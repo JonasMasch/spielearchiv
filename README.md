@@ -69,6 +69,7 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
     "genres": ["Action-RPG", "Open World"],
     "score": 95,
     "hours": 128.5,
+    "avgHours": 58,
     "completion": 92,
     "startedOn": "2024-03-05",
     "finishedOn": "2024-04-21",
@@ -83,6 +84,7 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
 
 `status` ist `gespielt`, `spiele`, `backlog` oder `abgebrochen`. `cover` ist entweder eine Bild-URL
 oder ein `data:`-URI aus einem eigenen Upload (beim Hochladen auf ca. 300×420 verkleinert).
+`hours` sind deine eigenen Stunden, `avgHours` die übliche Spieldauer laut RAWG.
 
 Weil das Repo öffentlich sein muss, damit Pages kostenlos ist: Dein Archiv ist lesbar für jeden, der
 die Adresse kennt. Schreiben kann nur, wer den Token hat.

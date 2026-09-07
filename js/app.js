@@ -270,6 +270,7 @@ async function rawgSearch(q, signal){
       release: g.released || "",
       cover: g.background_image || "",
       platforms: shorts,
+      playtime: Number(g.playtime) > 0 ? Math.round(Number(g.playtime)) : "",
       platform: pickPlatform(names),
       genres: (g.genres||[]).map(function(x){ return x.name; }).slice(0,3),
       metacritic: g.metacritic || null
@@ -281,6 +282,7 @@ function applyHit(target, hit, opts){
   if(hit.name) target.title = hit.name;
   if(hit.release && (!target.release || opts.force)) target.release = hit.release;
   if(hit.platform && (!target.platform || opts.force)) target.platform = hit.platform;
+  if(hit.playtime && (!target.avgHours || opts.force)) target.avgHours = hit.playtime;
   if(hit.genres && hit.genres.length){
     target.genres = target.genres || [];
     hit.genres.forEach(function(x){ if(target.genres.indexOf(x)<0) target.genres.push(x); });
@@ -317,6 +319,10 @@ function fileToCover(file){
 function fmtHours(h){
   var n=nz(h); if(n==null || !isFinite(n)) return null;
   return (Math.round(n*10)/10).toLocaleString("de-DE")+" h";
+}
+function fmtAvg(h){
+  var n=nz(h);
+  return (n==null || !isFinite(n) || n<=0) ? null : Math.round(n).toLocaleString("de-DE")+" h";
 }
 function parseDate(s){
   var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");
@@ -543,6 +549,7 @@ function cardNode(g){
 
   var facts=el("div","facts");
   var fh=fmtHours(g.hours); if(fh) facts.appendChild(factNode("Zeit",fh));
+  var fa=fmtAvg(g.avgHours); if(fa) facts.appendChild(factNode("Üblich",fa));
   var cp=nz(g.completion); if(cp!=null) facts.appendChild(factNode("Fortschritt",Math.round(cp)+" %"));
   var sp=fmtSpan(g.startedOn,g.finishedOn); if(sp) facts.appendChild(factNode("Gespielt",sp));
   if(facts.childElementCount) b.appendChild(facts);
@@ -591,7 +598,11 @@ function renderTable(rows){
     if(sc!=null){ var m=el("div","meter"), fi=el("i"); fi.style.width=Math.max(1,sc)+"%"; fi.style.background=bandVar(sc); m.appendChild(fi); tds.appendChild(m); }
     tr.appendChild(tds);
 
-    var fh=fmtHours(g.hours);   tr.appendChild(el("td","t-num"+(fh?"":" t-dim"), fh||"—"));
+    var fh=fmtHours(g.hours), fa2=fmtAvg(g.avgHours);
+    var tdh=el("td","t-num"+(fh?"":" t-dim"));
+    tdh.appendChild(el("div",null,fh||"—"));
+    if(fa2) tdh.appendChild(el("div","t-sub","Ø "+fa2));
+    tr.appendChild(tdh);
     var cp=nz(g.completion);    tr.appendChild(el("td","t-num"+(cp!=null?"":" t-dim"), cp!=null?Math.round(cp)+" %":"—"));
     var sp=fmtSpan(g.startedOn,g.finishedOn); tr.appendChild(el("td","t-num"+(sp?"":" t-dim"), sp||"—"));
 
@@ -609,7 +620,7 @@ function renderTable(rows){
 
 function demoCard(){
   var c=cardNode({ id:"__demo", title:"Beispieleintrag", platform:"PS5", release:"2022-02-25", score:87,
-    hours:63.5, completion:92, startedOn:"2024-03-05", finishedOn:"2024-04-21", status:"gespielt",
+    hours:63.5, avgHours:58, completion:92, startedOn:"2024-03-05", finishedOn:"2024-04-21", status:"gespielt",
     genres:["Action-RPG","Open World"], listIds:[] });
   c.classList.add("demo"); c.tabIndex=-1; c.setAttribute("aria-hidden","true");
   return c;
@@ -699,7 +710,7 @@ function openEditor(id){
   var existing = id ? games.find(function(g){ return g.id===id; }) : null;
   draft = existing ? JSON.parse(JSON.stringify(existing)) : {
     id:uid(), title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
-    startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", listIds:[], createdAt:Date.now()
+    startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"", listIds:[], createdAt:Date.now()
   };
   draftCover = draft.cover || "";
   paintEditor(!!existing);
@@ -815,7 +826,7 @@ function paintEditor(isEdit){
           var ri=document.getElementById("e-release"); if(ri) ri.value=draft.release||"";
           var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
           draft._platforms = h.platforms || [];
-          paintTags(); paintDrop(); paintCoverActions(); paintPlatChips();
+          paintTags(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
           resBox.innerHTML="";
           info(srcStatus,"Übernommen — schau kurz drüber.");
         });
@@ -895,6 +906,14 @@ function paintEditor(isEdit){
   r1.appendChild(textField("Stunden gespielt","hours","z. B. 42.5","number",{min:"0",step:"0.5"}));
   r1.appendChild(textField("Fortschritt in %","completion","0–100","number",{min:"0",max:"100",step:"1"}));
   body.appendChild(r1);
+  var avgHint=el("p","hint"); avgHint.style.margin="-6px 0 16px";
+  function paintAvgHint(){
+    var fa=fmtAvg(draft.avgHours);
+    avgHint.textContent = fa ? "Für dieses Spiel werden im Schnitt rund "+fa+" gebraucht." : "";
+    avgHint.hidden = !fa;
+  }
+  paintAvgHint();
+  body.appendChild(avgHint);
 
   var r2=el("div","row2");
   r2.appendChild(textField("Gespielt von","startedOn",null,"date"));
@@ -1055,6 +1074,7 @@ function commit(errBox, isEdit){
     finishedOn: draft.finishedOn||"",
     status: draft.status||"backlog",
     notes: draft.notes||"",
+    avgHours: nz(draft.avgHours)==null ? "" : Math.max(0,Math.round(Number(draft.avgHours))),
     cover: draftCover||"",
     listIds: (draft.listIds||[]).slice(),
     createdAt: draft.createdAt||Date.now()
@@ -1147,7 +1167,7 @@ async function runBulk(rows, wantDb, st, go, cancel){
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     var g={ id:uid(), title:r.title, release:"", platform:"", genres:[], score:r.score, hours:"", completion:"",
-      startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", listIds:[], createdAt:Date.now()+i };
+      startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"", listIds:[], createdAt:Date.now()+i };
     if(wantDb){
       busy("Datenbank: "+(i+1)+" von "+rows.length+" — "+r.title);
       try{
@@ -1332,7 +1352,7 @@ function doImport(file){
       var g={ id:s.id||uid(), title:String(s.title), release:s.release||"", platform:s.platform||"",
         genres:Array.isArray(s.genres)?s.genres:[], score:s.score==null?"":s.score, hours:s.hours==null?"":s.hours,
         completion:s.completion==null?"":s.completion, startedOn:s.startedOn||"", finishedOn:s.finishedOn||"",
-        status:s.status||"backlog", notes:s.notes||"", cover:s.cover||"",
+        status:s.status||"backlog", notes:s.notes||"", cover:s.cover||"", avgHours:s.avgHours==null?"":s.avgHours,
         listIds:Array.isArray(s.listIds)?s.listIds:[], createdAt:s.createdAt||Date.now() };
       var i=games.findIndex(function(x){ return x.id===g.id; });
       if(i<0) games.push(g); else games[i]=g;
