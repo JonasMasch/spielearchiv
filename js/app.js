@@ -234,9 +234,22 @@ function rimg(url,w){
   if(url.slice(0,5)==="data:") return url;
   return url.indexOf("/media/")>=0 ? url.replace("/media/","/media/resize/"+(w||420)+"/-/") : url;
 }
+function shortPlat(n){ return PLAT_SHORT[n] || n; }
+function preferredPlatform(){
+  var count={}, best="", top=0;
+  games.forEach(function(g){
+    if(!g.platform) return;
+    count[g.platform]=(count[g.platform]||0)+1;
+    if(count[g.platform]>top){ top=count[g.platform]; best=g.platform; }
+  });
+  return best;
+}
 function pickPlatform(names){
+  var shorts=names.map(shortPlat);
+  var pref=preferredPlatform();
+  if(pref && shorts.indexOf(pref)>=0) return pref;
   for(var i=0;i<PLAT_ORDER.length;i++){ if(names.indexOf(PLAT_ORDER[i])>=0) return PLAT_SHORT[PLAT_ORDER[i]]; }
-  return names.length ? (PLAT_SHORT[names[0]]||names[0]) : "";
+  return shorts[0] || "";
 }
 async function rawgSearch(q, signal){
   var key=rawgKey();
@@ -249,11 +262,15 @@ async function rawgSearch(q, signal){
   if(!r.ok) throw new Error("RAWG antwortet mit "+r.status+".");
   var j=await r.json();
   return (j.results||[]).map(function(g){
+    var names=(g.platforms||[]).map(function(p){ return (p.platform&&p.platform.name)||""; }).filter(Boolean);
+    var shorts=[];
+    names.map(shortPlat).forEach(function(x){ if(shorts.indexOf(x)<0) shorts.push(x); });
     return {
       name: g.name || "",
       release: g.released || "",
       cover: g.background_image || "",
-      platform: pickPlatform((g.platforms||[]).map(function(p){ return (p.platform&&p.platform.name)||""; })),
+      platforms: shorts,
+      platform: pickPlatform(names),
       genres: (g.genres||[]).map(function(x){ return x.name; }).slice(0,3),
       metacritic: g.metacritic || null
     };
@@ -797,7 +814,8 @@ function paintEditor(isEdit){
           it.value=draft.title;
           var ri=document.getElementById("e-release"); if(ri) ri.value=draft.release||"";
           var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
-          paintTags(); paintDrop(); paintCoverActions();
+          draft._platforms = h.platforms || [];
+          paintTags(); paintDrop(); paintCoverActions(); paintPlatChips();
           resBox.innerHTML="";
           info(srcStatus,"Übernommen — schau kurz drüber.");
         });
@@ -894,8 +912,30 @@ function paintEditor(isEdit){
   var plats=allPlatforms();
   ["PC","PS5","PS4","Xbox Series","Switch","Steam Deck","Handy"].forEach(function(p){ if(plats.indexOf(p)<0) plats.push(p); });
   plats.forEach(function(p){ var oo=el("option"); oo.value=p; dlp.appendChild(oo); });
-  fp.appendChild(dlp); r3.appendChild(fp);
+  fp.appendChild(dlp);
+  var platChips=el("div","pills"); platChips.style.marginTop="7px"; fp.appendChild(platChips);
+  r3.appendChild(fp);
   body.appendChild(r3);
+
+  function paintPlatChips(){
+    platChips.innerHTML="";
+    var opts=draft._platforms||[];
+    if(opts.length<2) return;
+    var lab=el("div","hint","Auf welcher Plattform hast du es gespielt?");
+    lab.style.cssText="flex:1 0 100%;margin-bottom:2px";
+    platChips.appendChild(lab);
+    opts.slice(0,10).forEach(function(pn){
+      var b=el("button","pill",pn); b.type="button";
+      b.setAttribute("aria-pressed", String(draft.platform===pn));
+      b.addEventListener("click",function(){
+        draft.platform=pn; ip.value=pn;
+        Array.prototype.forEach.call(platChips.querySelectorAll(".pill"),function(o){
+          o.setAttribute("aria-pressed", String(o===b));
+        });
+      });
+      platChips.appendChild(b);
+    });
+  }
 
   /* Status */
   var fst=el("div","field");
