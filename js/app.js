@@ -158,9 +158,14 @@ function paintSave(){
 }
 
 var dirty=false;
+function cacheNow(){ LS.set("sa.cache", {games:games, lists:lists, sha:sha, dirty:dirty, at:Date.now()}); }
+function stashLocal(){
+  if(!games.length) return;
+  LS.set("sa.backup", {games:games, lists:lists, at:Date.now()});
+}
 function markDirty(){
   dirty=true;
-  LS.set("sa.cache", {games:games, lists:lists, sha:sha, at:Date.now()});
+  cacheNow();
   paintSave();
   if(!token()) return;
   clearTimeout(saveTimer);
@@ -175,7 +180,7 @@ async function saveNow(){
   try{
     await ghSave();
     dirty=false; lastSaved=new Date(); savingNow=false;
-    LS.set("sa.cache", {games:games, lists:lists, sha:sha, at:Date.now()});
+    cacheNow();
     notice(null); paintSave();
   }catch(e){
     savingNow=false;
@@ -1132,6 +1137,28 @@ function openSettings(msg){
     var m=el("p","err",msg); m.style.marginBottom="14px"; body.appendChild(m);
   }
 
+  /* Sicherung aus einem verworfenen lokalen Stand */
+  var bk=LS.get("sa.backup",null);
+  if(bk && Array.isArray(bk.games) && bk.games.length){
+    var s0=el("div","sec");
+    s0.appendChild(el("div","sec-h","Verworfener lokaler Stand"));
+    var p0=el("p","sec-p");
+    p0.textContent="Bei einem Abgleich wurde ein Stand aus diesem Browser durch die Version aus dem Repo ersetzt: "+
+      bk.games.length+(bk.games.length===1?" Spiel":" Spiele")+" vom "+new Date(bk.at||Date.now()).toLocaleString("de-DE")+
+      ". Beim Wiederherstellen wird ergänzt, nichts gelöscht.";
+    s0.appendChild(p0);
+    var rb=el("button","btn btn-sm","Diesen Stand wiederherstellen"); rb.type="button";
+    rb.addEventListener("click",function(){
+      var added=0;
+      bk.games.forEach(function(g){ if(!games.some(function(x){ return x.id===g.id; })){ games.push(g); added++; } });
+      (bk.lists||[]).forEach(function(l){ if(!lists.some(function(x){ return x.id===l.id; })) lists.push(l); });
+      markDirty(); render(); closeOverlay();
+      toast(added ? added+(added===1?" Spiel":" Spiele")+" zurückgeholt." : "Alles war schon vorhanden.");
+    });
+    s0.appendChild(rb);
+    body.appendChild(s0);
+  }
+
   /* GitHub */
   var s1=el("div","sec");
   s1.appendChild(el("div","sec-h","Speichern auf GitHub"));
@@ -1327,7 +1354,10 @@ window.addEventListener("beforeunload",function(ev){
   }
 
   var cache=LS.get("sa.cache",null);
-  if(cache && Array.isArray(cache.games)){ games=cache.games; lists=cache.lists||[]; sha=cache.sha||null; }
+  if(cache && Array.isArray(cache.games)){
+    games=cache.games; lists=cache.lists||[]; sha=cache.sha||null;
+    dirty = cache.dirty===true;
+  }
   render(); paintSave();
 
   ghLoad().then(function(got){
@@ -1339,21 +1369,23 @@ window.addEventListener("beforeunload",function(ev){
     }
     var remoteGames = Array.isArray(got.data.games) ? got.data.games : [];
     var remoteLists = Array.isArray(got.data.lists) ? got.data.lists : [];
-    if(dirty || (cache && cache.sha && got.sha!==cache.sha && games.length)){
+    var wouldVanish = games.length && !remoteGames.length;
+    if(dirty || wouldVanish || (cache && cache.sha && got.sha!==cache.sha && games.length)){
       sha=got.sha;
-      notice("Im Repo liegt eine andere Version ("+remoteGames.length+" Spiele) als in diesem Browser ("+games.length+").", [
-        {label:"GitHub übernehmen", onClick:function(){
+      notice("In diesem Browser liegen "+games.length+(games.length===1?" Spiel":" Spiele")+
+             ", im Repo "+remoteGames.length+". Welcher Stand soll gelten?", [
+        {label:"Diesen Browser hochladen", onClick:function(){ notice(null); markDirty(); saveNow(); }},
+        {label:"Stand aus dem Repo", onClick:function(){
+          stashLocal();
           games=remoteGames; lists=remoteLists; dirty=false;
-          LS.set("sa.cache",{games:games,lists:lists,sha:sha,at:Date.now()});
-          notice(null); render(); paintSave();
-        }},
-        {label:"Meine behalten", onClick:function(){ notice(null); markDirty(); }}
+          cacheNow(); notice(null); render(); paintSave();
+        }}
       ]);
-      render();
+      render(); paintSave();
       return;
     }
     games=remoteGames; lists=remoteLists; sha=got.sha; dirty=false;
-    LS.set("sa.cache",{games:games,lists:lists,sha:sha,at:Date.now()});
+    cacheNow();
     render(); paintSave();
   }).catch(function(e){
     notice("Das Archiv konnte nicht von GitHub geladen werden: "+(e && e.message ? e.message : "unbekannter Fehler")+" Es wird der Stand aus diesem Browser angezeigt.", [
