@@ -22,7 +22,9 @@ Browser. Für „Speichern per Klick“:
 - github.com → Settings → Developer settings → **Personal access tokens → Fine-grained tokens**
 - *Repository access:* **Only select repositories** → nur dieses Repo
 - *Permissions → Repository permissions → Contents:* **Read and write** — mehr nicht
-- Ablaufdatum nach Geschmack, den Token einmal kopieren
+- *Expiration:* höchstens **ein Jahr** — ein weiter entferntes Datum lehnt GitHub ohne sichtbare
+  Fehlermeldung ab, der Knopf tut dann scheinbar nichts
+- Token einmal kopieren, er wird nur ein einziges Mal angezeigt
 
 Dann auf der Seite **Einstellungen** öffnen, Token einfügen, **Verbindung prüfen**, **Übernehmen**.
 
