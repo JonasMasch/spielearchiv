@@ -97,7 +97,17 @@ function payload(){
 async function ghLoad(){
   var url = apiUrl("/contents/"+encodeURI(CFG.path)+"?ref="+encodeURIComponent(CFG.branch));
   var r = await fetch(url, {headers:ghHeaders(), cache:"no-store"});
-  if(r.status===404) return { data:null, sha:null };
+  if(r.status===404){
+    var rr = await fetch(apiUrl(""), {headers:ghHeaders(), cache:"no-store"});
+    if(rr.status===404){
+      var e404=new Error(token()
+        ? "GitHub findet "+CFG.owner+"/"+CFG.repo+" nicht. Meist hat der Token keinen Zugriff darauf — "+
+          "bei „Repository access“ muss „"+CFG.repo+"“ ausgewaehlt und „Contents“ auf „Read and write“ stehen."
+        : "GitHub findet "+CFG.owner+"/"+CFG.repo+" nicht. Stimmen owner und repo in js/config.js?");
+      e404.auth=true; throw e404;
+    }
+    return { data:null, sha:null };
+  }
   if(r.status===401 || r.status===403){
     var e=new Error(r.status===401 ? "Der Token wird nicht akzeptiert." : "Zugriff verweigert oder Limit erreicht.");
     e.auth=true; throw e;
@@ -122,6 +132,10 @@ async function ghSave(){
   });
   if(r.status===409 || r.status===422){ var c=new Error("conflict"); c.conflict=true; throw c; }
   if(r.status===401 || r.status===403){ var a=new Error(r.status===401?"Der Token wird nicht akzeptiert.":"Der Token darf in dieses Repo nicht schreiben."); a.auth=true; throw a; }
+  if(r.status===404){
+    throw new Error("GitHub findet das Repository nicht. Fast immer heisst das: Der Token hat keinen "+
+      "Zugriff darauf — bei „Repository access“ war „"+CFG.repo+"“ nicht ausgewaehlt.");
+  }
   if(!r.ok){
     var txt=""; try{ txt=(await r.json()).message||""; }catch(e){}
     throw new Error("GitHub antwortet mit "+r.status+(txt?": "+txt:"")+".");
@@ -138,7 +152,7 @@ function setSave(s, text){
 function paintSave(){
   if(savingNow) return setSave("saving","speichert …");
   if(!token())  return setSave("idle","nur lokal");
-  if(saveState==="error") return;
+  if(saveState==="error" && dirty) return setSave("error","nicht gespeichert");
   if(dirty)     return setSave("dirty","ungespeichert");
   setSave("saved", lastSaved ? "gespeichert "+lastSaved.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"}) : "gespeichert");
 }
@@ -538,7 +552,7 @@ function renderTable(rows){
   rows.forEach(function(g,i){
     var tr=el("tr"); tr.tabIndex=0;
     tr.appendChild(el("td","t-rank",String(i+1)));
-    var tdc=el("td","t-cover"); tdc.appendChild(coverNode(g,"cv",200)); tr.appendChild(tdc);
+    var tdc=el("td","t-cover"); tdc.appendChild(coverNode(g,"cv",420)); tr.appendChild(tdc);
 
     var tdt=el("td");
     tdt.appendChild(el("div","t-title",g.title||"Ohne Titel"));
@@ -760,8 +774,10 @@ function paintEditor(isEdit){
       hits.forEach(function(h){
         var b=el("button"); b.type="button";
         var img=el("img","rimg"); img.alt=""; img.loading="lazy";
-        img.src = h.cover ? rimg(h.cover,160) : "";
-        if(!h.cover) img.style.visibility="hidden";
+        if(h.cover){
+          img.src = rimg(h.cover,420);
+          img.addEventListener("error",function(){ img.style.visibility="hidden"; });
+        } else img.style.visibility="hidden";
         b.appendChild(img);
         var meta=el("div");
         meta.appendChild(el("div","sres-n",h.name));
