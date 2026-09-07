@@ -295,6 +295,11 @@ tbody tr:last-child td{border-bottom:none}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--paper);
   padding:9px 16px;border-radius:100px;font-size:13px;z-index:60;box-shadow:var(--shadow-2);max-width:min(92vw,520px);text-align:center}
 
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-3)}
+.foot a{color:var(--ink-2)}
+.foot a:hover{color:var(--accent)}
+
 @media (max-width:1000px){
   .layout{grid-template-columns:1fr}
   .rail{position:static;flex-direction:row;flex-wrap:wrap}

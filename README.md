@@ -26,8 +26,10 @@ Browser. Für „Speichern per Klick“:
 
 Dann auf der Seite **Einstellungen** öffnen, Token einfügen, **Verbindung prüfen**, **Übernehmen**.
 
-**4 — RAWG-Key holen.** Kostenlos unter [rawg.io/apidocs](https://rawg.io/apidocs) registrieren, Key
-kopieren, in den Einstellungen eintragen. Danach schlägt die Titelsuche im Eintrag Cover, Release,
+**4 — RAWG-Key holen.** Kostenlos registrieren, dann auf [rawg.io/apidocs](https://rawg.io/apidocs)
+eingeloggt auf „Get API Key“ klicken (Direktlink: <https://rawg.io/login/?forward=developer>). Key
+kopieren und in den Einstellungen eintragen. Der Gratis-Tarif gilt für nicht-kommerzielle Projekte,
+erlaubt 20.000 Anfragen im Monat und verlangt einen Rückverweis auf RAWG — der steht in der Fußzeile. Danach schlägt die Titelsuche im Eintrag Cover, Release,
 Plattform und Genres vor.
 
 Token und RAWG-Key werden **nicht** ins Repo geschrieben. Sie liegen im `localStorage` des jeweiligen
