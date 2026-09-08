@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:56:53.520Z",
+  "updatedAt": "2026-09-08T16:57:06.465Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1438,6 +1438,29 @@
       ],
       "createdAt": 1788886559612,
       "updatedAt": 1788886610005
+    },
+    {
+      "id": "db97d690-fecd-464e-9fb4-58dede441cd0",
+      "title": "Forza Motorsport 7",
+      "release": "2017-10-03",
+      "platform": "PC",
+      "genres": [
+        "Racing"
+      ],
+      "score": 79,
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/2ff/2ffc64e3c5569e29627aeb8b8637d693.jpg",
+      "listIds": [
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1788886612853,
+      "updatedAt": 1788886622963
     }
   ]
 }
