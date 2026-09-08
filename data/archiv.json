@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:14:39.834Z",
+  "updatedAt": "2026-09-08T13:14:44.893Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -160,6 +160,31 @@
       "listIds": [],
       "createdAt": 1788873132258,
       "updatedAt": 1788873169735
+    },
+    {
+      "id": "70630ba7-0dc7-4013-be69-45c5cab605ab",
+      "title": "Ghost of Tsushima",
+      "release": "2020-07-17",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": 92,
+      "hours": 70,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/f24/f2493ea338fe7bd3c7d73750a85a0959.jpeg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a"
+      ],
+      "createdAt": 1788873243220,
+      "updatedAt": 1788873281392
     }
   ]
 }
