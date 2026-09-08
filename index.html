@@ -37,7 +37,7 @@
   <section class="stats" id="stats"></section>
 
   <div class="layout">
-    <aside class="rail">
+    <aside class="rail is-hidden" id="rail">
       <div class="rail-block">
         <div class="rail-h">Filter <button class="btn btn-quiet btn-sm" id="btn-reset" type="button" style="font-size:11px;padding:2px 6px">zurücksetzen</button></div>
         <div class="field">
@@ -81,11 +81,13 @@
           <option value="release-desc">Release — neueste zuerst</option>
           <option value="added-desc">Zuletzt hinzugefügt</option>
         </select>
+        <button class="btn btn-sm filter-toggle" id="btn-filters" type="button" aria-expanded="false" aria-controls="rail">Filter</button>
         <div class="seg" id="viewseg">
           <button data-view="grid" aria-pressed="true" type="button">Raster</button>
           <button data-view="table" aria-pressed="false" type="button">Tabelle</button>
         </div>
       </div>
+      <div class="activefilters" id="activefilters" hidden></div>
       <div id="results"></div>
     </main>
   </div>

@@ -520,26 +520,29 @@ function renderRail(){
 /* ============ Render: Karten & Tabelle ============ */
 function factNode(k,v){ var f=el("span","fact"); f.appendChild(el("span",null,k)); f.appendChild(el("b",null,v)); return f; }
 
-function cardNode(g){
-  var a=el("button","card"); a.type="button";
-  a.appendChild(coverNode(g,"cover",420));
-  var b=el("div","card-body");
+function cardNode(g, rank){
+  var a=el("button","poster"); a.type="button";
 
-  var top=el("div","card-top");
-  var left=el("div"); left.style.minWidth="0";
-  left.appendChild(el("div","card-title",g.title||"Ohne Titel"));
+  var art=coverNode(g,"poster-art",640);
+  if(rank){ art.appendChild(el("span","poster-rank","#"+rank)); }
+
+  var st=el("span","poster-status",STATUS_L[g.status]||"Backlog");
+  art.appendChild(st);
+
+  var sc=nz(g.score);
+  var sb=el("div","poster-score");
+  var num=el("b", null, sc==null ? "ohne Wertung" : String(sc));
+  if(sc==null) num.className="none"; else num.style.color=bandVar(sc);
+  sb.appendChild(num);
+  if(sc!=null){ var bd=el("em",null,band(sc).l); bd.style.color=bandVar(sc); sb.appendChild(bd); }
+  art.appendChild(sb);
+  a.appendChild(art);
+
+  var b=el("div","poster-body");
+  b.appendChild(el("div","poster-title",g.title||"Ohne Titel"));
   var bits=[]; var ry=releaseYear(g); if(ry) bits.push(String(ry));
   if(g.platform) bits.push(g.platform);
-  if(bits.length) left.appendChild(el("div","card-sub",bits.join(" · ")));
-  top.appendChild(left);
-
-  var sb=el("div","scorebox"), sc=nz(g.score);
-  var sn=el("span","score", sc==null?"—":String(sc));
-  if(sc==null) sn.className="score is-empty"; else sn.style.color=bandVar(sc);
-  sb.appendChild(sn);
-  if(sc!=null){ var bd=el("span","band",band(sc).l); bd.style.color=bandVar(sc); sb.appendChild(bd); }
-  top.appendChild(sb);
-  b.appendChild(top);
+  if(bits.length) b.appendChild(el("div","poster-meta",bits.join(" · ")));
 
   if(sc!=null){
     var m=el("div","meter"), fi=el("i");
@@ -554,11 +557,11 @@ function cardNode(g){
   var sp=fmtSpan(g.startedOn,g.finishedOn); if(sp) facts.appendChild(factNode("Gespielt",sp));
   if(facts.childElementCount) b.appendChild(facts);
 
-  var tags=el("div","tags");
-  var st=el("span","status",STATUS_L[g.status]||"Backlog"); st.setAttribute("data-s",g.status||"backlog");
-  tags.appendChild(st);
-  (g.genres||[]).slice(0,4).forEach(function(x){ tags.appendChild(el("span","tag",x)); });
-  b.appendChild(tags);
+  if((g.genres||[]).length){
+    var tags=el("div","tags");
+    g.genres.slice(0,3).forEach(function(x){ tags.appendChild(el("span","tag",x)); });
+    b.appendChild(tags);
+  }
 
   a.appendChild(b);
   a.addEventListener("click",function(){ openEditor(g.id); });
@@ -567,7 +570,8 @@ function cardNode(g){
 
 function renderGrid(rows){
   var wrap=el("div","grid");
-  rows.forEach(function(g){ wrap.appendChild(cardNode(g)); });
+  var ranked = filt.sort==="score-desc";
+  rows.forEach(function(g,i){ wrap.appendChild(cardNode(g, ranked && nz(g.score)!=null ? i+1 : 0)); });
   return wrap;
 }
 
@@ -662,6 +666,40 @@ function renderEmpty(){
   return e;
 }
 
+function renderActiveFilters(){
+  var box=$("#activefilters");
+  box.innerHTML="";
+  var chips=[];
+  if(filt.q)      chips.push({k:"Suche", v:"„"+filt.q+"“", off:function(){ filt.q=""; $("#f-q").value=""; }});
+  if(filt.status) chips.push({k:"Status", v:STATUS_L[filt.status], off:function(){ filt.status=""; }});
+  if(filt.plat)   chips.push({k:"Plattform", v:filt.plat, off:function(){ filt.plat=""; }});
+  if(filt.genre)  chips.push({k:"Genre", v:filt.genre, off:function(){ filt.genre=""; }});
+  if(filt.list){
+    var l=lists.find(function(x){ return x.id===filt.list; });
+    if(l) chips.push({k:"Liste", v:l.name, off:function(){ filt.list=""; }});
+  }
+  if(filt.min>1)  chips.push({k:"Wertung", v:"ab "+filt.min, off:function(){ filt.min=1; }});
+
+  var ft=$("#btn-filters");
+  if(ft) ft.textContent = chips.length ? "Filter · "+chips.length : "Filter";
+  if(!chips.length){ box.hidden=true; return; }
+  box.hidden=false;
+  chips.forEach(function(c){
+    var w=el("span","afchip");
+    w.appendChild(el("span",null,c.k));
+    w.appendChild(document.createTextNode(c.v));
+    var x=el("button",null,"×"); x.type="button"; x.setAttribute("aria-label",c.k+" "+c.v+" entfernen");
+    x.addEventListener("click",function(){ c.off(); render(); });
+    w.appendChild(x);
+    box.appendChild(w);
+  });
+  if(chips.length>1){
+    var all=el("button","btn btn-quiet btn-sm","alle entfernen"); all.type="button";
+    all.addEventListener("click",resetFilters);
+    box.appendChild(all);
+  }
+}
+
 /* ============ Render ============ */
 function render(){
   renderStats();
@@ -670,6 +708,7 @@ function render(){
   c.innerHTML="";
   c.appendChild(el("b",null,String(rows.length)));
   c.appendChild(document.createTextNode(" von "+games.length+(games.length===1?" Spiel":" Spielen")));
+  renderActiveFilters();
   var res=$("#results"); res.innerHTML="";
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
 }
@@ -1371,6 +1410,11 @@ $("#btn-bulk").addEventListener("click",openBulk);
 $("#btn-settings").addEventListener("click",function(){ openSettings(); });
 $("#btn-newlist").addEventListener("click",function(){ newList(null); });
 $("#btn-reset").addEventListener("click",resetFilters);
+$("#btn-filters").addEventListener("click",function(){
+  var rail=$("#rail"), open=rail.classList.toggle("is-hidden")===false;
+  this.setAttribute("aria-expanded", String(open));
+  if(open) rail.scrollIntoView({behavior:"smooth", block:"start"});
+});
 $("#savechip").addEventListener("click",function(){ if(token()) saveNow(); else openSettings(); });
 $("#file-import").addEventListener("change",function(ev){
   if(ev.target.files && ev.target.files[0]) doImport(ev.target.files[0]);
