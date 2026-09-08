@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:18:56.302Z",
+  "updatedAt": "2026-09-08T16:19:04.002Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -757,10 +757,11 @@
       "avgHours": "",
       "cover": "https://media.rawg.io/media/screenshots/b35/b35a365997998da1d667b4dec99d0253.jpg",
       "listIds": [
-        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
       ],
       "createdAt": 1788875258959,
-      "updatedAt": 1788875283230
+      "updatedAt": 1788884340501
     },
     {
       "id": "50e3fdab-cd18-4a13-af1d-168d4b402a03",
