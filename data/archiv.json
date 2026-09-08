@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:29:05.579Z",
+  "updatedAt": "2026-09-08T13:33:28.686Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -364,6 +364,31 @@
       ],
       "createdAt": 1788874097770,
       "updatedAt": 1788874142077
+    },
+    {
+      "id": "960c1cdb-9813-4b00-9eea-94e726cc942b",
+      "title": "Assassin’s Creed Rogue",
+      "release": "2014-11-11",
+      "platform": "Switch",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": 76,
+      "hours": 25,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 12,
+      "cover": "https://media.rawg.io/media/games/3c4/3c4a44ed99c87c56e0cdcfaaaf5c3628.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788874204217,
+      "updatedAt": 1788874231358
     }
   ]
 }
