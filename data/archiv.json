@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:04:15.060Z",
+  "updatedAt": "2026-09-08T16:04:37.127Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1127,6 +1127,29 @@
       "listIds": [],
       "createdAt": 1788883448839,
       "updatedAt": 1788883451558
+    },
+    {
+      "id": "df680f87-2e36-425c-b250-e08370c7035e",
+      "title": "Where Winds Meet",
+      "release": "2025-11-14",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": 3,
+      "cover": "https://media.rawg.io/media/screenshots/8a7/8a797083d6dd0f810a42bb2fa379a23a.jpg",
+      "listIds": [],
+      "createdAt": 1788883471173,
+      "updatedAt": 1788883473626
     }
   ]
 }
