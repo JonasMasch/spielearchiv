@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:02:47.092Z",
+  "updatedAt": "2026-09-08T16:03:14.442Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1038,6 +1038,29 @@
       "listIds": [],
       "createdAt": 1788883359222,
       "updatedAt": 1788883363590
+    },
+    {
+      "id": "b8bb37f3-68de-42a8-a023-c03a4ec6b9f3",
+      "title": "Kena: Bridge of Spirits",
+      "release": "2021-09-21",
+      "platform": "PC",
+      "genres": [
+        "Shooter",
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": 4,
+      "cover": "https://media.rawg.io/media/games/91d/91ddeef8d5ebee7f21faa89efa0f2201.jpg",
+      "listIds": [],
+      "createdAt": 1788883387155,
+      "updatedAt": 1788883390940
     }
   ]
 }
