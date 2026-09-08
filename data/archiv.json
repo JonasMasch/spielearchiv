@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:00:32.057Z",
+  "updatedAt": "2026-09-08T16:00:52.692Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -908,6 +908,50 @@
       "listIds": [],
       "createdAt": 1788883226937,
       "updatedAt": 1788883228554
+    },
+    {
+      "id": "348af2ce-5d46-4b10-8678-67cd7b461a31",
+      "title": "Star Wars Jedi: Fallen Order",
+      "release": "2019-11-15",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 8,
+      "cover": "https://media.rawg.io/media/games/559/559bc0768f656ad0c63c54b80a82d680.jpg",
+      "listIds": [],
+      "createdAt": 1788883243853,
+      "updatedAt": 1788883245888
+    },
+    {
+      "id": "ecce6c56-6d12-4ed3-86bc-755d46af450c",
+      "title": "Star Wars Jedi: Survivor",
+      "release": "2023-04-27",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 17,
+      "cover": "https://media.rawg.io/media/games/3e4/3e43e29ae126ef951842393f5ff7f33a.jpg",
+      "listIds": [],
+      "createdAt": 1788883247587,
+      "updatedAt": 1788883249190
     }
   ]
 }
