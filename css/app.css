@@ -347,7 +347,6 @@ tbody tr:last-child td{border-bottom:none}
 
 .tabpage{display:none}
 .tabpage.is-active{display:block}
-.fab{display:none}
 
 .page-head{margin-bottom:18px}
 .page-head h2{font-size:22px;margin-bottom:6px}
@@ -416,37 +415,25 @@ tbody tr:last-child td{border-bottom:none}
   .notice-acts{margin-left:0;flex-wrap:wrap}
   .filter-toggle{display:inline-flex}
   .rail.is-hidden{display:none}
-  .topbar{padding:15px 0 11px}
+  .topbar{padding:14px 0 10px}
+  .scroll .inner{padding-top:14px;padding-bottom:44px}
 
-  /* App-Geruest: nur der Inhalt scrollt, Kopf und Leiste stehen fest */
-  html,body{height:100%}
-  body{overflow:hidden}
-  .shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
-  .apphead{order:1;flex:none}
-  .scroll{order:2;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;
-    -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
-  .scroll .inner{padding-top:16px;padding-bottom:26px}
-
-  .tabnav{order:3;flex:none;
-    border-top:1px solid var(--line);border-bottom:none;
-    background:var(--surface);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-    box-shadow:0 -6px 22px -14px rgba(0,0,0,.55)}
+  /* Die Navigation klebt oben statt unten zu schweben: kein Element,
+     das Safari beim Ein- und Ausfahren seiner Leisten verschieben kann. */
+  .tabnav{position:sticky;top:0;z-index:41;background:var(--surface);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 8px 20px -16px rgba(0,0,0,.7)}
   .tabnav .inner{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0}
-  .tabnav button{flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;border-radius:0;
+  .tabnav button{flex-direction:column;align-items:center;gap:3px;padding:8px 4px 9px;border-radius:0;
     -webkit-tap-highlight-color:transparent}
   .tabnav button:hover{background:none}
-  .tabnav svg{width:21px;height:21px}
+  .tabnav svg{width:20px;height:20px}
   .tabnav em{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase}
   .tabnav button[aria-selected="true"]{color:var(--accent)}
-  .tabnav button[aria-selected="true"]::after{display:none}
+  .tabnav button[aria-selected="true"]::after{left:9px;right:9px;bottom:0}
 
-  .fab{display:grid;place-items:center;position:absolute;right:16px;
-    bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:30;
-    width:52px;height:52px;border-radius:100px;border:none;cursor:pointer;
-    background:var(--accent);color:var(--accent-on);box-shadow:0 6px 20px -6px rgba(0,0,0,.55)}
-  .fab:active{transform:scale(.94)}
-  body:not([data-tab="archiv"]) .fab{display:none}
+  /* Die Werkzeugleiste darf nicht mit der Navigation um denselben Platz streiten */
+  .toolbar{position:static}
 
   .drawer{padding-bottom:env(safe-area-inset-bottom,0px)}
   .searchbar .inp{font-size:16px}

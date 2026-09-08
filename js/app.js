@@ -1649,7 +1649,6 @@ $("#tabnav").addEventListener("click",function(ev){
   setTab(b.dataset.tab);
   if(b.dataset.tab==="lists") render();
 });
-$("#fab").addEventListener("click",function(){ setTab("add"); });
 
 $("#add-go").addEventListener("click",runAddSearch);
 $("#add-q").addEventListener("keydown",function(ev){

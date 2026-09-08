@@ -48,8 +48,8 @@ einmal neu eintragen.
 | `⌘⏎` / `Strg+⏎` | Eintrag speichern |
 
 Die Seite hat vier Bereiche: **Archiv** (alle Spiele mit Kennzahlen und Filtern), **Hinzufügen**
-(Datenbanksuche), **Listen** und **Mehr**. Am Rechner stehen sie als Reiter unter dem Titel, auf dem
-Handy als feste Leiste am unteren Rand.
+(Datenbanksuche), **Listen** und **Mehr**. Sie stehen als Reiter unter dem Titel — auf schmalen
+Bildschirmen klebt die Reiterleiste beim Scrollen oben fest.
 
 Jede Liste merkt sich ihre eigene Reihenfolge und Ansicht (`sort` und `view` am Listeneintrag).
 
