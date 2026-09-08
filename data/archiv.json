@@ -1,6 +1,42 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-07T17:30:22.608Z",
-  "lists": [],
-  "games": []
+  "updatedAt": "2026-09-08T11:54:34.505Z",
+  "lists": [
+    {
+      "id": "47723e02-2705-4789-83da-8d99c53847cf",
+      "name": "2026",
+      "createdAt": 1788868457419
+    },
+    {
+      "id": "8a52f439-b341-4d5b-b66b-696d749f0652",
+      "name": "Forza Horizon",
+      "createdAt": 1788868469035
+    }
+  ],
+  "games": [
+    {
+      "id": "27b9c47a-bc1f-478e-b56b-ac582a8b6637",
+      "title": "Forza Horizon 6",
+      "release": "2026-05-19",
+      "platform": "Xbox Series",
+      "genres": [
+        "Racing"
+      ],
+      "score": 94,
+      "hours": 40.5,
+      "completion": 85,
+      "startedOn": "2026-05-19",
+      "finishedOn": "2026-07-19",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/d74/d744a3b0f6f0f0bc63f5ceb9b5e63230.jpeg",
+      "listIds": [
+        "47723e02-2705-4789-83da-8d99c53847cf",
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1788868305381,
+      "updatedAt": 1788868471002
+    }
+  ]
 }
