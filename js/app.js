@@ -510,7 +510,10 @@ function renderRail(){
   allRow.setAttribute("aria-current", String(!filt.list));
   allRow.appendChild(el("span","lr-name","Alle Spiele"));
   allRow.appendChild(el("span","lr-n",String(games.length)));
-  allRow.addEventListener("click",function(){ filt.list=""; render(); });
+  allRow.addEventListener("click",function(){
+    filt.list=""; render();
+    if(document.body.getAttribute("data-tab")==="filter") setTab("archiv");
+  });
   box.appendChild(allRow);
 
   if(!lists.length){
@@ -529,7 +532,10 @@ function renderRail(){
       if(confirm("Liste „"+l.name+"“ löschen? Die Spiele bleiben erhalten.")) dropList(l.id);
     });
     r.appendChild(dl);
-    r.addEventListener("click",function(){ filt.list=(filt.list===l.id)?"":l.id; render(); });
+    r.addEventListener("click",function(){
+      filt.list=(filt.list===l.id)?"":l.id; render();
+      if(document.body.getAttribute("data-tab")==="filter") setTab("archiv");
+    });
     box.appendChild(r);
   });
 }
@@ -697,8 +703,8 @@ function renderActiveFilters(){
   }
   if(filt.min>1)  chips.push({k:"Wertung", v:"ab "+filt.min, off:function(){ filt.min=1; }});
 
-  var ft=$("#btn-filters");
-  if(ft) ft.textContent = chips.length ? "Filter · "+chips.length : "Filter";
+  var badge=$("#tab-badge");
+  if(badge){ badge.textContent=String(chips.length); badge.hidden = !chips.length; }
   if(!chips.length){ box.hidden=true; return; }
   box.hidden=false;
   chips.forEach(function(c){
@@ -726,6 +732,8 @@ function render(){
   c.appendChild(el("b",null,String(rows.length)));
   c.appendChild(document.createTextNode(" von "+games.length+(games.length===1?" Spiel":" Spielen")));
   renderActiveFilters();
+  var sr=$("#btn-showresults");
+  if(sr) sr.textContent = rows.length===1 ? "1 Spiel anzeigen" : rows.length+" Spiele anzeigen";
   var res=$("#results"); res.innerHTML="";
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
 }
@@ -1438,11 +1446,24 @@ $("#btn-bulk").addEventListener("click",openBulk);
 $("#btn-settings").addEventListener("click",function(){ openSettings(); });
 $("#btn-newlist").addEventListener("click",function(){ newList(null); });
 $("#btn-reset").addEventListener("click",resetFilters);
-$("#btn-filters").addEventListener("click",function(){
-  var rail=$("#rail"), open=rail.classList.toggle("is-hidden")===false;
-  this.setAttribute("aria-expanded", String(open));
-  if(open) rail.scrollIntoView({behavior:"smooth", block:"start"});
+function setTab(name){
+  document.body.setAttribute("data-tab", name);
+  Array.prototype.forEach.call($("#tabbar").children, function(b){
+    b.setAttribute("aria-selected", String(b.dataset.tab===name));
+  });
+  window.scrollTo(0,0);
+}
+$("#tabbar").addEventListener("click",function(ev){
+  var b=ev.target.closest("button[data-tab]"); if(!b) return;
+  setTab(b.dataset.tab);
 });
+$("#fab").addEventListener("click",function(){ openEditor(null); });
+$("#btn-showresults").addEventListener("click",function(){ setTab("archiv"); });
+$("#m-add").addEventListener("click",function(){ openEditor(null); });
+$("#m-bulk").addEventListener("click",openBulk);
+$("#m-settings").addEventListener("click",function(){ openSettings(); });
+$("#m-export").addEventListener("click",doExport);
+$("#m-import").addEventListener("click",function(){ $("#file-import").click(); });
 $("#savechip").addEventListener("click",function(){ if(token()) saveNow(); else openSettings(); });
 $("#file-import").addEventListener("change",function(ev){
   if(ev.target.files && ev.target.files[0]) doImport(ev.target.files[0]);
@@ -1478,6 +1499,8 @@ window.addEventListener("beforeunload",function(ev){
 });
 
 /* ============ Start ============ */
+document.body.setAttribute("data-tab","archiv");
+
 (function boot(){
   var v=LS.raw("sa.view");
   if(v==="table"||v==="grid"){

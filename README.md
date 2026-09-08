@@ -47,6 +47,10 @@ einmal neu eintragen.
 | `⌘S` / `Strg+S` | jetzt auf GitHub speichern |
 | `⌘⏎` / `Strg+⏎` | Eintrag speichern |
 
+Auf schmalen Bildschirmen wird die Seite zur App: unten eine Leiste mit **Archiv**, **Filter**,
+**Statistik** und **Mehr**, dazu ein runder Knopf zum Eintragen. Ab 760 Pixel Breite verschwindet
+die Leiste und die Seitenspalte übernimmt wieder.
+
 Der Chip oben rechts zeigt den Speicherstand: *ungespeichert* → *speichert* → *gespeichert*. Klick
 darauf speichert sofort; sonst pusht die Seite drei Sekunden nach der letzten Änderung von selbst.
 „Mehrere eintragen“ nimmt eine Liste entgegen — eine Zeile pro Spiel, optional `Titel | 87` mit

@@ -66,6 +66,8 @@
         <div class="rail-h">Listen <button class="btn btn-quiet btn-sm" id="btn-newlist" type="button" style="font-size:11px;padding:2px 6px">+ neu</button></div>
         <div id="lists"></div>
       </div>
+
+      <button class="btn btn-accent showresults" id="btn-showresults" type="button">Spiele anzeigen</button>
     </aside>
 
     <main>
@@ -81,7 +83,6 @@
           <option value="release-desc">Release — neueste zuerst</option>
           <option value="added-desc">Zuletzt hinzugefügt</option>
         </select>
-        <button class="btn btn-sm filter-toggle" id="btn-filters" type="button" aria-expanded="false" aria-controls="rail">Filter</button>
         <div class="seg" id="viewseg">
           <button data-view="grid" aria-pressed="true" type="button">Raster</button>
           <button data-view="table" aria-pressed="false" type="button">Tabelle</button>
@@ -89,6 +90,27 @@
       </div>
       <div class="activefilters" id="activefilters" hidden></div>
       <div id="results"></div>
+
+      <section class="morepanel" id="more" aria-label="Verwalten">
+        <div class="morelist">
+          <button class="morerow" id="m-add" type="button">
+            <b>Spiel hinzufügen</b><span>Titel tippen, Treffer wählen, bewerten</span>
+          </button>
+          <button class="morerow" id="m-bulk" type="button">
+            <b>Mehrere eintragen</b><span>Ganze Liste auf einmal, Cover und Daten kommen automatisch dazu</span>
+          </button>
+          <button class="morerow" id="m-settings" type="button">
+            <b>Einstellungen</b><span>GitHub-Token und Spieledatenbank für dieses Gerät</span>
+          </button>
+          <button class="morerow" id="m-export" type="button">
+            <b>Exportieren</b><span>Das ganze Archiv als JSON sichern</span>
+          </button>
+          <button class="morerow" id="m-import" type="button">
+            <b>Importieren</b><span>Eine JSON-Datei einlesen</span>
+          </button>
+        </div>
+        <p class="hint" style="margin-top:16px">Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.</p>
+      </section>
     </main>
   </div>
 
@@ -96,6 +118,29 @@
     Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.
   </footer>
 </div>
+
+<button class="fab" id="fab" type="button" aria-label="Spiel hinzufügen">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+</button>
+
+<nav class="tabbar" id="tabbar" aria-label="Bereiche">
+  <button type="button" data-tab="archiv" aria-selected="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg>
+    <em>Archiv</em>
+  </button>
+  <button type="button" data-tab="filter" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/></svg>
+    <em>Filter<span class="tab-badge" id="tab-badge" hidden></span></em>
+  </button>
+  <button type="button" data-tab="statistik" aria-selected="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="4.4" height="9" rx="1.2"/><rect x="9.8" y="7" width="4.4" height="14" rx="1.2"/><rect x="16.6" y="3" width="4.4" height="18" rx="1.2"/></svg>
+    <em>Statistik</em>
+  </button>
+  <button type="button" data-tab="mehr" aria-selected="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+    <em>Mehr</em>
+  </button>
+</nav>
 
 <input type="file" id="file-import" accept="application/json,.json" hidden>
 <div id="overlay"></div>
