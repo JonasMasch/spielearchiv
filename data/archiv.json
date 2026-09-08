@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:01:08.974Z",
+  "updatedAt": "2026-09-08T16:01:28.641Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -973,6 +973,27 @@
       "listIds": [],
       "createdAt": 1788883263221,
       "updatedAt": 1788883265472
+    },
+    {
+      "id": "6c8f9bfd-dedc-4866-a58c-5be9f0424f82",
+      "title": "Rise of the Tomb Raider",
+      "release": "2015-11-10",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 14,
+      "cover": "https://media.rawg.io/media/games/b45/b45575f34285f2c4479c9a5f719d972e.jpg",
+      "listIds": [],
+      "createdAt": 1788883283221,
+      "updatedAt": 1788883285138
     }
   ]
 }
