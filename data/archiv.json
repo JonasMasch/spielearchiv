@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:33:28.686Z",
+  "updatedAt": "2026-09-08T13:34:13.636Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -389,6 +389,30 @@
       ],
       "createdAt": 1788874204217,
       "updatedAt": 1788874231358
+    },
+    {
+      "id": "645ffe18-cf64-4360-9915-51a0ddbdfc08",
+      "title": "Assassin’s Creed III",
+      "release": "2012-10-30",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": 69,
+      "hours": 19,
+      "completion": 80,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 22,
+      "cover": "https://media.rawg.io/media/games/275/2759da6fcaa8f81f21800926168c85f6.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788874420640,
+      "updatedAt": 1788874450134
     }
   ]
 }
