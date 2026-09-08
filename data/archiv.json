@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:18:18.502Z",
+  "updatedAt": "2026-09-08T16:18:30.851Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -151,10 +151,11 @@
       "avgHours": "",
       "cover": "https://media.rawg.io/media/games/42a/42a71f0cbe23185f778c10462faa12d8.jpg",
       "listIds": [
-        "47723e02-2705-4789-83da-8d99c53847cf"
+        "47723e02-2705-4789-83da-8d99c53847cf",
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
       ],
       "createdAt": 1788873074019,
-      "updatedAt": 1788873108607
+      "updatedAt": 1788884307351
     },
     {
       "id": "45a6482d-b527-44ea-ad15-dabfc901bc11",
