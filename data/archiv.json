@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:03:14.442Z",
+  "updatedAt": "2026-09-08T16:03:18.240Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1061,6 +1061,29 @@
       "listIds": [],
       "createdAt": 1788883387155,
       "updatedAt": 1788883390940
+    },
+    {
+      "id": "744a716d-1c7d-434c-8aa5-bd430035be66",
+      "title": "Kena: Scars of Kosmora",
+      "release": "2026-12-31",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/screenshots/3a3/3a3855e1b5218c02ab038dcb873eacde.jpg",
+      "listIds": [],
+      "createdAt": 1788883392122,
+      "updatedAt": 1788883394739
     }
   ]
 }
