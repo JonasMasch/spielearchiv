@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:34:13.636Z",
+  "updatedAt": "2026-09-08T13:35:19.842Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -413,6 +413,30 @@
       ],
       "createdAt": 1788874420640,
       "updatedAt": 1788874450134
+    },
+    {
+      "id": "10231187-29db-49c4-9ae8-8fea3797e5f3",
+      "title": "Assassin's Creed Revelations",
+      "release": "2011-11-15",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": 77,
+      "hours": 18,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 14,
+      "cover": "https://media.rawg.io/media/games/193/19390fa5e75e9048b22c9a736cf9992f.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788874468304,
+      "updatedAt": 1788874516340
     }
   ]
 }
