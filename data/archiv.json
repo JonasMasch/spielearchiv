@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:18:50.487Z",
+  "updatedAt": "2026-09-08T16:18:56.302Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -92,7 +92,7 @@
         "Strategy",
         "RPG"
       ],
-      "score": 77,
+      "score": 79,
       "hours": 25,
       "completion": 80,
       "startedOn": "",
@@ -106,7 +106,7 @@
         "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
       ],
       "createdAt": 1788872170528,
-      "updatedAt": 1788884326984
+      "updatedAt": 1788884332801
     },
     {
       "id": "73136c3b-13c1-49dc-b47c-c5a42491c0cd",
