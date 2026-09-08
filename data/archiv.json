@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:36:02.185Z",
+  "updatedAt": "2026-09-08T13:36:40.055Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -461,6 +461,31 @@
       ],
       "createdAt": 1788874532489,
       "updatedAt": 1788874558683
+    },
+    {
+      "id": "0297b61e-d260-40ad-9d51-d1964df1f8a2",
+      "title": "Assassin's Creed Origins",
+      "release": "2017-10-27",
+      "platform": "PC",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "score": 88,
+      "hours": 125,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 28,
+      "cover": "https://media.rawg.io/media/games/336/336c6bd63d83cf8e59937ab8895d1240.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788874566433,
+      "updatedAt": 1788874596552
     }
   ]
 }
