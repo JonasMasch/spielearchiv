@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:14:19.683Z",
+  "updatedAt": "2026-09-08T16:15:03.986Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1362,6 +1362,30 @@
       ],
       "createdAt": 1788884003796,
       "updatedAt": 1788884056181
+    },
+    {
+      "id": "47169452-fdc0-4325-a227-baeed929d5e6",
+      "title": "The Legend of Zelda: Tears of the Kingdom",
+      "release": "2023-05-12",
+      "platform": "Switch",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": 90,
+      "hours": 70,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/556/55684bfd048706f4266d331d70050b37.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1788884069847,
+      "updatedAt": 1788884100483
     }
   ]
 }
