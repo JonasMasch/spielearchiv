@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:57:45.241Z",
+  "updatedAt": "2026-09-08T17:07:08.244Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1461,6 +1461,30 @@
       ],
       "createdAt": 1788886612853,
       "updatedAt": 1788886622963
+    },
+    {
+      "id": "09a90dd5-e8e7-4ef4-aab9-275e7be70608",
+      "title": "Splatoon",
+      "release": "2015-05-29",
+      "platform": "Wii U",
+      "genres": [
+        "Shooter",
+        "Action"
+      ],
+      "score": 80,
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 8,
+      "cover": "https://media.rawg.io/media/games/c2f/c2f94f3fefa98453f33f2b6abb6ae103.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1788887187252,
+      "updatedAt": 1788887224739
     }
   ]
 }
