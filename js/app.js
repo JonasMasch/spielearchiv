@@ -53,6 +53,16 @@ var LS = {
 function token(){ return LS.raw("sa.token").trim(); }
 function rawgKey(){ return LS.raw("sa.rawg").trim(); }
 
+function scrollTop(){
+  var sc=document.getElementById("scroll");
+  if(sc) sc.scrollTop=0;
+  if(window.pageYOffset) window.scrollTo(0,0);
+}
+function lockScroll(on){
+  var sc=document.getElementById("scroll");
+  if(sc) sc.style.overflowY = on ? "hidden" : "";
+  document.body.style.overflow = on ? "hidden" : "";
+}
 function toast(msg){
   var old=document.querySelector(".toast"); if(old) old.remove();
   var t=el("div","toast",msg); document.body.appendChild(t);
@@ -805,7 +815,7 @@ function renderListOverview(){
     bd.appendChild(el("div","listcard-n",l.name));
     bd.appendChild(el("div","listcard-c", rows.length===1 ? "1 Spiel" : rows.length+" Spiele"));
     c.appendChild(bd);
-    c.addEventListener("click",function(){ openListId=l.id; render(); window.scrollTo(0,0); });
+    c.addEventListener("click",function(){ openListId=l.id; render(); scrollTop(); });
     grid.appendChild(c);
   });
 
@@ -827,7 +837,7 @@ function renderListDetail(l){
 
   var back=el("button","btn btn-quiet btn-sm","← Alle Listen"); back.type="button";
   back.style.marginBottom="12px";
-  back.addEventListener("click",function(){ openListId=null; render(); window.scrollTo(0,0); });
+  back.addEventListener("click",function(){ openListId=null; render(); scrollTop(); });
   wrap.appendChild(back);
 
   var head=el("div","listhead");
@@ -917,12 +927,12 @@ function resetFilters(){
 /* ============ Overlay ============ */
 function closeOverlay(){
   $("#overlay").innerHTML="";
-  document.body.style.overflow="";
+  lockScroll(false);
   draft=null; draftCover=null;
 }
 function makeDrawer(title){
   var o=$("#overlay"); o.innerHTML="";
-  document.body.style.overflow="hidden";
+  lockScroll(true);
   var scrim=el("div","scrim");
   scrim.addEventListener("click",closeOverlay);
   o.appendChild(scrim);
@@ -1628,7 +1638,7 @@ function setTab(name){
   Array.prototype.forEach.call(document.querySelectorAll(".tabpage"), function(pg){
     pg.classList.toggle("is-active", pg.id==="page-"+name);
   });
-  window.scrollTo(0,0);
+  scrollTop();
   if(name==="add") setTimeout(function(){ var q=$("#add-q"); if(q) q.focus(); },40);
 }
 

@@ -53,7 +53,9 @@ img{max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
 
-.wrap{max-width:1360px;margin:0 auto;padding:0 20px 96px}
+.shell{position:relative}
+.inner{max-width:1360px;margin:0 auto;padding:0 20px;width:100%}
+.scroll .inner{padding-top:20px;padding-bottom:96px}
 
 /* topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 0 18px}
@@ -329,7 +331,8 @@ tbody tr:last-child td{border-bottom:none}
 .filter-toggle{display:none}
 
 /* ---------- Bereichsnavigation ---------- */
-.tabnav{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.tabnav{border-bottom:1px solid var(--line)}
+.tabnav .inner{display:flex;gap:2px}
 .tabnav button{display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;
   padding:9px 15px 11px;color:var(--ink-3);font:inherit;font-weight:500;position:relative;
   border-radius:var(--r-m) var(--r-m) 0 0}
@@ -414,14 +417,22 @@ tbody tr:last-child td{border-bottom:none}
   .filter-toggle{display:inline-flex}
   .rail.is-hidden{display:none}
   .topbar{padding:15px 0 11px}
-  .wrap{padding-bottom:104px}
 
-  /* Navigation liegt fest am unteren Rand und ist in jedem Bereich sichtbar */
-  .tabnav{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:40;
-    display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0;
-    background:var(--surface);border-top:1px solid var(--line);border-bottom:none;
+  /* App-Geruest: nur der Inhalt scrollt, Kopf und Leiste stehen fest */
+  html,body{height:100%}
+  body{overflow:hidden}
+  .shell{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+  .apphead{order:1;flex:none}
+  .scroll{order:2;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+  .scroll .inner{padding-top:16px;padding-bottom:26px}
+
+  .tabnav{order:3;flex:none;
+    border-top:1px solid var(--line);border-bottom:none;
+    background:var(--surface);
     padding-bottom:env(safe-area-inset-bottom,0px);
     box-shadow:0 -6px 22px -14px rgba(0,0,0,.55)}
+  .tabnav .inner{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0}
   .tabnav button{flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;border-radius:0;
     -webkit-tap-highlight-color:transparent}
   .tabnav button:hover{background:none}
@@ -430,8 +441,8 @@ tbody tr:last-child td{border-bottom:none}
   .tabnav button[aria-selected="true"]{color:var(--accent)}
   .tabnav button[aria-selected="true"]::after{display:none}
 
-  .fab{display:grid;place-items:center;position:fixed;right:16px;
-    bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:39;
+  .fab{display:grid;place-items:center;position:absolute;right:16px;
+    bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:30;
     width:52px;height:52px;border-radius:100px;border:none;cursor:pointer;
     background:var(--accent);color:var(--accent-on);box-shadow:0 6px 20px -6px rgba(0,0,0,.55)}
   .fab:active{transform:scale(.94)}
@@ -442,7 +453,7 @@ tbody tr:last-child td{border-bottom:none}
 }
 
 @media (max-width:560px){
-  .wrap{padding:0 13px 104px}
+  .inner{padding:0 13px}
   .stats .hist{display:none}
   .stat{padding:10px 13px 11px}
   .topbar{padding:16px 0 12px}

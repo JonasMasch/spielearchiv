@@ -13,8 +13,9 @@
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<div class="wrap">
-  <header class="topbar">
+<div class="shell">
+  <header class="apphead">
+    <div class="inner topbar">
     <div class="brand">
       <span class="brand-mark">100</span>
       <div>
@@ -27,9 +28,11 @@
         <span class="dot"></span><span id="savetext">lädt …</span>
       </button>
     </div>
+    </div>
   </header>
 
-  <nav class="tabnav" id="tabnav" aria-label="Bereiche">
+  <nav class="tabnav" aria-label="Bereiche">
+    <div class="inner" id="tabnav">
     <button type="button" data-tab="archiv" aria-selected="true">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg>
       <em>Archiv<span class="tab-badge" id="tab-badge" hidden></span></em>
@@ -46,8 +49,11 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
       <em>Mehr</em>
     </button>
+    </div>
   </nav>
 
+  <div class="scroll" id="scroll">
+   <div class="inner">
   <div class="notice" id="notice" hidden></div>
 
   <!-- ============ Archiv ============ -->
@@ -152,6 +158,8 @@
     </div>
     <p class="hint" style="margin-top:16px">Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.</p>
   </section>
+   </div>
+  </div>
 </div>
 
 <button class="fab" id="fab" type="button" aria-label="Spiel hinzufügen">
