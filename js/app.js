@@ -1,4 +1,4 @@
-/* Hundert Punkte — persönliches Spielarchiv.
+/* Spielarchiv — persönliche Videospiel-Bewertungen.
    Daten liegen als JSON im GitHub-Repo, Cover und Metadaten kommen von RAWG. */
 (function(){
 "use strict";
@@ -1327,7 +1327,7 @@ function doExport(){
   var blob=new Blob([json],{type:"application/json"});
   var url=URL.createObjectURL(blob);
   var a=document.createElement("a");
-  a.href=url; a.download="hundert-punkte-"+new Date().toISOString().slice(0,10)+".json";
+  a.href=url; a.download="spielarchiv-"+new Date().toISOString().slice(0,10)+".json";
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(function(){ URL.revokeObjectURL(url); },1000);
 }

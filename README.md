@@ -1,4 +1,4 @@
-# Hundert Punkte
+# Spielarchiv
 
 Persönliches Videospiel-Archiv: Wertung von 1 bis 100, gespielte Stunden, Fortschritt in Prozent,
 Zeitraum von–bis, Release, Plattform, Genres, Cover, Notizen — sortierbar, filterbar und in eigene
