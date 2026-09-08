@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T15:57:33.654Z",
+  "updatedAt": "2026-09-08T15:58:16.703Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -776,6 +776,28 @@
       ],
       "createdAt": 1788883030369,
       "updatedAt": 1788883050153
+    },
+    {
+      "id": "107113b0-4e0c-4d8e-8103-5a85d02ef28c",
+      "title": "Ghost of Yotei",
+      "release": "2025-10-02",
+      "platform": "PS5",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/30b/30b195c2321d763f807366967ffad793.jpg",
+      "listIds": [],
+      "createdAt": 1788883080268,
+      "updatedAt": 1788883093202
     }
   ]
 }
