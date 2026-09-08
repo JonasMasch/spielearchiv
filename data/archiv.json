@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T15:59:33.223Z",
+  "updatedAt": "2026-09-08T16:00:16.639Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -865,6 +865,28 @@
       "listIds": [],
       "createdAt": 1788883167237,
       "updatedAt": 1788883169721
+    },
+    {
+      "id": "e0687c78-00b5-4172-9e2b-698e0d86f4a8",
+      "title": "The Witcher 3: Wild Hunt",
+      "release": "2015-05-18",
+      "platform": "PC",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 43,
+      "cover": "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg",
+      "listIds": [],
+      "createdAt": 1788883210270,
+      "updatedAt": 1788883213137
     }
   ]
 }
