@@ -10,6 +10,7 @@ var STATUS = [
   {k:"gespielt",    l:"Gespielt"},
   {k:"spiele",      l:"Am Spielen"},
   {k:"backlog",     l:"Backlog"},
+  {k:"wunschliste", l:"Wunschliste"},
   {k:"abgebrochen", l:"Abgebrochen"}
 ];
 var STATUS_L = {}; STATUS.forEach(function(s){ STATUS_L[s.k]=s.l; });
@@ -365,6 +366,21 @@ function fmtSpan(a,b){
   if(B) return "bis "+B;
   return null;
 }
+function todayISO(){
+  var d=new Date();
+  return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+}
+function isUpcoming(g){
+  var r=String(g.release||"");
+  if(!/^\d{4}/.test(r)) return false;
+  var full = /^\d{4}-\d{2}-\d{2}$/.test(r) ? r : (r.length===4 ? r+"-12-31" : r+"-28");
+  return full > todayISO();
+}
+function releaseLabel(g){
+  if(!g.release) return null;
+  if(!isUpcoming(g)){ var y=releaseYear(g); return y?String(y):null; }
+  return "erscheint "+(fmtDate(g.release) || isoToDE(g.release));
+}
 function releaseYear(g){ var m=/^(\d{4})/.exec(String(g.release||"")); return m?+m[1]:null; }
 function releaseSort(g){
   var m=/^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$/.exec(String(g.release||""));
@@ -415,6 +431,9 @@ function sorter(s){
     case "hours-desc":      return numDesc(function(g){ return g.hours; });
     case "completion-desc": return numDesc(function(g){ return g.completion; });
     case "finished-desc":   return strDesc(function(g){ return g.finishedOn; });
+    case "release-asc":     return function(a,b){ var x=releaseSort(a), y=releaseSort(b);
+                              if(x<0&&y<0) return byTitle(a,b); if(x<0) return 1; if(y<0) return -1;
+                              return x-y || byTitle(a,b); };
     case "release-desc":    return function(a,b){ var x=releaseSort(a), y=releaseSort(b);
                               if(x<0&&y<0) return byTitle(a,b); if(x<0) return 1; if(y<0) return -1; return y-x || byTitle(a,b); };
     case "added-desc":      return numDesc(function(g){ return g.createdAt; });
@@ -459,9 +478,7 @@ function coverNode(g,cls,w){
 function anyFilter(){
   return !!(filt.q || filt.status || filt.plat || filt.genre || filt.list || filt.min>1);
 }
-function renderStats(){
-  var filtered=anyFilter();
-  var rows=filtered ? visible() : games.slice();
+function fillStats(s, rows, countLabel){
   var scored=rows.filter(function(g){ return nz(g.score)!=null; });
   var avg = scored.length ? scored.reduce(function(a,g){ return a+Number(g.score); },0)/scored.length : null;
   var hrs = rows.reduce(function(a,g){ return a+(nz(g.hours)||0); },0);
@@ -471,7 +488,7 @@ function renderStats(){
   scored.forEach(function(g){ buckets[Math.min(9,Math.max(0,Math.floor((Number(g.score)-1)/10)))]++; });
   var peak=Math.max.apply(null,buckets.concat([1]));
 
-  var s=$("#stats"); s.innerHTML="";
+  s.innerHTML="";
   function tile(k,v,sub){
     var d=el("div","stat");
     d.appendChild(el("span","stat-k",k));
@@ -479,7 +496,7 @@ function renderStats(){
     if(sub) b.appendChild(el("small",null,sub));
     d.appendChild(b); return d;
   }
-  s.appendChild(tile(filtered ? "Spiele (gefiltert)" : "Spiele", String(rows.length)));
+  s.appendChild(tile(countLabel || "Spiele", String(rows.length)));
   s.appendChild(tile("Ø Wertung", avg==null?"—":(Math.round(avg*10)/10).toLocaleString("de-DE"), avg==null?null:"/ 100"));
   s.appendChild(tile("Stunden", hrs?Math.round(hrs).toLocaleString("de-DE"):"—", hrs?"h gesamt":null));
   s.appendChild(tile("Abgeschlossen", String(done), rows.length?"von "+rows.length:null));
@@ -499,6 +516,12 @@ function renderStats(){
   ["1","50","100"].forEach(function(x){ ax.appendChild(el("span",null,x)); });
   h.appendChild(ax);
   s.appendChild(h);
+}
+
+function renderStats(){
+  var filtered=anyFilter();
+  fillStats($("#stats"), filtered ? visible() : games.slice(),
+            filtered ? "Spiele (gefiltert)" : "Spiele");
 }
 
 /* ============ Render: Rail ============ */
@@ -558,7 +581,7 @@ function cardNode(g, rank){
 
   var b=el("div","poster-body");
   b.appendChild(el("div","poster-title",g.title||"Ohne Titel"));
-  var bits=[]; var ry=releaseYear(g); if(ry) bits.push(String(ry));
+  var bits=[]; var rl=releaseLabel(g); if(rl) bits.push(rl);
   if(g.platform) bits.push(g.platform);
   if(bits.length) b.appendChild(el("div","poster-meta",bits.join(" · ")));
 
@@ -607,7 +630,7 @@ function renderTable(rows){
 
     var tdt=el("td");
     tdt.appendChild(el("div","t-title",g.title||"Ohne Titel"));
-    var bits=[]; var ry=releaseYear(g); if(ry) bits.push(String(ry));
+    var bits=[]; var rl=releaseLabel(g); if(rl) bits.push(rl);
     if(g.platform) bits.push(g.platform);
     if((g.genres||[]).length) bits.push(g.genres.slice(0,3).join(", "));
     if(bits.length) tdt.appendChild(el("div","t-sub",bits.join(" · ")));
@@ -852,7 +875,8 @@ function renderListDetail(l){
   [["score-desc","Wertung — hoch zu niedrig"],["score-asc","Wertung — niedrig zu hoch"],
    ["title-asc","Titel A–Z"],["hours-desc","Stunden — meiste zuerst"],
    ["completion-desc","Fortschritt — höchster zuerst"],["finished-desc","Zuletzt beendet"],
-   ["release-desc","Release — neueste zuerst"],["added-desc","Zuletzt hinzugefügt"]].forEach(function(o){
+   ["release-desc","Release — neueste zuerst"],["release-asc","Release — früheste zuerst"],
+   ["added-desc","Zuletzt hinzugefügt"]].forEach(function(o){
     var oo=el("option",null,o[1]); oo.value=o[0]; sortSel.appendChild(oo);
   });
   sortSel.value = l.sort || "score-desc";
@@ -883,6 +907,12 @@ function renderListDetail(l){
   acts.appendChild(ren); acts.appendChild(del);
   head.appendChild(acts);
   wrap.appendChild(head);
+
+  if(rows.length){
+    var st=el("section","stats"); st.style.marginBottom="20px";
+    fillStats(st, rows, "Spiele in dieser Liste");
+    wrap.appendChild(st);
+  }
 
   if(!rows.length){
     var e=el("div","empty");

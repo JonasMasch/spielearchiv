@@ -88,7 +88,9 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
 }
 ```
 
-`status` ist `gespielt`, `spiele`, `backlog` oder `abgebrochen`. `release`, `startedOn` und
+`status` ist `gespielt`, `spiele`, `backlog`, `wunschliste` oder `abgebrochen`. `wunschliste` ist
+für Angekündigtes gedacht: Liegt `release` in der Zukunft, zeigen Karte und Tabelle statt der
+Jahreszahl „erscheint TT.MM.JJJJ“. `release`, `startedOn` und
 `finishedOn` stehen als ISO-Datum in der Datei, damit sich danach sortieren lässt; in der Oberfläche
 werden sie als Tag.Monat.Jahr angezeigt und eingegeben. `cover` ist entweder eine Bild-URL
 oder ein `data:`-URI aus einem eigenen Upload (beim Hochladen auf ca. 300×420 verkleinert).

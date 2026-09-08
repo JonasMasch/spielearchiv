@@ -15,6 +15,7 @@
   --band-good:#3F8560;
   --band-top:#A8235B;
   --band-elite:#7038C8;
+  --wish:#2F6FB5;
   --shadow-1:0 1px 2px rgba(25,25,34,.05);
   --shadow-2:0 2px 4px rgba(25,25,34,.05), 0 14px 30px -18px rgba(25,25,34,.35);
   --r-s:4px; --r-m:7px; --r-l:12px;
@@ -28,7 +29,7 @@
     --line:#2C2C38; --line-2:#3D3D4C;
     --ink:#ECEBF2; --ink-2:#B2B0C0; --ink-3:#82808F;
     --accent:#EF5B93; --accent-on:#22040F; --accent-soft:#33122160;
-    --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF5B93; --band-elite:#B08CF5;
+    --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF5B93; --band-elite:#B08CF5; --wish:#79ADEE;
     --shadow-1:0 1px 2px rgba(0,0,0,.4);
     --shadow-2:0 2px 4px rgba(0,0,0,.35), 0 14px 30px -18px rgba(0,0,0,.9);
   }
@@ -38,7 +39,7 @@
   --line:#2C2C38; --line-2:#3D3D4C;
   --ink:#ECEBF2; --ink-2:#B2B0C0; --ink-3:#82808F;
   --accent:#EF5B93; --accent-on:#22040F; --accent-soft:#33122160;
-  --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF5B93; --band-elite:#B08CF5;
+  --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF5B93; --band-elite:#B08CF5; --wish:#79ADEE;
   --shadow-1:0 1px 2px rgba(0,0,0,.4);
   --shadow-2:0 2px 4px rgba(0,0,0,.35), 0 14px 30px -18px rgba(0,0,0,.9);
 }
@@ -201,6 +202,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.55}
 .status[data-s="gespielt"]{color:var(--band-good);border-color:var(--band-good)}
 .status[data-s="spiele"]{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
 .status[data-s="backlog"]{color:var(--ink-3);border-color:var(--line-2)}
+.status[data-s="wunschliste"]{color:var(--wish);border-color:var(--wish)}
 .status[data-s="abgebrochen"]{color:var(--band-low);border-color:var(--band-low)}
 
 /* aktive Filter */
