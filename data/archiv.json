@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:57:06.465Z",
+  "updatedAt": "2026-09-08T16:57:16.822Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1308,7 +1308,7 @@
         "Racing",
         "Arcade"
       ],
-      "score": 85,
+      "score": 87,
       "hours": "",
       "completion": "",
       "startedOn": "",
@@ -1321,7 +1321,7 @@
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788883898828,
-      "updatedAt": 1788883913881
+      "updatedAt": 1788886633320
     },
     {
       "id": "0b1d6ad0-f0a7-44d0-b95c-ea4fedf2a4c8",
