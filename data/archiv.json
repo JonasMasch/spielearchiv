@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:03:18.240Z",
+  "updatedAt": "2026-09-08T16:03:37.908Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1084,6 +1084,28 @@
       "listIds": [],
       "createdAt": 1788883392122,
       "updatedAt": 1788883394739
+    },
+    {
+      "id": "9e57054e-65b4-4604-a852-fa2f1af19b7a",
+      "title": "Detroit: Become Human",
+      "release": "2018-05-25",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": 10,
+      "cover": "https://media.rawg.io/media/games/951/951572a3dd1e42544bd39a5d5b42d234.jpg",
+      "listIds": [],
+      "createdAt": 1788883411606,
+      "updatedAt": 1788883414407
     }
   ]
 }
