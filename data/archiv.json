@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T17:07:08.244Z",
+  "updatedAt": "2026-09-08T17:07:21.999Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1485,6 +1485,30 @@
       ],
       "createdAt": 1788887187252,
       "updatedAt": 1788887224739
+    },
+    {
+      "id": "2a764f4b-bea4-4b83-9924-fae7346deba7",
+      "title": "Splatoon 2",
+      "release": "2017-07-21",
+      "platform": "Switch",
+      "genres": [
+        "Shooter",
+        "Action"
+      ],
+      "score": 79,
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/24b/24b68f500fd138c3146d8856f0dd55b4.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1788887227751,
+      "updatedAt": 1788887238497
     }
   ]
 }
