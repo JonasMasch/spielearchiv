@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:12:19.367Z",
+  "updatedAt": "2026-09-08T16:13:58.701Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -27,6 +27,11 @@
       "id": "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
       "name": "2024",
       "createdAt": 1788874135929
+    },
+    {
+      "id": "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e",
+      "name": "Nintendo",
+      "createdAt": 1788884035199
     }
   ],
   "games": [
