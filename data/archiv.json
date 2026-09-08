@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:13:58.701Z",
+  "updatedAt": "2026-09-08T16:14:19.683Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1338,6 +1338,30 @@
       ],
       "createdAt": 1788883921362,
       "updatedAt": 1788883935865
+    },
+    {
+      "id": "ca42ebdb-c219-4881-bb18-8ea2dae68b44",
+      "title": "Super Mario Odyssey",
+      "release": "2017-10-27",
+      "platform": "Switch",
+      "genres": [
+        "Platformer",
+        "Arcade"
+      ],
+      "score": 90,
+      "hours": 100,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/267/267bd0dbc496f52692487d07d014c061.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1788884003796,
+      "updatedAt": 1788884056181
     }
   ]
 }
