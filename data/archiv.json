@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:11:57.384Z",
+  "updatedAt": "2026-09-08T16:12:19.367Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1309,6 +1309,30 @@
       ],
       "createdAt": 1788883898828,
       "updatedAt": 1788883913881
+    },
+    {
+      "id": "0b1d6ad0-f0a7-44d0-b95c-ea4fedf2a4c8",
+      "title": "Forza Horizon 2",
+      "release": "2014-09-30",
+      "platform": "Xbox One",
+      "genres": [
+        "Racing",
+        "Arcade"
+      ],
+      "score": 81,
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 2,
+      "cover": "https://media.rawg.io/media/games/9a8/9a8be216c8907959a9984eec3a2cc8d1.jpg",
+      "listIds": [
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1788883921362,
+      "updatedAt": 1788883935865
     }
   ]
 }
