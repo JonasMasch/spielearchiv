@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:35:19.842Z",
+  "updatedAt": "2026-09-08T13:36:02.185Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -437,6 +437,30 @@
       ],
       "createdAt": 1788874468304,
       "updatedAt": 1788874516340
+    },
+    {
+      "id": "09647b65-995e-45e9-bca6-aecc139e8d36",
+      "title": "Assassin’s Creed Brotherhood",
+      "release": "2010-11-16",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": 80,
+      "hours": 26,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 16,
+      "cover": "https://media.rawg.io/media/games/116/116b93c6876a361a96b2eee3ee58ab13.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788874532489,
+      "updatedAt": 1788874558683
     }
   ]
 }
