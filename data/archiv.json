@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:06:53.028Z",
+  "updatedAt": "2026-09-08T16:07:18.628Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1215,6 +1215,28 @@
       "listIds": [],
       "createdAt": 1788883606858,
       "updatedAt": 1788883609526
+    },
+    {
+      "id": "81f98e1c-6196-46ef-a549-ffcab2b25390",
+      "title": "God of War Laufey",
+      "release": "2027-02-16",
+      "platform": "PS5",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/d9e/d9e30f2182a8535a0ef02949dfb1ffed.jpg",
+      "listIds": [],
+      "createdAt": 1788883631458,
+      "updatedAt": 1788883635126
     }
   ]
 }
