@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:41:55.059Z",
+  "updatedAt": "2026-09-08T13:43:01.808Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -581,6 +581,31 @@
       ],
       "createdAt": 1788874887328,
       "updatedAt": 1788874911557
+    },
+    {
+      "id": "d590f19e-0049-4224-8051-9acdf5f7ef7d",
+      "title": "Marvel's Spider-Man Remastered",
+      "release": "2020-11-12",
+      "platform": "PC",
+      "genres": [
+        "Casual",
+        "Adventure",
+        "Action"
+      ],
+      "score": 83,
+      "hours": 22,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 13,
+      "cover": "https://media.rawg.io/media/games/5f1/5f1399f755ed3a40b04a9195f4c06be5.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+      ],
+      "createdAt": 1788874933271,
+      "updatedAt": 1788874978302
     }
   ]
 }
