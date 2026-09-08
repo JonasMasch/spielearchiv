@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:22:33.179Z",
+  "updatedAt": "2026-09-08T13:28:59.433Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -22,6 +22,11 @@
       "id": "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430",
       "name": "Assassin’s Creed",
       "createdAt": 1788873674317
+    },
+    {
+      "id": "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
+      "name": "2024",
+      "createdAt": 1788874135929
     }
   ],
   "games": [
