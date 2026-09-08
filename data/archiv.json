@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:00:16.639Z",
+  "updatedAt": "2026-09-08T16:00:32.057Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -887,6 +887,27 @@
       "listIds": [],
       "createdAt": 1788883210270,
       "updatedAt": 1788883213137
+    },
+    {
+      "id": "97510309-074a-4bef-84b0-e83dd6a60b1d",
+      "title": "Red Dead Redemption 2",
+      "release": "2018-10-26",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 21,
+      "cover": "https://media.rawg.io/media/games/511/5118aff5091cb3efec399c808f8c598f.jpg",
+      "listIds": [],
+      "createdAt": 1788883226937,
+      "updatedAt": 1788883228554
     }
   ]
 }
