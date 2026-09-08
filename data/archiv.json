@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:01:47.589Z",
+  "updatedAt": "2026-09-08T16:02:47.092Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1016,6 +1016,28 @@
       "listIds": [],
       "createdAt": 1788883302205,
       "updatedAt": 1788883304088
+    },
+    {
+      "id": "701ea829-cd06-4311-822a-13ad33dc861d",
+      "title": "Crimson Desert",
+      "release": "2026-03-19",
+      "platform": "PC",
+      "genres": [
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/dac/dacfcdeaef957a36416f4e6d5ec76229.jpg",
+      "listIds": [],
+      "createdAt": 1788883359222,
+      "updatedAt": 1788883363590
     }
   ]
 }
