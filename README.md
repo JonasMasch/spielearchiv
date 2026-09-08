@@ -47,9 +47,11 @@ einmal neu eintragen.
 | `⌘S` / `Strg+S` | jetzt auf GitHub speichern |
 | `⌘⏎` / `Strg+⏎` | Eintrag speichern |
 
-Auf schmalen Bildschirmen wird die Seite zur App: unten eine Leiste mit **Archiv**, **Filter**,
-**Statistik** und **Mehr**, dazu ein runder Knopf zum Eintragen. Ab 760 Pixel Breite verschwindet
-die Leiste und die Seitenspalte übernimmt wieder.
+Die Seite hat vier Bereiche: **Archiv** (alle Spiele mit Kennzahlen und Filtern), **Hinzufügen**
+(Datenbanksuche), **Listen** und **Mehr**. Am Rechner stehen sie als Reiter unter dem Titel, auf dem
+Handy als feste Leiste am unteren Rand.
+
+Jede Liste merkt sich ihre eigene Reihenfolge und Ansicht (`sort` und `view` am Listeneintrag).
 
 Der Chip oben rechts zeigt den Speicherstand: *ungespeichert* → *speichert* → *gespeichert*. Klick
 darauf speichert sofort; sonst pusht die Seite drei Sekunden nach der letzten Änderung von selbst.

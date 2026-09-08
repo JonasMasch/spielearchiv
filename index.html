@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Spielarchiv</title>
 <meta name="description" content="Persönliches Spielarchiv: Wertung 1–100, Stunden, Fortschritt, Zeiträume und eigene Listen.">
 <meta name="color-scheme" content="light dark">
@@ -19,128 +19,144 @@
       <span class="brand-mark">100</span>
       <div>
         <h1>Spielarchiv</h1>
-        <p class="brand-sub">Persönliches Spielarchiv</p>
+        <p class="brand-sub">Persönliche Bewertungen</p>
       </div>
     </div>
     <div class="topbar-actions">
-      <button class="savechip" id="savechip" data-s="idle" type="button" title="Speichern / Einstellungen">
+      <button class="savechip" id="savechip" data-s="idle" type="button" title="Speichern">
         <span class="dot"></span><span id="savetext">lädt …</span>
       </button>
-      <button class="btn btn-quiet btn-sm" id="btn-settings" type="button">Einstellungen</button>
-      <button class="btn btn-sm" id="btn-bulk" type="button">Mehrere eintragen</button>
-      <button class="btn btn-accent" id="btn-add" type="button">Spiel hinzufügen</button>
     </div>
   </header>
 
+  <nav class="tabnav" id="tabnav" aria-label="Bereiche">
+    <button type="button" data-tab="archiv" aria-selected="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg>
+      <em>Archiv<span class="tab-badge" id="tab-badge" hidden></span></em>
+    </button>
+    <button type="button" data-tab="add" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      <em>Hinzufügen</em>
+    </button>
+    <button type="button" data-tab="lists" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg>
+      <em>Listen</em>
+    </button>
+    <button type="button" data-tab="more" aria-selected="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      <em>Mehr</em>
+    </button>
+  </nav>
+
   <div class="notice" id="notice" hidden></div>
 
-  <section class="stats" id="stats"></section>
+  <!-- ============ Archiv ============ -->
+  <section class="tabpage is-active" id="page-archiv">
+    <section class="stats" id="stats"></section>
 
-  <div class="layout">
-    <aside class="rail is-hidden" id="rail">
-      <div class="rail-block">
-        <div class="rail-h">Filter <button class="btn btn-quiet btn-sm" id="btn-reset" type="button" style="font-size:11px;padding:2px 6px">zurücksetzen</button></div>
-        <div class="field">
-          <label for="f-q">Suche</label>
-          <input class="inp" id="f-q" type="search" placeholder="Titel, Notiz, Tag …" autocomplete="off">
+    <div class="layout">
+      <aside class="rail is-hidden" id="rail">
+        <div class="rail-block">
+          <div class="rail-h">Filter <button class="btn btn-quiet btn-sm" id="btn-reset" type="button" style="font-size:11px;padding:2px 6px">zurücksetzen</button></div>
+          <div class="field">
+            <label for="f-q">Suche</label>
+            <input class="inp" id="f-q" type="search" placeholder="Titel, Notiz, Tag …" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <div class="pills" id="f-status"></div>
+          </div>
+          <div class="field">
+            <label for="f-plat">Plattform</label>
+            <select class="inp" id="f-plat"></select>
+          </div>
+          <div class="field">
+            <label for="f-genre">Genre / Tag</label>
+            <select class="inp" id="f-genre"></select>
+          </div>
+          <div class="field">
+            <label for="f-list">Liste</label>
+            <select class="inp" id="f-list"></select>
+          </div>
+          <div class="field">
+            <label for="f-min">Wertung ab <span id="f-min-out">1</span></label>
+            <input class="slider" id="f-min" type="range" min="1" max="100" value="1">
+          </div>
         </div>
-        <div class="field">
-          <label>Status</label>
-          <div class="pills" id="f-status"></div>
-        </div>
-        <div class="field">
-          <label for="f-plat">Plattform</label>
-          <select class="inp" id="f-plat"></select>
-        </div>
-        <div class="field">
-          <label for="f-genre">Genre / Tag</label>
-          <select class="inp" id="f-genre"></select>
-        </div>
-        <div class="field">
-          <label for="f-min">Wertung ab <span id="f-min-out">1</span></label>
-          <input class="slider" id="f-min" type="range" min="1" max="100" value="1">
-        </div>
-      </div>
+      </aside>
 
-      <div class="rail-block">
-        <div class="rail-h">Listen <button class="btn btn-quiet btn-sm" id="btn-newlist" type="button" style="font-size:11px;padding:2px 6px">+ neu</button></div>
-        <div id="lists"></div>
-      </div>
-
-      <button class="btn btn-accent showresults" id="btn-showresults" type="button">Spiele anzeigen</button>
-    </aside>
-
-    <main>
-      <div class="toolbar">
-        <span class="count" id="count"></span>
-        <select class="inp" id="f-sort" style="width:auto">
-          <option value="score-desc">Wertung — hoch zu niedrig</option>
-          <option value="score-asc">Wertung — niedrig zu hoch</option>
-          <option value="title-asc">Titel A–Z</option>
-          <option value="hours-desc">Stunden — meiste zuerst</option>
-          <option value="completion-desc">Fortschritt — höchster zuerst</option>
-          <option value="finished-desc">Zuletzt beendet</option>
-          <option value="release-desc">Release — neueste zuerst</option>
-          <option value="added-desc">Zuletzt hinzugefügt</option>
-        </select>
-        <div class="seg" id="viewseg">
-          <button data-view="grid" aria-pressed="true" type="button">Raster</button>
-          <button data-view="table" aria-pressed="false" type="button">Tabelle</button>
+      <main>
+        <div class="toolbar">
+          <span class="count" id="count"></span>
+          <button class="btn btn-sm filter-toggle" id="btn-filters" type="button" aria-expanded="false" aria-controls="rail">Filter</button>
+          <select class="inp" id="f-sort" style="width:auto">
+            <option value="score-desc">Wertung — hoch zu niedrig</option>
+            <option value="score-asc">Wertung — niedrig zu hoch</option>
+            <option value="title-asc">Titel A–Z</option>
+            <option value="hours-desc">Stunden — meiste zuerst</option>
+            <option value="completion-desc">Fortschritt — höchster zuerst</option>
+            <option value="finished-desc">Zuletzt beendet</option>
+            <option value="release-desc">Release — neueste zuerst</option>
+            <option value="added-desc">Zuletzt hinzugefügt</option>
+          </select>
+          <div class="seg" id="viewseg">
+            <button data-view="grid" aria-pressed="true" type="button">Raster</button>
+            <button data-view="table" aria-pressed="false" type="button">Tabelle</button>
+          </div>
         </div>
-      </div>
-      <div class="activefilters" id="activefilters" hidden></div>
-      <div id="results"></div>
+        <div class="activefilters" id="activefilters" hidden></div>
+        <div id="results"></div>
+      </main>
+    </div>
+  </section>
 
-      <section class="morepanel" id="more" aria-label="Verwalten">
-        <div class="morelist">
-          <button class="morerow" id="m-add" type="button">
-            <b>Spiel hinzufügen</b><span>Titel tippen, Treffer wählen, bewerten</span>
-          </button>
-          <button class="morerow" id="m-bulk" type="button">
-            <b>Mehrere eintragen</b><span>Ganze Liste auf einmal, Cover und Daten kommen automatisch dazu</span>
-          </button>
-          <button class="morerow" id="m-settings" type="button">
-            <b>Einstellungen</b><span>GitHub-Token und Spieledatenbank für dieses Gerät</span>
-          </button>
-          <button class="morerow" id="m-export" type="button">
-            <b>Exportieren</b><span>Das ganze Archiv als JSON sichern</span>
-          </button>
-          <button class="morerow" id="m-import" type="button">
-            <b>Importieren</b><span>Eine JSON-Datei einlesen</span>
-          </button>
-        </div>
-        <p class="hint" style="margin-top:16px">Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.</p>
-      </section>
-    </main>
-  </div>
+  <!-- ============ Hinzufügen ============ -->
+  <section class="tabpage" id="page-add">
+    <div class="page-head">
+      <h2>Spiel hinzufügen</h2>
+      <p>Titel eingeben, das richtige Spiel wählen — Cover, Release, Plattform, Genres und die übliche Spieldauer kommen mit.</p>
+    </div>
+    <div class="searchbar">
+      <input class="inp" id="add-q" type="search" placeholder="Spiel suchen …" autocomplete="off" spellcheck="false">
+      <button class="btn btn-accent" id="add-go" type="button">Suchen</button>
+    </div>
+    <div class="ai-status" id="add-status"></div>
+    <div id="add-results"></div>
+    <div class="add-alt">
+      <button class="btn" id="add-manual" type="button">Ohne Datenbank eintragen</button>
+      <button class="btn" id="add-bulk" type="button">Mehrere auf einmal</button>
+    </div>
+  </section>
 
-  <footer class="foot">
-    Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.
-  </footer>
+  <!-- ============ Listen ============ -->
+  <section class="tabpage" id="page-lists">
+    <div id="lists-view"></div>
+  </section>
+
+  <!-- ============ Mehr ============ -->
+  <section class="tabpage" id="page-more">
+    <div class="page-head"><h2>Verwalten</h2></div>
+    <div class="morelist">
+      <button class="morerow" id="m-settings" type="button">
+        <b>Einstellungen</b><span>GitHub-Token und Spieledatenbank für dieses Gerät</span>
+      </button>
+      <button class="morerow" id="m-bulk" type="button">
+        <b>Mehrere eintragen</b><span>Ganze Liste auf einmal, Cover und Daten kommen automatisch dazu</span>
+      </button>
+      <button class="morerow" id="m-export" type="button">
+        <b>Exportieren</b><span>Das ganze Archiv als JSON sichern</span>
+      </button>
+      <button class="morerow" id="m-import" type="button">
+        <b>Importieren</b><span>Eine JSON-Datei einlesen</span>
+      </button>
+    </div>
+    <p class="hint" style="margin-top:16px">Spieldaten und Cover von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>.</p>
+  </section>
 </div>
 
 <button class="fab" id="fab" type="button" aria-label="Spiel hinzufügen">
   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
 </button>
-
-<nav class="tabbar" id="tabbar" aria-label="Bereiche">
-  <button type="button" data-tab="archiv" aria-selected="true">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg>
-    <em>Archiv</em>
-  </button>
-  <button type="button" data-tab="filter" aria-selected="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/></svg>
-    <em>Filter<span class="tab-badge" id="tab-badge" hidden></span></em>
-  </button>
-  <button type="button" data-tab="statistik" aria-selected="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="4.4" height="9" rx="1.2"/><rect x="9.8" y="7" width="4.4" height="14" rx="1.2"/><rect x="16.6" y="3" width="4.4" height="18" rx="1.2"/></svg>
-    <em>Statistik</em>
-  </button>
-  <button type="button" data-tab="mehr" aria-selected="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
-    <em>Mehr</em>
-  </button>
-</nav>
 
 <input type="file" id="file-import" accept="application/json,.json" hidden>
 <div id="overlay"></div>

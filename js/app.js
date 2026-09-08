@@ -34,6 +34,8 @@ var PLAT_SHORT = {"PC":"PC","PlayStation 5":"PS5","PlayStation 4":"PS4","Xbox Se
 var games = [], lists = [];
 var sha = null, saveState = "idle", lastSaved = null, saveTimer = null, savingNow = false;
 var view = "grid";
+var tab = "archiv";
+var openListId = null;
 var filt = { q:"", status:"", plat:"", genre:"", list:"", min:1, sort:"score-desc" };
 
 var $ = function(s){ return document.querySelector(s); };
@@ -360,6 +362,12 @@ function releaseSort(g){
 }
 
 /* ============ Ableitungen ============ */
+function sortedLists(){
+  return lists.slice().sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); });
+}
+function gamesOfList(id){
+  return games.filter(function(g){ return (g.listIds||[]).indexOf(id)>=0; });
+}
 function allPlatforms(){
   var s={}; games.forEach(function(g){ if(g.platform) s[g.platform]=1; });
   return Object.keys(s).sort(function(a,b){ return a.localeCompare(b,"de"); });
@@ -438,8 +446,12 @@ function coverNode(g,cls,w){
 }
 
 /* ============ Render: Kennzahlen ============ */
+function anyFilter(){
+  return !!(filt.q || filt.status || filt.plat || filt.genre || filt.list || filt.min>1);
+}
 function renderStats(){
-  var rows=visible();
+  var filtered=anyFilter();
+  var rows=filtered ? visible() : games.slice();
   var scored=rows.filter(function(g){ return nz(g.score)!=null; });
   var avg = scored.length ? scored.reduce(function(a,g){ return a+Number(g.score); },0)/scored.length : null;
   var hrs = rows.reduce(function(a,g){ return a+(nz(g.hours)||0); },0);
@@ -457,7 +469,7 @@ function renderStats(){
     if(sub) b.appendChild(el("small",null,sub));
     d.appendChild(b); return d;
   }
-  s.appendChild(tile("Spiele", String(rows.length)));
+  s.appendChild(tile(filtered ? "Spiele (gefiltert)" : "Spiele", String(rows.length)));
   s.appendChild(tile("Ø Wertung", avg==null?"—":(Math.round(avg*10)/10).toLocaleString("de-DE"), avg==null?null:"/ 100"));
   s.appendChild(tile("Stunden", hrs?Math.round(hrs).toLocaleString("de-DE"):"—", hrs?"h gesamt":null));
   s.appendChild(tile("Abgeschlossen", String(done), rows.length?"von "+rows.length:null));
@@ -505,39 +517,12 @@ function renderRail(){
   if($("#f-q").value!==filt.q) $("#f-q").value=filt.q;
   $("#f-sort").value=filt.sort;
 
-  var box=$("#lists"); box.innerHTML="";
-  var allRow=el("button","listrow"); allRow.type="button";
-  allRow.setAttribute("aria-current", String(!filt.list));
-  allRow.appendChild(el("span","lr-name","Alle Spiele"));
-  allRow.appendChild(el("span","lr-n",String(games.length)));
-  allRow.addEventListener("click",function(){
-    filt.list=""; render();
-    if(document.body.getAttribute("data-tab")==="filter") setTab("archiv");
-  });
-  box.appendChild(allRow);
-
-  if(!lists.length){
-    var hint=el("p","hint","Noch keine Listen. Lege z. B. „Top 10 2025“ oder „Nochmal spielen“ an.");
-    hint.style.marginTop="8px"; box.appendChild(hint);
-  }
-  lists.slice().sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); }).forEach(function(l){
-    var n=games.filter(function(g){ return (g.listIds||[]).indexOf(l.id)>=0; }).length;
-    var r=el("button","listrow"); r.type="button";
-    r.setAttribute("aria-current", String(filt.list===l.id));
-    r.appendChild(el("span","lr-name",l.name));
-    r.appendChild(el("span","lr-n",String(n)));
-    var dl=el("button","lr-del","×"); dl.type="button"; dl.setAttribute("aria-label","Liste „"+l.name+"“ löschen");
-    dl.addEventListener("click",function(ev){
-      ev.stopPropagation();
-      if(confirm("Liste „"+l.name+"“ löschen? Die Spiele bleiben erhalten.")) dropList(l.id);
-    });
-    r.appendChild(dl);
-    r.addEventListener("click",function(){
-      filt.list=(filt.list===l.id)?"":l.id; render();
-      if(document.body.getAttribute("data-tab")==="filter") setTab("archiv");
-    });
-    box.appendChild(r);
-  });
+  var ls=$("#f-list"), lfocus=document.activeElement===ls;
+  ls.innerHTML="";
+  var o0=el("option",null,"Alle Listen"); o0.value=""; ls.appendChild(o0);
+  sortedLists().forEach(function(l){ var oo=el("option",null,l.name); oo.value=l.id; ls.appendChild(oo); });
+  ls.value = lists.some(function(l){ return l.id===filt.list; }) ? filt.list : "";
+  if(lfocus) ls.focus();
 }
 
 /* ============ Render: Karten & Tabelle ============ */
@@ -591,9 +576,9 @@ function cardNode(g, rank){
   return a;
 }
 
-function renderGrid(rows){
+function renderGrid(rows, sortKey){
   var wrap=el("div","grid");
-  var ranked = filt.sort==="score-desc";
+  var ranked = (sortKey || filt.sort)==="score-desc";
   rows.forEach(function(g,i){ wrap.appendChild(cardNode(g, ranked && nz(g.score)!=null ? i+1 : 0)); });
   return wrap;
 }
@@ -672,7 +657,7 @@ function renderEmpty(){
     L.appendChild(ul);
     var row=el("div"); row.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
     var b1=el("button","btn btn-accent","Erstes Spiel eintragen"); b1.type="button";
-    b1.addEventListener("click",function(){ openEditor(null); });
+    b1.addEventListener("click",function(){ setTab("add"); });
     var b2=el("button","btn","Mehrere auf einmal"); b2.type="button";
     b2.addEventListener("click",openBulk);
     var b3=el("button","btn btn-quiet","JSON importieren"); b3.type="button";
@@ -723,6 +708,193 @@ function renderActiveFilters(){
   }
 }
 
+/* ============ Seite: Hinzufügen ============ */
+var addCtl=null, addTimer=null;
+
+function renderAddPage(){
+  var st=$("#add-status"), box=$("#add-results");
+  if(!rawgKey()){
+    box.innerHTML="";
+    st.className="ai-status"; st.innerHTML="";
+    st.appendChild(document.createTextNode("Für die Datenbanksuche fehlt der Key dieses Geräts. "));
+    var lnk=el("button","btn btn-quiet btn-sm","Jetzt eintragen"); lnk.type="button";
+    lnk.addEventListener("click",function(){ openSettings(); });
+    st.appendChild(lnk);
+  }
+}
+
+function runAddSearch(){
+  var q=($("#add-q").value||"").trim();
+  var st=$("#add-status"), box=$("#add-results");
+  box.innerHTML="";
+  if(q.length<2){ st.className="ai-status bad"; st.textContent="Erst ein paar Buchstaben tippen."; return; }
+  if(!rawgKey()){ renderAddPage(); return; }
+  if(addCtl) addCtl.abort();
+  addCtl=new AbortController();
+  st.className="ai-status"; st.innerHTML="";
+  st.appendChild(el("span","spin")); st.appendChild(document.createTextNode("sucht …"));
+  rawgSearch(q, addCtl.signal).then(function(hits){
+    if(!hits.length){
+      st.className="ai-status";
+      st.textContent="Nichts gefunden. Du kannst das Spiel trotzdem von Hand eintragen.";
+      return;
+    }
+    st.className="ai-status";
+    st.textContent=hits.length+" Treffer — wähl das richtige Spiel aus:";
+    var grid=el("div","hits");
+    hits.forEach(function(hit){
+      var b=el("button","hit"); b.type="button";
+      var art=el("div","hit-art");
+      if(hit.cover){
+        var im=el("img"); im.src=rimg(hit.cover,420); im.alt=""; im.loading="lazy";
+        im.addEventListener("error",function(){
+          im.remove(); tileStyle(art,hit.name); art.appendChild(el("div","cover-ph",initials(hit.name)));
+        });
+        art.appendChild(im);
+      } else { tileStyle(art,hit.name); art.appendChild(el("div","cover-ph",initials(hit.name))); }
+      b.appendChild(art);
+      var bd=el("div","hit-body");
+      bd.appendChild(el("div","hit-n",hit.name));
+      var m=[]; if(hit.release) m.push(String(hit.release).slice(0,4));
+      if(hit.platforms && hit.platforms.length) m.push(hit.platforms.slice(0,3).join(", "));
+      if(hit.playtime) m.push("ca. "+hit.playtime+" h");
+      bd.appendChild(el("div","hit-m", m.join(" · ") || "keine Angaben"));
+      b.appendChild(bd);
+      b.addEventListener("click",function(){ openEditor(null, hit); });
+      grid.appendChild(b);
+    });
+    box.appendChild(grid);
+  }).catch(function(e){
+    if(e && e.name==="AbortError") return;
+    st.className="ai-status bad";
+    st.textContent = e && e.message ? e.message : "Suche fehlgeschlagen.";
+  });
+}
+
+/* ============ Seite: Listen ============ */
+function renderListsPage(){
+  var box=$("#lists-view"); box.innerHTML="";
+  var current = openListId ? lists.find(function(l){ return l.id===openListId; }) : null;
+  if(current) box.appendChild(renderListDetail(current));
+  else box.appendChild(renderListOverview());
+}
+
+function miniStrip(rows){
+  var strip=el("div","listcard-strip");
+  var shown=rows.slice(0,4);
+  for(var i=0;i<4;i++){
+    if(shown[i]) strip.appendChild(coverNode(shown[i],"",420));
+    else { var e=el("div"); e.style.background="var(--surface-2)"; strip.appendChild(e); }
+  }
+  return strip;
+}
+
+function renderListOverview(){
+  var wrap=el("div");
+  var head=el("div","page-head");
+  head.appendChild(el("h2",null,"Listen"));
+  head.appendChild(el("p",null,"Eigene Zusammenstellungen neben dem Status — jede Liste behält ihre eigene Reihenfolge und Ansicht."));
+  wrap.appendChild(head);
+
+  var grid=el("div","listgrid");
+  sortedLists().forEach(function(l){
+    var rows=gamesOfList(l.id).sort(sorter(l.sort||"score-desc"));
+    var c=el("button","listcard"); c.type="button";
+    c.appendChild(miniStrip(rows));
+    var bd=el("div","listcard-body");
+    bd.appendChild(el("div","listcard-n",l.name));
+    bd.appendChild(el("div","listcard-c", rows.length===1 ? "1 Spiel" : rows.length+" Spiele"));
+    c.appendChild(bd);
+    c.addEventListener("click",function(){ openListId=l.id; render(); window.scrollTo(0,0); });
+    grid.appendChild(c);
+  });
+
+  var nb=el("button","listcard is-new"); nb.type="button";
+  var nbi=el("div"); nbi.style.cssText="display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px";
+  nbi.appendChild(el("div",null,"+"));
+  nbi.appendChild(el("div","listcard-n","Neue Liste"));
+  nb.appendChild(nbi);
+  nb.addEventListener("click",function(){ newList(function(l){ openListId=l.id; render(); }); });
+  grid.appendChild(nb);
+
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+function renderListDetail(l){
+  var wrap=el("div");
+  var rows=gamesOfList(l.id).sort(sorter(l.sort||"score-desc"));
+
+  var back=el("button","btn btn-quiet btn-sm","← Alle Listen"); back.type="button";
+  back.style.marginBottom="12px";
+  back.addEventListener("click",function(){ openListId=null; render(); window.scrollTo(0,0); });
+  wrap.appendChild(back);
+
+  var head=el("div","listhead");
+  var left=el("div");
+  left.appendChild(el("h2",null,l.name));
+  left.appendChild(el("div","sub", (rows.length===1 ? "1 Spiel" : rows.length+" Spiele")));
+  head.appendChild(left);
+
+  var acts=el("div","listhead-acts");
+  var sortSel=el("select","inp"); sortSel.style.width="auto";
+  sortSel.setAttribute("aria-label","Reihenfolge dieser Liste");
+  [["score-desc","Wertung — hoch zu niedrig"],["score-asc","Wertung — niedrig zu hoch"],
+   ["title-asc","Titel A–Z"],["hours-desc","Stunden — meiste zuerst"],
+   ["completion-desc","Fortschritt — höchster zuerst"],["finished-desc","Zuletzt beendet"],
+   ["release-desc","Release — neueste zuerst"],["added-desc","Zuletzt hinzugefügt"]].forEach(function(o){
+    var oo=el("option",null,o[1]); oo.value=o[0]; sortSel.appendChild(oo);
+  });
+  sortSel.value = l.sort || "score-desc";
+  sortSel.addEventListener("change",function(){ l.sort=sortSel.value; putList(l); });
+  acts.appendChild(sortSel);
+
+  var seg=el("div","seg");
+  [["grid","Raster"],["table","Tabelle"]].forEach(function(v){
+    var b=el("button",null,v[1]); b.type="button";
+    b.setAttribute("aria-pressed", String((l.view||"grid")===v[0]));
+    b.addEventListener("click",function(){ l.view=v[0]; putList(l); });
+    seg.appendChild(b);
+  });
+  acts.appendChild(seg);
+
+  var ren=el("button","btn btn-sm","Umbenennen"); ren.type="button";
+  ren.addEventListener("click",function(){
+    var name=prompt("Neuer Name:", l.name);
+    if(name==null) return;
+    name=name.trim(); if(!name) return;
+    l.name=name; putList(l);
+  });
+  var del=el("button","btn btn-sm btn-danger","Löschen"); del.type="button";
+  del.addEventListener("click",function(){
+    if(!confirm("Liste „"+l.name+"“ löschen? Die Spiele bleiben erhalten.")) return;
+    openListId=null; dropList(l.id);
+  });
+  acts.appendChild(ren); acts.appendChild(del);
+  head.appendChild(acts);
+  wrap.appendChild(head);
+
+  if(!rows.length){
+    var e=el("div","empty");
+    var L=el("div");
+    L.appendChild(el("h2",null,"Diese Liste ist noch leer"));
+    L.appendChild(el("p",null,"Öffne ein Spiel im Archiv und hak dort „"+l.name+"“ an — ein Spiel kann in beliebig vielen Listen stehen."));
+    var gb=el("button","btn btn-accent","Zum Archiv"); gb.type="button";
+    gb.addEventListener("click",function(){ setTab("archiv"); });
+    L.appendChild(gb);
+    e.appendChild(L);
+    var R=el("div");
+    R.appendChild(el("span","demo-label","So sieht ein Eintrag aus"));
+    R.appendChild(demoCard());
+    e.appendChild(R);
+    wrap.appendChild(e);
+    return wrap;
+  }
+
+  wrap.appendChild((l.view||"grid")==="grid" ? renderGrid(rows, l.sort||"score-desc") : renderTable(rows));
+  return wrap;
+}
+
 /* ============ Render ============ */
 function render(){
   renderStats();
@@ -732,10 +904,10 @@ function render(){
   c.appendChild(el("b",null,String(rows.length)));
   c.appendChild(document.createTextNode(" von "+games.length+(games.length===1?" Spiel":" Spielen")));
   renderActiveFilters();
-  var sr=$("#btn-showresults");
-  if(sr) sr.textContent = rows.length===1 ? "1 Spiel anzeigen" : rows.length+" Spiele anzeigen";
   var res=$("#results"); res.innerHTML="";
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
+  renderListsPage();
+  renderAddPage();
 }
 function resetFilters(){
   filt.q=""; filt.status=""; filt.plat=""; filt.genre=""; filt.list=""; filt.min=1;
@@ -770,13 +942,19 @@ function makeDrawer(title){
 /* ============ Editor ============ */
 var draft=null, draftCover=null;
 
-function openEditor(id){
+function openEditor(id, prefill){
   var existing = id ? games.find(function(g){ return g.id===id; }) : null;
   draft = existing ? JSON.parse(JSON.stringify(existing)) : {
     id:uid(), title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
     startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"", listIds:[], createdAt:Date.now()
   };
   draftCover = draft.cover || "";
+  if(!existing && prefill){
+    var c = applyHit(draft, prefill, {force:true});
+    if(c) draftCover = c;
+    draft._platforms = prefill.platforms || [];
+  }
+  if(!existing && openListId && lists.some(function(l){ return l.id===openListId; })) draft.listIds=[openListId];
   paintEditor(!!existing);
 }
 
@@ -1440,35 +1618,57 @@ function doImport(file){
   fr.readAsText(file);
 }
 
-/* ============ Events ============ */
-$("#btn-add").addEventListener("click",function(){ openEditor(null); });
-$("#btn-bulk").addEventListener("click",openBulk);
-$("#btn-settings").addEventListener("click",function(){ openSettings(); });
-$("#btn-newlist").addEventListener("click",function(){ newList(null); });
-$("#btn-reset").addEventListener("click",resetFilters);
+/* ============ Bereiche ============ */
 function setTab(name){
+  tab=name;
   document.body.setAttribute("data-tab", name);
-  Array.prototype.forEach.call($("#tabbar").children, function(b){
+  Array.prototype.forEach.call($("#tabnav").children, function(b){
     b.setAttribute("aria-selected", String(b.dataset.tab===name));
   });
+  Array.prototype.forEach.call(document.querySelectorAll(".tabpage"), function(pg){
+    pg.classList.toggle("is-active", pg.id==="page-"+name);
+  });
   window.scrollTo(0,0);
+  if(name==="add") setTimeout(function(){ var q=$("#add-q"); if(q) q.focus(); },40);
 }
-$("#tabbar").addEventListener("click",function(ev){
+
+/* ============ Events ============ */
+$("#tabnav").addEventListener("click",function(ev){
   var b=ev.target.closest("button[data-tab]"); if(!b) return;
+  if(b.dataset.tab==="lists" && tab==="lists") openListId=null;
   setTab(b.dataset.tab);
+  if(b.dataset.tab==="lists") render();
 });
-$("#fab").addEventListener("click",function(){ openEditor(null); });
-$("#btn-showresults").addEventListener("click",function(){ setTab("archiv"); });
-$("#m-add").addEventListener("click",function(){ openEditor(null); });
-$("#m-bulk").addEventListener("click",openBulk);
+$("#fab").addEventListener("click",function(){ setTab("add"); });
+
+$("#add-go").addEventListener("click",runAddSearch);
+$("#add-q").addEventListener("keydown",function(ev){
+  if(ev.key==="Enter"){ ev.preventDefault(); clearTimeout(addTimer); runAddSearch(); }
+});
+$("#add-q").addEventListener("input",function(){
+  clearTimeout(addTimer);
+  if(rawgKey() && this.value.trim().length>=3) addTimer=setTimeout(runAddSearch,550);
+});
+$("#add-manual").addEventListener("click",function(){ openEditor(null); });
+$("#add-bulk").addEventListener("click",openBulk);
+
 $("#m-settings").addEventListener("click",function(){ openSettings(); });
+$("#m-bulk").addEventListener("click",openBulk);
 $("#m-export").addEventListener("click",doExport);
 $("#m-import").addEventListener("click",function(){ $("#file-import").click(); });
+
+$("#btn-reset").addEventListener("click",resetFilters);
+$("#btn-filters").addEventListener("click",function(){
+  var rail=$("#rail"), open=rail.classList.toggle("is-hidden")===false;
+  this.setAttribute("aria-expanded", String(open));
+  if(open) rail.scrollIntoView({behavior:"smooth", block:"nearest"});
+});
 $("#savechip").addEventListener("click",function(){ if(token()) saveNow(); else openSettings(); });
 $("#file-import").addEventListener("change",function(ev){
   if(ev.target.files && ev.target.files[0]) doImport(ev.target.files[0]);
   ev.target.value="";
 });
+
 var qt=null;
 $("#f-q").addEventListener("input",function(ev){
   clearTimeout(qt); var v=ev.target.value;
@@ -1476,6 +1676,7 @@ $("#f-q").addEventListener("input",function(ev){
 });
 $("#f-plat").addEventListener("change",function(ev){ filt.plat=ev.target.value; render(); });
 $("#f-genre").addEventListener("change",function(ev){ filt.genre=ev.target.value; render(); });
+$("#f-list").addEventListener("change",function(ev){ filt.list=ev.target.value; render(); });
 $("#f-sort").addEventListener("change",function(ev){ filt.sort=ev.target.value; render(); });
 $("#f-min").addEventListener("input",function(ev){
   filt.min=Number(ev.target.value); $("#f-min-out").textContent=filt.min;
@@ -1490,8 +1691,8 @@ $("#viewseg").addEventListener("click",function(ev){
 });
 document.addEventListener("keydown",function(ev){
   if(document.activeElement!==document.body) return;
-  if(ev.key==="/"){ ev.preventDefault(); $("#f-q").focus(); }
-  else if(ev.key==="n" && !ev.metaKey && !ev.ctrlKey && !ev.altKey){ ev.preventDefault(); openEditor(null); }
+  if(ev.key==="/"){ ev.preventDefault(); setTab("archiv"); $("#f-q").focus(); }
+  else if(ev.key==="n" && !ev.metaKey && !ev.ctrlKey && !ev.altKey){ ev.preventDefault(); setTab("add"); }
   else if((ev.metaKey||ev.ctrlKey) && ev.key==="s"){ ev.preventDefault(); saveNow(); }
 });
 window.addEventListener("beforeunload",function(ev){
@@ -1499,7 +1700,7 @@ window.addEventListener("beforeunload",function(ev){
 });
 
 /* ============ Start ============ */
-document.body.setAttribute("data-tab","archiv");
+setTab("archiv");
 
 (function boot(){
   var v=LS.raw("sa.view");
