@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:21:17.820Z",
+  "updatedAt": "2026-09-08T13:21:26.529Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -285,6 +285,31 @@
       ],
       "createdAt": 1788873580279,
       "updatedAt": 1788873602750
+    },
+    {
+      "id": "0694b5c5-7a10-4c24-abee-130db4532a71",
+      "title": "Assassin's Creed Shadows",
+      "release": "2025-03-20",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": 84,
+      "hours": 140,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/526/526881e0f5f8c1550e51df3801f96ea3.jpg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a",
+        "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
+      ],
+      "createdAt": 1788873636442,
+      "updatedAt": 1788873683027
     }
   ]
 }
