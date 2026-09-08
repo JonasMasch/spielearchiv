@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T12:57:20.110Z",
+  "updatedAt": "2026-09-08T13:10:31.028Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -86,6 +86,31 @@
       ],
       "createdAt": 1788872170528,
       "updatedAt": 1788872236606
+    },
+    {
+      "id": "73136c3b-13c1-49dc-b47c-c5a42491c0cd",
+      "title": "The Legend of Zelda: Breath of the Wild",
+      "release": "2017-03-03",
+      "platform": "Switch",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": 98,
+      "hours": 400,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 121,
+      "cover": "https://media.rawg.io/media/games/cc1/cc196a5ad763955d6532cdba236f730c.jpg",
+      "listIds": [
+        "47723e02-2705-4789-83da-8d99c53847cf"
+      ],
+      "createdAt": 1788872966007,
+      "updatedAt": 1788873027523
     }
   ]
 }
