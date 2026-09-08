@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:07:18.628Z",
+  "updatedAt": "2026-09-08T16:11:11.196Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1237,6 +1237,30 @@
       "listIds": [],
       "createdAt": 1788883631458,
       "updatedAt": 1788883635126
+    },
+    {
+      "id": "cc9cd9ab-2fd8-453e-af5b-1dc8b16feb6c",
+      "title": "Forza Horizon 5",
+      "release": "2021-11-08",
+      "platform": "PC",
+      "genres": [
+        "Racing",
+        "Arcade"
+      ],
+      "score": 81,
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 15,
+      "cover": "https://media.rawg.io/media/games/082/082365507ff04d456c700157072d35db.jpg",
+      "listIds": [
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1788883835361,
+      "updatedAt": 1788883867696
     }
   ]
 }
