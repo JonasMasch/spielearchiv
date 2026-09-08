@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:43:01.808Z",
+  "updatedAt": "2026-09-08T13:48:33.497Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -606,6 +606,151 @@
       ],
       "createdAt": 1788874933271,
       "updatedAt": 1788874978302
+    },
+    {
+      "id": "44a98d8c-d38d-42ae-91f4-9bb58a658d5d",
+      "title": "God of War (2018)",
+      "release": "2018-04-20",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": 91,
+      "hours": 21,
+      "completion": 80,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 15,
+      "cover": "https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a"
+      ],
+      "createdAt": 1788874999217,
+      "updatedAt": 1788875024518
+    },
+    {
+      "id": "cbb38a51-2ebb-42e5-83cc-cf83b7b7c18c",
+      "title": "Horizon Forbidden West",
+      "release": "2022-02-18",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": 98,
+      "hours": 112,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/bf7/bf73b105ccbba42107986bbcd96fcada.jpg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a"
+      ],
+      "createdAt": 1788875053491,
+      "updatedAt": 1788875082911
+    },
+    {
+      "id": "11fb5a25-9ca7-483f-a9f8-02a8c830245c",
+      "title": "THRONE AND LIBERTY",
+      "release": "2024-10-01",
+      "platform": "PC",
+      "genres": [
+        "Massively Multiplayer",
+        "Adventure",
+        "Action"
+      ],
+      "score": 67,
+      "hours": 38,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 3,
+      "cover": "https://media.rawg.io/media/screenshots/f5a/f5a47c651a93a57b6b0341b2af53e966.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+      ],
+      "createdAt": 1788875106699,
+      "updatedAt": 1788875132696
+    },
+    {
+      "id": "22f9f4ef-0d11-47e5-a768-38031cc8ed26",
+      "title": "The Crew: Motorfest",
+      "release": "2023-09-14",
+      "platform": "PC",
+      "genres": [
+        "Racing",
+        "Arcade"
+      ],
+      "score": 80,
+      "hours": 31,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 5,
+      "cover": "https://media.rawg.io/media/games/01c/01c5ea9e52ba297b28f11938e5005758.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+      ],
+      "createdAt": 1788875155611,
+      "updatedAt": 1788875180042
+    },
+    {
+      "id": "30ceabb1-2c46-42a2-ac0f-07cf7cd39426",
+      "title": "Astro Bot",
+      "release": "2024-09-06",
+      "platform": "PS5",
+      "genres": [
+        "Platformer",
+        "Action"
+      ],
+      "score": 92,
+      "hours": 18,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/b19/b19cdd6be95ffffd63fdd2d1fbac057a.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+      ],
+      "createdAt": 1788875195705,
+      "updatedAt": 1788875218835
+    },
+    {
+      "id": "e7c5b3ca-7d68-4aba-8f57-fb518b4f5661",
+      "title": "Pokémon Brilliant Diamond, Shining Pearl",
+      "release": "2021-11-19",
+      "platform": "Switch",
+      "genres": [
+        "Adventure",
+        "RPG"
+      ],
+      "score": 69,
+      "hours": 19,
+      "completion": 80,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/screenshots/b35/b35a365997998da1d667b4dec99d0253.jpg",
+      "listIds": [
+        "ce5fae23-220d-4ea9-a52f-67d719d49eeb"
+      ],
+      "createdAt": 1788875258959,
+      "updatedAt": 1788875283230
     }
   ]
 }
