@@ -82,7 +82,9 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
 }
 ```
 
-`status` ist `gespielt`, `spiele`, `backlog` oder `abgebrochen`. `cover` ist entweder eine Bild-URL
+`status` ist `gespielt`, `spiele`, `backlog` oder `abgebrochen`. `release`, `startedOn` und
+`finishedOn` stehen als ISO-Datum in der Datei, damit sich danach sortieren lässt; in der Oberfläche
+werden sie als Tag.Monat.Jahr angezeigt und eingegeben. `cover` ist entweder eine Bild-URL
 oder ein `data:`-URI aus einem eigenen Upload (beim Hochladen auf ca. 300×420 verkleinert).
 `hours` sind deine eigenen Stunden, `avgHours` die übliche Spieldauer laut RAWG.
 

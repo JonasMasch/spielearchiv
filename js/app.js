@@ -15,7 +15,7 @@ var STATUS = [
 var STATUS_L = {}; STATUS.forEach(function(s){ STATUS_L[s.k]=s.l; });
 
 var BANDS = [
-  {min:90, l:"Meisterwerk",  c:"top"},
+  {min:90, l:"Meisterwerk",  c:"elite"},
   {min:80, l:"Herausragend", c:"top"},
   {min:70, l:"Stark",        c:"good"},
   {min:60, l:"Solide",       c:"good"},
@@ -323,6 +323,23 @@ function fmtHours(h){
 function fmtAvg(h){
   var n=nz(h);
   return (n==null || !isFinite(n) || n<=0) ? null : Math.round(n).toLocaleString("de-DE")+" h";
+}
+function pad2(v){ return ("0"+String(v)).slice(-2); }
+function isoToDE(v){
+  v=String(v||"").trim();
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v); if(m) return m[3]+"."+m[2]+"."+m[1];
+  var m2=/^(\d{4})-(\d{2})$/.exec(v);         if(m2) return m2[2]+"."+m2[1];
+  return v;
+}
+function deToIso(v){
+  v=String(v||"").trim().replace(/\s+/g,"");
+  if(!v) return "";
+  var m=/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(v);
+  if(m) return m[3]+"-"+pad2(m[2])+"-"+pad2(m[1]);
+  var m2=/^(\d{1,2})\.(\d{4})$/.exec(v);
+  if(m2) return m2[2]+"-"+pad2(m2[1]);
+  if(/^\d{4}$/.test(v)) return v;
+  return v;
 }
 function parseDate(s){
   var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");
@@ -800,7 +817,7 @@ function paintEditor(isEdit){
   var srcBtn=el("button","btn btn-sm","In der Datenbank suchen"); srcBtn.type="button";
   srcRow.appendChild(srcBtn); srcRow.appendChild(srcStatus);
   right.appendChild(srcRow);
-  var resBox=el("div"); right.appendChild(resBox);
+  var resBox=el("div");
 
   var coverActs=el("div"); right.appendChild(coverActs);
   function paintCoverActions(){
@@ -818,6 +835,7 @@ function paintEditor(isEdit){
   }
   cp.appendChild(right); cp.appendChild(fin);
   body.appendChild(cp);
+  body.appendChild(resBox);
 
   var searchCtl=null, searchTimer=null;
   function busy(node,txt){ node.className="ai-status"; node.innerHTML=""; node.appendChild(el("span","spin")); node.appendChild(document.createTextNode(txt)); }
@@ -862,7 +880,7 @@ function paintEditor(isEdit){
           var cover=applyHit(draft,h,{force:true});
           if(cover) draftCover=cover;
           it.value=draft.title;
-          var ri=document.getElementById("e-release"); if(ri) ri.value=draft.release||"";
+          var ri=document.getElementById("e-release"); if(ri) ri.value=isoToDE(draft.release||"");
           var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
           draft._platforms = h.platforms || [];
           paintTags(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
@@ -960,7 +978,17 @@ function paintEditor(isEdit){
   body.appendChild(r2);
 
   var r3=el("div","row2");
-  r3.appendChild(textField("Erschienen","release","2022 oder 2022-02-25"));
+  var frel=el("div","field");
+  var lrel=el("label",null,"Erschienen"); lrel.htmlFor="e-release"; frel.appendChild(lrel);
+  var irel=el("input","inp"); irel.id="e-release"; irel.autocomplete="off";
+  irel.placeholder="25.02.2022 oder 2022";
+  irel.value=isoToDE(draft.release||"");
+  irel.addEventListener("input",function(){ draft.release=deToIso(irel.value); });
+  irel.addEventListener("blur",function(){ irel.value=isoToDE(draft.release||""); });
+  frel.appendChild(irel);
+  var hrel=el("p","hint","Tag.Monat.Jahr — nur das Jahr reicht auch.");
+  hrel.style.marginTop="5px"; frel.appendChild(hrel);
+  r3.appendChild(frel);
   var fp=el("div","field");
   var lp=el("label",null,"Plattform"); lp.htmlFor="e-platform"; fp.appendChild(lp);
   var ip=el("input","inp"); ip.id="e-platform"; ip.value=draft.platform||""; ip.placeholder="PC, PS5, Switch …"; ip.setAttribute("list","dl-plat");
@@ -1319,7 +1347,7 @@ function openSettings(msg){
   var s2=el("div","sec");
   s2.appendChild(el("div","sec-h","Spieledatenbank (RAWG)"));
   var p2=el("p","sec-p");
-  p2.textContent = "Liefert Cover, Release, Plattform und Genres beim Eintragen. Kostenlosen Key holen unter rawg.io/apidocs — er bleibt wie der Token nur in diesem Browser und landet nicht im Repo.";
+  p2.textContent = "Liefert Cover, Release, Plattform und Genres beim Eintragen. Kostenlosen Key holen unter rawg.io/apidocs. Wichtig: Token und Key gelten nur in diesem Browser — auf Handy, Tablet und jedem weiteren Rechner musst du sie einmal neu eintragen.";
   s2.appendChild(p2);
   var fr2=el("div","field");
   var lr=el("label",null,"API-Key"); lr.htmlFor="s-rawg"; fr2.appendChild(lr);
