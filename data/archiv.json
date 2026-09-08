@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:05:26.612Z",
+  "updatedAt": "2026-09-08T16:06:39.345Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1171,6 +1171,28 @@
       "listIds": [],
       "createdAt": 1788883520324,
       "updatedAt": 1788883523110
+    },
+    {
+      "id": "00681f2b-d7d8-45f1-8da1-2d876aacf0e5",
+      "title": "Resonance: A Plague Tale Legacy",
+      "release": "2026-08-27",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/c55/c55cc53bdf3cc4ee6f0a39f3c8b1dca7.jpg",
+      "listIds": [],
+      "createdAt": 1788883593491,
+      "updatedAt": 1788883595842
     }
   ]
 }
