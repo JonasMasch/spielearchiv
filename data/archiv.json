@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:39:54.953Z",
+  "updatedAt": "2026-09-08T13:41:07.538Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -534,6 +534,30 @@
       ],
       "createdAt": 1788874653246,
       "updatedAt": 1788874688276
+    },
+    {
+      "id": "00a2f167-629a-4020-ae77-cbace8b88d43",
+      "title": "Super Mario 3D World",
+      "release": "2013-11-21",
+      "platform": "Switch",
+      "genres": [
+        "Platformer",
+        "Action"
+      ],
+      "score": 80,
+      "hours": 30,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 58,
+      "cover": "https://media.rawg.io/media/games/cb7/cb78e5b2ada0e38cafb14cd00cfafbd7.jpg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a"
+      ],
+      "createdAt": 1788874837612,
+      "updatedAt": 1788874864033
     }
   ]
 }
