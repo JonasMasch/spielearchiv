@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:11:52.110Z",
+  "updatedAt": "2026-09-08T13:12:53.236Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -134,6 +134,27 @@
       ],
       "createdAt": 1788873074019,
       "updatedAt": 1788873108607
+    },
+    {
+      "id": "45a6482d-b527-44ea-ad15-dabfc901bc11",
+      "title": "Mario + Rabbids Sparks of Hope",
+      "release": "2022-10-20",
+      "platform": "Switch",
+      "genres": [
+        "RPG"
+      ],
+      "score": 63,
+      "hours": 15,
+      "completion": 35,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "abgebrochen",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/1fa/1faa976b3f7a43195fa708d9a80e7468.jpg",
+      "listIds": [],
+      "createdAt": 1788873132258,
+      "updatedAt": 1788873169735
     }
   ]
 }
