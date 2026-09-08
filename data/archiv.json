@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:10:31.028Z",
+  "updatedAt": "2026-09-08T13:11:52.110Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -111,6 +111,29 @@
       ],
       "createdAt": 1788872966007,
       "updatedAt": 1788873027523
+    },
+    {
+      "id": "9877dad9-0a9d-4b6c-936b-b643b71c98e3",
+      "title": "Kirby and the Forgotten Land",
+      "release": "2022-03-25",
+      "platform": "Switch",
+      "genres": [
+        "Action"
+      ],
+      "score": 81,
+      "hours": 20,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/42a/42a71f0cbe23185f778c10462faa12d8.jpg",
+      "listIds": [
+        "47723e02-2705-4789-83da-8d99c53847cf"
+      ],
+      "createdAt": 1788873074019,
+      "updatedAt": 1788873108607
     }
   ]
 }
