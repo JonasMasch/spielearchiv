@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T15:58:16.703Z",
+  "updatedAt": "2026-09-08T15:58:44.208Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -798,6 +798,29 @@
       "listIds": [],
       "createdAt": 1788883080268,
       "updatedAt": 1788883093202
+    },
+    {
+      "id": "1370644a-fb33-46a9-b902-1c5570936e18",
+      "title": "Assassin's Creed Valhalla",
+      "release": "2020-11-10",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action",
+        "RPG"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 5,
+      "cover": "https://media.rawg.io/media/games/934/9346092ae11bf7582c883869468171cc.jpg",
+      "listIds": [],
+      "createdAt": 1788883117902,
+      "updatedAt": 1788883120705
     }
   ]
 }
