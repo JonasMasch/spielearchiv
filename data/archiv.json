@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T16:01:28.641Z",
+  "updatedAt": "2026-09-08T16:01:47.589Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -994,6 +994,28 @@
       "listIds": [],
       "createdAt": 1788883283221,
       "updatedAt": 1788883285138
+    },
+    {
+      "id": "36c96eeb-3838-4d39-93b8-f2151664ea30",
+      "title": "Shadow of the Tomb Raider",
+      "release": "2018-09-14",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 10,
+      "cover": "https://media.rawg.io/media/games/7f6/7f6cd70ba2ad57053b4847c13569f2d8.jpg",
+      "listIds": [],
+      "createdAt": 1788883302205,
+      "updatedAt": 1788883304088
     }
   ]
 }
