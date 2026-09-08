@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T13:18:58.900Z",
+  "updatedAt": "2026-09-08T13:20:06.251Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -257,6 +257,29 @@
       ],
       "createdAt": 1788873467415,
       "updatedAt": 1788873499907
+    },
+    {
+      "id": "f6fc8d2d-2fd4-4a04-a0ed-3686ebfd85ce",
+      "title": "Mario Kart Wii",
+      "release": "2008-04-27",
+      "platform": "Wii",
+      "genres": [
+        "Racing"
+      ],
+      "score": 80,
+      "hours": 20,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 12,
+      "cover": "https://media.rawg.io/media/screenshots/68a/68a5dfb584c006bb3064b83881669aaf.jpg",
+      "listIds": [
+        "5a665922-852b-4725-8453-c204a31a9d5a"
+      ],
+      "createdAt": 1788873580279,
+      "updatedAt": 1788873602750
     }
   ]
 }
