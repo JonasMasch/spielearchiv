@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T15:58:44.208Z",
+  "updatedAt": "2026-09-08T15:59:17.939Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -821,6 +821,27 @@
       "listIds": [],
       "createdAt": 1788883117902,
       "updatedAt": 1788883120705
+    },
+    {
+      "id": "3e1db7f2-16c5-4ffd-b50f-9b013929b951",
+      "title": "Assassin's Creed Syndicate",
+      "release": "2015-10-23",
+      "platform": "PC",
+      "genres": [
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "avgHours": 22,
+      "cover": "https://media.rawg.io/media/games/9f1/9f189c639f70f91166df415811a8b525.jpg",
+      "listIds": [],
+      "createdAt": 1788883152653,
+      "updatedAt": 1788883154437
     }
   ]
 }
