@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-08T11:54:34.505Z",
+  "updatedAt": "2026-09-08T11:56:32.156Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -37,6 +37,30 @@
       ],
       "createdAt": 1788868305381,
       "updatedAt": 1788868471002
+    },
+    {
+      "id": "735301a7-b6ae-43ae-a382-f8b48b9daf69",
+      "title": "Marvel's Spider-Man 2",
+      "release": "2023-10-20",
+      "platform": "PS5",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": 93,
+      "hours": 27,
+      "completion": 100,
+      "startedOn": "2026-07-20",
+      "finishedOn": "2026-08-25",
+      "status": "gespielt",
+      "notes": "",
+      "avgHours": 26,
+      "cover": "https://media.rawg.io/media/games/7ae/7ae5a14cdb4ab222a134c15f4629e430.jpg",
+      "listIds": [
+        "47723e02-2705-4789-83da-8d99c53847cf"
+      ],
+      "createdAt": 1788868498852,
+      "updatedAt": 1788868588654
     }
   ]
 }
