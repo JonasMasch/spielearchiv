@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:36:42.339Z",
+  "updatedAt": "2026-09-10T08:38:58.874Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1611,6 +1611,31 @@
       ],
       "createdAt": 1789028617152,
       "updatedAt": 1789028662220
+    },
+    {
+      "id": "5a9b0a53-8e0f-4dab-97b4-e2da31a0d82f",
+      "title": "Minecraft",
+      "release": "2009-05-10",
+      "platform": "PC",
+      "genres": [
+        "Action",
+        "Arcade",
+        "Simulation"
+      ],
+      "score": 100,
+      "hours": 3500,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": 26,
+      "cover": "https://media.rawg.io/media/games/b4e/b4e4c73d5aa4ec66bbf75375c4847a2b.jpg",
+      "listIds": [],
+      "createdAt": 1789029506254,
+      "updatedAt": 1789029535371
     }
   ]
 }
