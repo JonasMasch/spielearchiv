@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:29:40.524Z",
+  "updatedAt": "2026-09-10T08:30:15.257Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -635,7 +635,7 @@
       "id": "44a98d8c-d38d-42ae-91f4-9bb58a658d5d",
       "title": "God of War (2018)",
       "release": "2018-04-20",
-      "platform": "PC",
+      "platform": "PS5",
       "genres": [
         "Action"
       ],
@@ -646,13 +646,15 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": 15,
       "cover": "https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg",
       "listIds": [
         "5a665922-852b-4725-8453-c204a31a9d5a"
       ],
       "createdAt": 1788874999217,
-      "updatedAt": 1788875024518
+      "updatedAt": 1789029011755
     },
     {
       "id": "cbb38a51-2ebb-42e5-83cc-cf83b7b7c18c",
