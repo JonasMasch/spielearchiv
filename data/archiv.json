@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:29:04.825Z",
+  "updatedAt": "2026-09-10T08:29:13.474Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1333,7 +1333,7 @@
       "id": "4ed7af1a-7666-42fd-b1c3-6cdacd22dfdf",
       "title": "Forza Horizon 4",
       "release": "2018-10-02",
-      "platform": "PC",
+      "platform": "Xbox Series",
       "genres": [
         "Racing",
         "Arcade"
@@ -1345,13 +1345,15 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": 13,
       "cover": "https://media.rawg.io/media/games/786/7863e587bac630de82fca50d799236a9.jpg",
       "listIds": [
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788883871095,
-      "updatedAt": 1788883895063
+      "updatedAt": 1789028949973
     },
     {
       "id": "510e24ac-dc7d-4642-9daa-76976227f4e7",
