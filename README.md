@@ -77,6 +77,8 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
     "hours": 128.5,
     "avgHours": 58,
     "completion": 92,
+    "playthroughs": 2,
+    "priority": "",
     "startedOn": "2024-03-05",
     "finishedOn": "2024-04-21",
     "status": "gespielt",
@@ -94,7 +96,9 @@ Jahreszahl „erscheint TT.MM.JJJJ“. `release`, `startedOn` und
 `finishedOn` stehen als ISO-Datum in der Datei, damit sich danach sortieren lässt; in der Oberfläche
 werden sie als Tag.Monat.Jahr angezeigt und eingegeben. `cover` ist entweder eine Bild-URL
 oder ein `data:`-URI aus einem eigenen Upload (beim Hochladen auf ca. 300×420 verkleinert).
-`hours` sind deine eigenen Stunden, `avgHours` die übliche Spieldauer laut RAWG.
+`hours` sind deine eigenen Stunden, `avgHours` die übliche Spieldauer laut RAWG,
+`playthroughs` die Zahl der Durchgänge. `priority` ist die Vorfreude von 1 bis 5 und wird nur bei
+`backlog` und `wunschliste` erfasst und angezeigt.
 
 Weil das Repo öffentlich sein muss, damit Pages kostenlos ist: Dein Archiv ist lesbar für jeden, der
 die Adresse kennt. Schreiben kann nur, wer den Token hat.

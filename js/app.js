@@ -24,6 +24,9 @@ var BANDS = [
   {min:30, l:"Schwach",      c:"low"},
   {min:0,  l:"Mies",         c:"low"}
 ];
+var PRIO = {1:"irgendwann", 2:"bei Gelegenheit", 3:"gerne bald", 4:"ziemlich bald", 5:"als Nächstes"};
+function wantsPriority(status){ return status==="backlog" || status==="wunschliste"; }
+
 function band(s){ for(var i=0;i<BANDS.length;i++){ if(s>=BANDS[i].min) return BANDS[i]; } return BANDS[BANDS.length-1]; }
 function bandVar(s){ return "var(--band-"+band(s).c+")"; }
 
@@ -436,6 +439,8 @@ function sorter(s){
                               return x-y || byTitle(a,b); };
     case "release-desc":    return function(a,b){ var x=releaseSort(a), y=releaseSort(b);
                               if(x<0&&y<0) return byTitle(a,b); if(x<0) return 1; if(y<0) return -1; return y-x || byTitle(a,b); };
+    case "priority-desc":   return numDesc(function(g){ return g.priority; });
+    case "playthroughs-desc": return numDesc(function(g){ return g.playthroughs; });
     case "added-desc":      return numDesc(function(g){ return g.createdAt; });
     default:                return numDesc(function(g){ return g.score; });
   }
@@ -559,6 +564,19 @@ function renderRail(){
 }
 
 /* ============ Render: Karten & Tabelle ============ */
+function pipsNode(v){
+  var w=el("span","pips");
+  w.setAttribute("role","img");
+  w.setAttribute("aria-label", v+" von 5 — "+(PRIO[v]||""));
+  for(var i=1;i<=5;i++){
+    var p=el("i"); if(i<=v) p.className="on";
+    w.appendChild(p);
+  }
+  return w;
+}
+function factWith(k,node){
+  var f=el("span","fact"); f.appendChild(el("span",null,k)); f.appendChild(node); return f;
+}
 function factNode(k,v){ var f=el("span","fact"); f.appendChild(el("span",null,k)); f.appendChild(el("b",null,v)); return f; }
 
 function cardNode(g, rank){
@@ -595,6 +613,9 @@ function cardNode(g, rank){
   var fh=fmtHours(g.hours); if(fh) facts.appendChild(factNode("Zeit",fh));
   var fa=fmtAvg(g.avgHours); if(fa) facts.appendChild(factNode("Üblich",fa));
   var cp=nz(g.completion); if(cp!=null) facts.appendChild(factNode("Fortschritt",Math.round(cp)+" %"));
+  var pt=nz(g.playthroughs); if(pt) facts.appendChild(factNode("Durchgespielt", pt+"\u00D7"));
+  var pr=nz(g.priority);
+  if(pr && wantsPriority(g.status)) facts.appendChild(factWith("Vorfreude", pipsNode(pr)));
   var sp=fmtSpan(g.startedOn,g.finishedOn); if(sp) facts.appendChild(factNode("Gespielt",sp));
   if(facts.childElementCount) b.appendChild(facts);
 
@@ -648,12 +669,22 @@ function renderTable(rows){
     tdh.appendChild(el("div",null,fh||"—"));
     if(fa2) tdh.appendChild(el("div","t-sub","Ø "+fa2));
     tr.appendChild(tdh);
-    var cp=nz(g.completion);    tr.appendChild(el("td","t-num"+(cp!=null?"":" t-dim"), cp!=null?Math.round(cp)+" %":"—"));
+    var cp=nz(g.completion), ptc=nz(g.playthroughs);
+    var tdc2=el("td","t-num"+(cp!=null?"":" t-dim"));
+    tdc2.appendChild(el("div",null, cp!=null?Math.round(cp)+" %":"—"));
+    if(ptc) tdc2.appendChild(el("div","t-sub", ptc+"\u00D7 durch"));
+    tr.appendChild(tdc2);
     var sp=fmtSpan(g.startedOn,g.finishedOn); tr.appendChild(el("td","t-num"+(sp?"":" t-dim"), sp||"—"));
 
     var tdst=el("td");
     var st=el("span","status",STATUS_L[g.status]||"Backlog"); st.setAttribute("data-s",g.status||"backlog");
-    tdst.appendChild(st); tr.appendChild(tdst);
+    tdst.appendChild(st);
+    var prt=nz(g.priority);
+    if(prt && wantsPriority(g.status)){
+      var pw=el("div"); pw.style.marginTop="5px"; pw.appendChild(pipsNode(prt));
+      tdst.appendChild(pw);
+    }
+    tr.appendChild(tdst);
 
     tr.addEventListener("click",function(){ openEditor(g.id); });
     tr.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); openEditor(g.id); } });
@@ -665,7 +696,7 @@ function renderTable(rows){
 
 function demoCard(){
   var c=cardNode({ id:"__demo", title:"Beispieleintrag", platform:"PS5", release:"2022-02-25", score:87,
-    hours:63.5, avgHours:58, completion:92, startedOn:"2024-03-05", finishedOn:"2024-04-21", status:"gespielt",
+    hours:63.5, avgHours:58, completion:92, playthroughs:2, startedOn:"2024-03-05", finishedOn:"2024-04-21", status:"gespielt",
     genres:["Action-RPG","Open World"], listIds:[] });
   c.classList.add("demo"); c.tabIndex=-1; c.setAttribute("aria-hidden","true");
   return c;
@@ -876,6 +907,7 @@ function renderListDetail(l){
    ["title-asc","Titel A–Z"],["hours-desc","Stunden — meiste zuerst"],
    ["completion-desc","Fortschritt — höchster zuerst"],["finished-desc","Zuletzt beendet"],
    ["release-desc","Release — neueste zuerst"],["release-asc","Release — früheste zuerst"],
+   ["priority-desc","Vorfreude — höchste zuerst"],["playthroughs-desc","Am häufigsten durchgespielt"],
    ["added-desc","Zuletzt hinzugefügt"]].forEach(function(o){
     var oo=el("option",null,o[1]); oo.value=o[0]; sortSel.appendChild(oo);
   });
@@ -986,7 +1018,8 @@ function openEditor(id, prefill){
   var existing = id ? games.find(function(g){ return g.id===id; }) : null;
   draft = existing ? JSON.parse(JSON.stringify(existing)) : {
     id:uid(), title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
-    startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"", listIds:[], createdAt:Date.now()
+    startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"",
+    playthroughs:"", priority:"", listIds:[], createdAt:Date.now()
   };
   draftCover = draft.cover || "";
   if(!existing && prefill){
@@ -1198,6 +1231,37 @@ function paintEditor(isEdit){
   paintAvgHint();
   body.appendChild(avgHint);
 
+  var r1b=el("div","row2");
+  r1b.appendChild(textField("Wie oft durchgespielt","playthroughs","0","number",{min:"0",step:"1"}));
+  var prioBox=el("div","field");
+  r1b.appendChild(prioBox);
+  body.appendChild(r1b);
+
+  function paintPriority(){
+    prioBox.innerHTML="";
+    if(!wantsPriority(draft.status||"backlog")){ prioBox.hidden=true; return; }
+    prioBox.hidden=false;
+    prioBox.appendChild(el("label",null,"Vorfreude"));
+    var row=el("div","prio");
+    for(var i=1;i<=5;i++){
+      (function(v){
+        var b=el("button","prio-dot"); b.type="button";
+        b.setAttribute("aria-label", v+" — "+PRIO[v]);
+        b.setAttribute("aria-pressed", String(nz(draft.priority)!=null && v<=Number(draft.priority)));
+        b.addEventListener("click",function(){
+          draft.priority = (Number(draft.priority)===v) ? "" : v;
+          paintPriority();
+        });
+        row.appendChild(b);
+      })(i);
+    }
+    prioBox.appendChild(row);
+    var cur=nz(draft.priority);
+    var lab=el("p","hint", cur ? cur+" von 5 — "+PRIO[cur] : "1 irgendwann bis 5 als Nächstes");
+    lab.style.marginTop="6px";
+    prioBox.appendChild(lab);
+  }
+
   var r2=el("div","row2");
   r2.appendChild(textField("Gespielt von","startedOn",null,"date"));
   r2.appendChild(textField("bis","finishedOn",null,"date"));
@@ -1259,10 +1323,12 @@ function paintEditor(isEdit){
     b.addEventListener("click",function(){
       draft.status=st.k;
       Array.prototype.forEach.call(stw.children,function(o){ o.setAttribute("aria-pressed", String(o===b)); });
+      paintPriority();
     });
     stw.appendChild(b);
   });
   fst.appendChild(stw); body.appendChild(fst);
+  paintPriority();
 
   /* Genres */
   var fg=el("div","field");
@@ -1367,6 +1433,9 @@ function commit(errBox, isEdit){
     finishedOn: draft.finishedOn||"",
     status: draft.status||"backlog",
     notes: draft.notes||"",
+    playthroughs: nz(draft.playthroughs)==null ? "" : Math.max(0,Math.round(Number(draft.playthroughs))),
+    priority: (wantsPriority(draft.status||"backlog") && nz(draft.priority)!=null)
+              ? Math.min(5,Math.max(1,Math.round(Number(draft.priority)))) : "",
     avgHours: nz(draft.avgHours)==null ? "" : Math.max(0,Math.round(Number(draft.avgHours))),
     cover: draftCover||"",
     listIds: (draft.listIds||[]).slice(),
@@ -1460,7 +1529,8 @@ async function runBulk(rows, wantDb, st, go, cancel){
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     var g={ id:uid(), title:r.title, release:"", platform:"", genres:[], score:r.score, hours:"", completion:"",
-      startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"", listIds:[], createdAt:Date.now()+i };
+      startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"",
+      playthroughs:"", priority:"", listIds:[], createdAt:Date.now()+i };
     if(wantDb){
       busy("Datenbank: "+(i+1)+" von "+rows.length+" — "+r.title);
       try{
@@ -1646,6 +1716,7 @@ function doImport(file){
         genres:Array.isArray(s.genres)?s.genres:[], score:s.score==null?"":s.score, hours:s.hours==null?"":s.hours,
         completion:s.completion==null?"":s.completion, startedOn:s.startedOn||"", finishedOn:s.finishedOn||"",
         status:s.status||"backlog", notes:s.notes||"", cover:s.cover||"", avgHours:s.avgHours==null?"":s.avgHours,
+        playthroughs:s.playthroughs==null?"":s.playthroughs, priority:s.priority==null?"":s.priority,
         listIds:Array.isArray(s.listIds)?s.listIds:[], createdAt:s.createdAt||Date.now() };
       var i=games.findIndex(function(x){ return x.id===g.id; });
       if(i<0) games.push(g); else games[i]=g;

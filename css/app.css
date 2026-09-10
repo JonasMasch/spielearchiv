@@ -197,6 +197,16 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.55}
 .fact{display:flex;gap:5px;align-items:baseline;color:var(--ink-3)}
 .fact b{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .tags{display:flex;flex-wrap:wrap;gap:4px}
+.pips{display:inline-flex;gap:3px;align-items:center;vertical-align:middle}
+.pips i{width:7px;height:7px;border-radius:100px;border:1px solid var(--line-2);display:block;flex:none}
+.pips i.on{background:var(--wish);border-color:var(--wish)}
+
+.prio{display:flex;gap:7px;align-items:center}
+.prio-dot{width:26px;height:26px;border-radius:100px;border:1px solid var(--line-2);background:var(--surface-2);
+  cursor:pointer;padding:0;transition:background .12s,border-color .12s,transform .08s}
+.prio-dot:hover{border-color:var(--wish);transform:scale(1.08)}
+.prio-dot[aria-pressed="true"]{background:var(--wish);border-color:var(--wish)}
+
 .tag{font-size:10.5px;border:1px solid var(--line);border-radius:100px;padding:1.5px 8px;color:var(--ink-3);background:var(--surface-2)}
 .status{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:100px;border:1px solid}
 .status[data-s="gespielt"]{color:var(--band-good);border-color:var(--band-good)}
