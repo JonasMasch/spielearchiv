@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:39:44.390Z",
+  "updatedAt": "2026-09-10T11:12:27.039Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1661,6 +1661,31 @@
       "listIds": [],
       "createdAt": 1789029560653,
       "updatedAt": 1789029580888
+    },
+    {
+      "id": "8ae74e42-25f5-4f8b-ab02-cfc8a2d6ffa8",
+      "title": "Lego Star Wars: The Skywalker Saga",
+      "release": "2022-04-05",
+      "platform": "Xbox Series",
+      "genres": [
+        "Platformer",
+        "Adventure",
+        "Action"
+      ],
+      "score": 85,
+      "hours": 25,
+      "completion": 80,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": 7,
+      "cover": "https://media.rawg.io/media/games/292/2926f9fb089ab91a0dac754193b325e5.jpg",
+      "listIds": [],
+      "createdAt": 1789038696253,
+      "updatedAt": 1789038743538
     }
   ]
 }
