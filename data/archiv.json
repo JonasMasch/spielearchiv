@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:26:26.328Z",
+  "updatedAt": "2026-09-10T08:26:47.525Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -87,7 +87,7 @@
       "id": "083b4c71-3176-4ec1-af63-a09ab07d8958",
       "title": "Pokémon FireRed, LeafGreen",
       "release": "2004-01-29",
-      "platform": "Game Boy Advance",
+      "platform": "Switch 2",
       "genres": [
         "Strategy",
         "RPG"
@@ -99,6 +99,8 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": "",
       "cover": "https://media.rawg.io/media/screenshots/bf7/bf76ba791262ca3a3580fc776bdecb87.jpg",
       "listIds": [
@@ -106,7 +108,7 @@
         "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
       ],
       "createdAt": 1788872170528,
-      "updatedAt": 1788884332801
+      "updatedAt": 1789028804024
     },
     {
       "id": "73136c3b-13c1-49dc-b47c-c5a42491c0cd",
