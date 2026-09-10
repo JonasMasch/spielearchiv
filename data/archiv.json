@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:26:47.525Z",
+  "updatedAt": "2026-09-10T08:27:26.024Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -650,7 +650,7 @@
       "id": "cbb38a51-2ebb-42e5-83cc-cf83b7b7c18c",
       "title": "Horizon Forbidden West",
       "release": "2022-02-18",
-      "platform": "PC",
+      "platform": "PS5",
       "genres": [
         "Adventure",
         "Action",
@@ -663,13 +663,15 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": "",
       "cover": "https://media.rawg.io/media/games/bf7/bf73b105ccbba42107986bbcd96fcada.jpg",
       "listIds": [
         "5a665922-852b-4725-8453-c204a31a9d5a"
       ],
       "createdAt": 1788875053491,
-      "updatedAt": 1788875082911
+      "updatedAt": 1789028842523
     },
     {
       "id": "11fb5a25-9ca7-483f-a9f8-02a8c830245c",
