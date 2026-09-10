@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:26:13.398Z",
+  "updatedAt": "2026-09-10T08:26:26.328Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -771,7 +771,7 @@
       "id": "50e3fdab-cd18-4a13-af1d-168d4b402a03",
       "title": "Assassin's Creed Back Flag Resynced",
       "release": "2026-07-09",
-      "platform": "PC",
+      "platform": "PS5",
       "genres": [
         "Adventure",
         "Action"
@@ -792,7 +792,7 @@
         "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
       ],
       "createdAt": 1788883030369,
-      "updatedAt": 1789028769899
+      "updatedAt": 1789028782827
     },
     {
       "id": "107113b0-4e0c-4d8e-8103-5a85d02ef28c",
