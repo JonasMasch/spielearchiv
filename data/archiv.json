@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:19:42.061Z",
+  "updatedAt": "2026-09-10T11:20:22.663Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1768,6 +1768,31 @@
       ],
       "createdAt": 1789039124792,
       "updatedAt": 1789039157643
+    },
+    {
+      "id": "07427a50-034d-4c23-a389-128e9b95c644",
+      "title": "Mario Kart 8 Deluxe",
+      "release": "2017-04-27",
+      "platform": "Switch",
+      "genres": [
+        "Racing"
+      ],
+      "score": 84,
+      "hours": 140,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/6f8/6f846e941c78cfbabe53cd67e55ced83.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1789039199459,
+      "updatedAt": 1789039219160
     }
   ]
 }
