@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:13:38.891Z",
+  "updatedAt": "2026-09-10T11:14:50.542Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1713,6 +1713,32 @@
       ],
       "createdAt": 1789038777654,
       "updatedAt": 1789038815389
+    },
+    {
+      "id": "0a638a54-56de-4877-ae2e-d2f2611dae1b",
+      "title": "Need for Speed Heat",
+      "release": "2019-11-08",
+      "platform": "Xbox Series",
+      "genres": [
+        "Racing",
+        "Arcade"
+      ],
+      "score": 75,
+      "hours": 50.5,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": 3,
+      "cover": "https://media.rawg.io/media/games/370/3703c683968a54f09630dcf03366ea35.jpg",
+      "listIds": [
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1789038844021,
+      "updatedAt": 1789038887039
     }
   ]
 }
