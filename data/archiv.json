@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:21:27.997Z",
+  "updatedAt": "2026-09-10T11:22:04.781Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1818,6 +1818,31 @@
       "listIds": [],
       "createdAt": 1789039251710,
       "updatedAt": 1789039284495
+    },
+    {
+      "id": "d8e316ba-b58c-495d-9bf9-61c8aa9f0ed9",
+      "title": "Super Mario Bros. Wonder",
+      "release": "2023-10-20",
+      "platform": "Switch",
+      "genres": [
+        "Adventure"
+      ],
+      "score": 82,
+      "hours": 10,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/1fd/1fd3f030bee73452d46a0678084a7ed9.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1789039300977,
+      "updatedAt": 1789039321279
     }
   ]
 }
