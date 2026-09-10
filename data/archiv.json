@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:18:02.710Z",
+  "updatedAt": "2026-09-10T11:19:21.145Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1743,6 +1743,31 @@
       ],
       "createdAt": 1789038844021,
       "updatedAt": 1789038887039
+    },
+    {
+      "id": "5d41bccd-1b7c-45fb-a385-d4531f662a46",
+      "title": "Animal Crossing: New Horizons",
+      "release": "2020-03-20",
+      "platform": "Switch",
+      "genres": [
+        "Simulation"
+      ],
+      "score": 78,
+      "hours": 145,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/42f/42fe1abd4d7c11ca92d93a0fb0f8662b.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1789039124792,
+      "updatedAt": 1789039157643
     }
   ]
 }
