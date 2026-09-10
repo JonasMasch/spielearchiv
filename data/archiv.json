@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:35:21.774Z",
+  "updatedAt": "2026-09-10T08:35:41.056Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1325,7 +1325,7 @@
         "Arcade"
       ],
       "score": 84,
-      "hours": "",
+      "hours": 121,
       "completion": "",
       "startedOn": "",
       "finishedOn": "",
@@ -1339,7 +1339,7 @@
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788883835361,
-      "updatedAt": 1789029061006
+      "updatedAt": 1789029337554
     },
     {
       "id": "4ed7af1a-7666-42fd-b1c3-6cdacd22dfdf",
