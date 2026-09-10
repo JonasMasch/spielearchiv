@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:27:33.092Z",
+  "updatedAt": "2026-09-10T08:27:37.891Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -663,7 +663,7 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
-      "playthroughs": "",
+      "playthroughs": 1,
       "priority": "",
       "avgHours": "",
       "cover": "https://media.rawg.io/media/games/bf7/bf73b105ccbba42107986bbcd96fcada.jpg",
@@ -671,7 +671,7 @@
         "5a665922-852b-4725-8453-c204a31a9d5a"
       ],
       "createdAt": 1788875053491,
-      "updatedAt": 1789028842523
+      "updatedAt": 1789028854389
     },
     {
       "id": "11fb5a25-9ca7-483f-a9f8-02a8c830245c",
