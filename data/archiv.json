@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:18:50.001Z",
+  "updatedAt": "2026-09-10T08:19:02.970Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -831,11 +831,13 @@
       "finishedOn": "",
       "status": "backlog",
       "notes": "",
+      "playthroughs": "",
+      "priority": 5,
       "avgHours": 5,
       "cover": "https://media.rawg.io/media/games/934/9346092ae11bf7582c883869468171cc.jpg",
       "listIds": [],
       "createdAt": 1788883117902,
-      "updatedAt": 1788883120705
+      "updatedAt": 1789028339468
     },
     {
       "id": "3e1db7f2-16c5-4ffd-b50f-9b013929b951",
