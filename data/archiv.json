@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:27:52.558Z",
+  "updatedAt": "2026-09-10T08:28:50.008Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -339,7 +339,7 @@
       "id": "2dff1d9b-1ccd-4c09-8715-5932ffeef76b",
       "title": "Assassin's Creed Odyssey",
       "release": "2018-10-05",
-      "platform": "Switch",
+      "platform": "Xbox Series",
       "genres": [
         "Action",
         "RPG"
@@ -351,6 +351,8 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": 2,
+      "priority": "",
       "avgHours": 31,
       "cover": "https://media.rawg.io/media/games/c6b/c6bd26767c1053fef2b10bb852943559.jpg",
       "listIds": [
@@ -358,7 +360,7 @@
         "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
       ],
       "createdAt": 1788873703851,
-      "updatedAt": 1788873749677
+      "updatedAt": 1789028926506
     },
     {
       "id": "20ad56c5-5479-4919-b700-1f5646124ef2",
