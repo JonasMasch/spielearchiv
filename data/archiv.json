@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:22:18.164Z",
+  "updatedAt": "2026-09-10T11:22:28.964Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1455,19 +1455,21 @@
         "Action"
       ],
       "score": 90,
-      "hours": 70,
+      "hours": 115,
       "completion": "",
       "startedOn": "",
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": "",
       "cover": "https://media.rawg.io/media/games/556/55684bfd048706f4266d331d70050b37.jpg",
       "listIds": [
         "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
       ],
       "createdAt": 1788884069847,
-      "updatedAt": 1788884100483
+      "updatedAt": 1789039345462
     },
     {
       "id": "a22c0fbc-28d4-435f-b375-d3a4ccd7369f",
