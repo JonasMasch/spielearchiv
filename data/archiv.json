@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:19:32.918Z",
+  "updatedAt": "2026-09-10T08:19:41.675Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -948,11 +948,13 @@
       "finishedOn": "",
       "status": "backlog",
       "notes": "",
+      "playthroughs": "",
+      "priority": 2,
       "avgHours": 8,
       "cover": "https://media.rawg.io/media/games/559/559bc0768f656ad0c63c54b80a82d680.jpg",
       "listIds": [],
       "createdAt": 1788883243853,
-      "updatedAt": 1788883245888
+      "updatedAt": 1789028378166
     },
     {
       "id": "ecce6c56-6d12-4ed3-86bc-755d46af450c",
@@ -1036,11 +1038,13 @@
       "finishedOn": "",
       "status": "backlog",
       "notes": "",
+      "playthroughs": "",
+      "priority": 3,
       "avgHours": 10,
       "cover": "https://media.rawg.io/media/games/7f6/7f6cd70ba2ad57053b4847c13569f2d8.jpg",
       "listIds": [],
       "createdAt": 1788883302205,
-      "updatedAt": 1788883304088
+      "updatedAt": 1789028374966
     },
     {
       "id": "701ea829-cd06-4311-822a-13ad33dc861d",
