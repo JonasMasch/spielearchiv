@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:30:29.841Z",
+  "updatedAt": "2026-09-10T08:30:42.458Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1367,7 +1367,7 @@
       "id": "510e24ac-dc7d-4642-9daa-76976227f4e7",
       "title": "Forza Horizon 3",
       "release": "2016-09-27",
-      "platform": "PC",
+      "platform": "Xbox Series",
       "genres": [
         "Racing",
         "Arcade"
@@ -1379,13 +1379,15 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": "",
       "cover": "https://media.rawg.io/media/games/30a/30afe3a3cb06849dc032ef3b9295f180.jpg",
       "listIds": [
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788883898828,
-      "updatedAt": 1788886633320
+      "updatedAt": 1789029038955
     },
     {
       "id": "0b1d6ad0-f0a7-44d0-b95c-ea4fedf2a4c8",
