@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:38:58.874Z",
+  "updatedAt": "2026-09-10T08:39:44.390Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1636,6 +1636,31 @@
       "listIds": [],
       "createdAt": 1789029506254,
       "updatedAt": 1789029535371
+    },
+    {
+      "id": "67cdf9c6-0e3b-4db3-a323-c86983fe21f3",
+      "title": "Rocket League",
+      "release": "2015-07-07",
+      "platform": "PC",
+      "genres": [
+        "Racing",
+        "Indie",
+        "Sports"
+      ],
+      "score": "",
+      "hours": 1400,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": 21,
+      "cover": "https://media.rawg.io/media/games/8cc/8cce7c0e99dcc43d66c8efd42f9d03e3.jpg",
+      "listIds": [],
+      "createdAt": 1789029560653,
+      "updatedAt": 1789029580888
     }
   ]
 }
