@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:12:27.039Z",
+  "updatedAt": "2026-09-10T11:13:38.891Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1686,6 +1686,33 @@
       "listIds": [],
       "createdAt": 1789038696253,
       "updatedAt": 1789038743538
+    },
+    {
+      "id": "ca4b94d9-bf9d-449d-ba85-cac17590f2b7",
+      "title": "The Crew 2",
+      "release": "2018-06-29",
+      "platform": "Xbox Series",
+      "genres": [
+        "Racing",
+        "Massively Multiplayer",
+        "Action"
+      ],
+      "score": 50,
+      "hours": 22,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": 5,
+      "cover": "https://media.rawg.io/media/games/b49/b49e403e116e9734e95b4c88e5b2ae74.jpg",
+      "listIds": [
+        "8a52f439-b341-4d5b-b66b-696d749f0652"
+      ],
+      "createdAt": 1789038777654,
+      "updatedAt": 1789038815389
     }
   ]
 }
