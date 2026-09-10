@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:30:42.458Z",
+  "updatedAt": "2026-09-10T08:30:50.324Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -516,7 +516,7 @@
       "id": "e289bd07-4ff7-47ab-9f4d-71b6b2609e71",
       "title": "Assassin's Creed II",
       "release": "2009-11-17",
-      "platform": "PC",
+      "platform": "Xbox Series",
       "genres": [
         "Action"
       ],
@@ -527,6 +527,8 @@
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": 14,
       "cover": "https://media.rawg.io/media/games/1be/1bed7fae69d1004c09dfe1101d5a3a94.jpg",
       "listIds": [
@@ -534,7 +536,7 @@
         "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
       ],
       "createdAt": 1788874617804,
-      "updatedAt": 1788874644326
+      "updatedAt": 1789029046822
     },
     {
       "id": "c9b6852a-1b3a-4aea-b03b-95de0359cbe0",
