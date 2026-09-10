@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:20:22.663Z",
+  "updatedAt": "2026-09-10T11:21:27.997Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1793,6 +1793,31 @@
       ],
       "createdAt": 1789039199459,
       "updatedAt": 1789039219160
+    },
+    {
+      "id": "6490068c-e812-4ac9-93a1-8ddd27091013",
+      "title": "Stardew Valley",
+      "release": "2016-02-25",
+      "platform": "Switch",
+      "genres": [
+        "Indie",
+        "RPG",
+        "Simulation"
+      ],
+      "score": 90,
+      "hours": 155,
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": 13,
+      "cover": "https://media.rawg.io/media/games/713/713269608dc8f2f40f5a670a14b2de94.jpg",
+      "listIds": [],
+      "createdAt": 1789039251710,
+      "updatedAt": 1789039284495
     }
   ]
 }
