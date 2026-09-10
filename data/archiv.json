@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:21:09.885Z",
+  "updatedAt": "2026-09-10T08:24:05.957Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1555,6 +1555,32 @@
       ],
       "createdAt": 1788887227751,
       "updatedAt": 1788887238497
+    },
+    {
+      "id": "fb9f2cb0-7aa4-4d0b-9c21-359a3cccab0f",
+      "title": "Splatoon 3",
+      "release": "2022-09-09",
+      "platform": "Switch",
+      "genres": [
+        "Shooter",
+        "Action"
+      ],
+      "score": 82,
+      "hours": 300,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "notes": "",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/360/360ac0a839ab0f0d9a70b35d38264cb0.jpg",
+      "listIds": [
+        "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e"
+      ],
+      "createdAt": 1789028617152,
+      "updatedAt": 1789028642456
     }
   ]
 }
