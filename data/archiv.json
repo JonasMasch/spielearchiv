@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:35:00.490Z",
+  "updatedAt": "2026-09-10T08:35:21.774Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1403,19 +1403,21 @@
         "Arcade"
       ],
       "score": 81,
-      "hours": "",
+      "hours": 30.5,
       "completion": "",
       "startedOn": "",
       "finishedOn": "",
       "status": "gespielt",
       "notes": "",
+      "playthroughs": "",
+      "priority": "",
       "avgHours": 2,
       "cover": "https://media.rawg.io/media/games/9a8/9a8be216c8907959a9984eec3a2cc8d1.jpg",
       "listIds": [
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788883921362,
-      "updatedAt": 1788886638346
+      "updatedAt": 1789029318271
     },
     {
       "id": "ca42ebdb-c219-4881-bb18-8ea2dae68b44",
