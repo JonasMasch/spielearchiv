@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T08:31:04.507Z",
+  "updatedAt": "2026-09-10T08:34:06.290Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -44,7 +44,7 @@
         "Racing"
       ],
       "score": 94,
-      "hours": 40.5,
+      "hours": 60,
       "completion": 85,
       "startedOn": "2026-05-19",
       "finishedOn": "2026-07-19",
@@ -59,7 +59,7 @@
         "8a52f439-b341-4d5b-b66b-696d749f0652"
       ],
       "createdAt": 1788868305381,
-      "updatedAt": 1789028863939
+      "updatedAt": 1789029242788
     },
     {
       "id": "735301a7-b6ae-43ae-a382-f8b48b9daf69",
