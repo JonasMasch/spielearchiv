@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-10T11:23:42.934Z",
+  "updatedAt": "2026-09-11T06:39:11.018Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1873,6 +1873,29 @@
       ],
       "createdAt": 1789039401612,
       "updatedAt": 1789039419432
+    },
+    {
+      "id": "d25dad52-06dd-459c-90ad-4dbf54b33c00",
+      "title": "The Legend of Zelda: Ocarina of Time",
+      "release": "2026-11-05",
+      "platform": "Switch",
+      "genres": [
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "notes": "",
+      "playthroughs": "",
+      "priority": 5,
+      "avgHours": "",
+      "cover": "https://media.rawg.io/media/games/c3b/c3bc70310175785b0c9d7bfc93624d5f.jpg",
+      "listIds": [],
+      "createdAt": 1789108723763,
+      "updatedAt": 1789108747515
     }
   ]
 }
