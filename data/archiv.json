@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-11T10:41:38.671Z",
+  "updatedAt": "2026-09-12T15:31:35.355Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1898,6 +1898,30 @@
       "listIds": [],
       "createdAt": 1789108723763,
       "updatedAt": 1789108747515
+    },
+    {
+      "id": "1e0369b8-e1fa-4a3c-9b8c-942bea97926f",
+      "title": "A Plague Tale: Requiem",
+      "release": "2022-10-17",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "playthroughs": "",
+      "priority": 3,
+      "avgHours": 5,
+      "cover": "https://media.rawg.io/media/games/cd0/cd074f3f6045297cda9ad077273c09b6.jpg",
+      "listIds": [],
+      "createdAt": 1789227076143,
+      "updatedAt": 1789227091852
     }
   ]
 }
