@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-12T15:31:35.355Z",
+  "updatedAt": "2026-09-12T15:31:46.225Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1922,6 +1922,30 @@
       "listIds": [],
       "createdAt": 1789227076143,
       "updatedAt": 1789227091852
+    },
+    {
+      "id": "a9c2e060-5081-41be-af2f-84c12d393d02",
+      "title": "A Plague Tale: Innocence",
+      "release": "2019-05-13",
+      "platform": "PC",
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "playthroughs": "",
+      "priority": 3,
+      "avgHours": 7,
+      "cover": "https://media.rawg.io/media/games/b4a/b4adf80c36e267b35acc3497ed2af19c.jpg",
+      "listIds": [],
+      "createdAt": 1789227095363,
+      "updatedAt": 1789227102723
     }
   ]
 }
