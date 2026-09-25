@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-20T18:55:29.414Z",
+  "updatedAt": "2026-09-25T07:20:49.002Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -797,11 +797,11 @@
         "Action"
       ],
       "score": 85,
-      "hours": "",
+      "hours": 50,
       "completion": "",
       "startedOn": "2026-08-28",
       "finishedOn": "2026-09-17",
-      "status": "spiele",
+      "status": "gespielt",
       "notes": "",
       "playthroughs": "",
       "priority": "",
@@ -812,7 +812,7 @@
         "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430"
       ],
       "createdAt": 1788883030369,
-      "updatedAt": 1789930525911
+      "updatedAt": 1790320845496
     },
     {
       "id": "107113b0-4e0c-4d8e-8103-5a85d02ef28c",
