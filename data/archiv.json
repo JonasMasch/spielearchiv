@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-25T07:20:49.002Z",
+  "updatedAt": "2026-09-25T07:21:32.366Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -21,7 +21,8 @@
     {
       "id": "25e5b0e2-1e5d-4cb1-866b-9cf262f2e430",
       "name": "Assassin’s Creed",
-      "createdAt": 1788873674317
+      "createdAt": 1788873674317,
+      "sort": "hours-desc"
     },
     {
       "id": "ce5fae23-220d-4ea9-a52f-67d719d49eeb",
