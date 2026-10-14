@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-02T08:26:48.735Z",
+  "updatedAt": "2026-10-14T05:21:09.356Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1950,6 +1950,27 @@
       "listIds": [],
       "createdAt": 1789227095363,
       "updatedAt": 1789378989033
+    },
+    {
+      "id": "ba5b738a-24e1-4fa7-b11b-17d7edb77dc4",
+      "title": "Son of tanaji",
+      "release": "",
+      "platform": "",
+      "genres": [],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "wunschliste",
+      "notes": "",
+      "playthroughs": "",
+      "priority": 2,
+      "avgHours": "",
+      "cover": "",
+      "listIds": [],
+      "createdAt": 1791955234114,
+      "updatedAt": 1791955265854
     }
   ]
 }
