@@ -61,7 +61,11 @@
     <section class="stats" id="stats"></section>
 
     <div class="layout">
-      <aside class="rail is-hidden" id="rail">
+      <aside class="rail" id="rail">
+        <div class="sheet-head">
+          <strong>Filter</strong>
+          <button class="icon-btn" id="btn-filters-close" type="button" aria-label="Filter schließen">×</button>
+        </div>
         <div class="rail-block">
           <div class="rail-h">Filter <button class="btn btn-quiet btn-sm" id="btn-reset" type="button" style="font-size:11px;padding:2px 6px">zurücksetzen</button></div>
           <div class="field">
@@ -88,6 +92,10 @@
             <label for="f-min">Wertung ab <span id="f-min-out">1</span></label>
             <input class="slider" id="f-min" type="range" min="1" max="100" value="1">
           </div>
+        </div>
+        <div class="sheet-foot">
+          <button class="btn btn-sm" id="btn-reset2" type="button">Zurücksetzen</button>
+          <button class="btn btn-accent" id="btn-filters-done" type="button">Fertig</button>
         </div>
       </aside>
 
@@ -166,6 +174,7 @@
 </div>
 
 <input type="file" id="file-import" accept="application/json,.json" hidden>
+<div class="sheet-scrim" id="sheet-scrim"></div>
 <div id="overlay"></div>
 
 <script src="js/config.js"></script>

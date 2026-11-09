@@ -414,7 +414,7 @@ function visible(){
     if(filt.list && (g.listIds||[]).indexOf(filt.list)<0) return false;
     if(filt.min>1 && !(Number(g.score)>=filt.min)) return false;
     if(q){
-      var hay=[g.title,g.platform,g.notes,(g.genres||[]).join(" "),STATUS_L[g.status]||""].join(" ").toLowerCase();
+      var hay=[g.title,g.platform,(g.genres||[]).join(" "),STATUS_L[g.status]||""].join(" ").toLowerCase();
       if(hay.indexOf(q)<0) return false;
     }
     return true;
@@ -626,7 +626,7 @@ function cardNode(g, rank){
   }
 
   a.appendChild(b);
-  a.addEventListener("click",function(){ openEditor(g.id); });
+  a.addEventListener("click",function(){ openDetail(g.id); });
   return a;
 }
 
@@ -686,8 +686,8 @@ function renderTable(rows){
     }
     tr.appendChild(tdst);
 
-    tr.addEventListener("click",function(){ openEditor(g.id); });
-    tr.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); openEditor(g.id); } });
+    tr.addEventListener("click",function(){ openDetail(g.id); });
+    tr.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); openDetail(g.id); } });
     tb.appendChild(tr);
   });
   t.appendChild(tb); w.appendChild(t);
@@ -835,6 +835,87 @@ function runAddSearch(){
   });
 }
 
+/* ============ Spiele einer Liste auswählen ============ */
+function openListPicker(l){
+  var D=makeDrawer("Spiele in „"+l.name+"“");
+  var body=D.body, foot=D.foot;
+
+  var chosen={};
+  games.forEach(function(g){ if((g.listIds||[]).indexOf(l.id)>=0) chosen[g.id]=true; });
+
+  var f=el("div","field");
+  var lb=el("label",null,"Suche"); lb.htmlFor="pick-q"; f.appendChild(lb);
+  var q=el("input","inp"); q.id="pick-q"; q.type="search"; q.placeholder="Titel, Plattform, Genre …"; q.autocomplete="off";
+  f.appendChild(q); body.appendChild(f);
+
+  var hint=el("p","hint","Angehakte Spiele stehen in der Liste. Ein Tipp hakt an oder ab.");
+  body.appendChild(hint);
+
+  var box=el("div","pick"); body.appendChild(box);
+  var apply=el("button","btn btn-accent","Übernehmen"); apply.type="button";
+
+  function countChosen(){ return Object.keys(chosen).filter(function(k){ return chosen[k]; }).length; }
+  function refreshFoot(){
+    var c=countChosen();
+    apply.textContent = c===1 ? "Übernehmen (1 Spiel)" : "Übernehmen ("+c+" Spiele)";
+  }
+  function paint(){
+    var term=q.value.trim().toLowerCase();
+    box.innerHTML="";
+    var rows=games.filter(function(g){
+      if(!term) return true;
+      return [g.title,g.platform,(g.genres||[]).join(" ")].join(" ").toLowerCase().indexOf(term)>=0;
+    }).sort(function(a,b){
+      var ai=chosen[a.id]?0:1, bi=chosen[b.id]?0:1;
+      if(ai!==bi) return ai-bi;
+      return String(a.title||"").localeCompare(String(b.title||""),"de",{sensitivity:"base"});
+    });
+    if(!rows.length){ box.appendChild(el("p","hint","Kein Spiel passt zur Suche.")); return; }
+    rows.forEach(function(g){
+      var r=el("button","pickrow"); r.type="button";
+      r.setAttribute("aria-pressed", String(!!chosen[g.id]));
+      r.appendChild(coverNode(g,"cv",200));
+      var mid=el("div");
+      mid.appendChild(el("b",null,g.title||"Ohne Titel"));
+      var bits=[]; var ry=releaseYear(g); if(ry) bits.push(String(ry));
+      if(g.platform) bits.push(g.platform);
+      mid.appendChild(el("span",null,bits.join(" · ")));
+      r.appendChild(mid);
+      r.appendChild(el("span","pickbox","\u2713"));
+      r.addEventListener("click",function(){
+        chosen[g.id] = !chosen[g.id];
+        r.setAttribute("aria-pressed", String(!!chosen[g.id]));
+        refreshFoot();
+      });
+      box.appendChild(r);
+    });
+  }
+  var pt=null;
+  q.addEventListener("input",function(){ clearTimeout(pt); pt=setTimeout(paint,140); });
+  paint(); refreshFoot();
+
+  foot.appendChild(el("div","spacer"));
+  var cancel=el("button","btn btn-sm","Abbrechen"); cancel.type="button";
+  cancel.addEventListener("click",closeOverlay);
+  apply.addEventListener("click",function(){
+    var touched=0;
+    games.forEach(function(g){
+      var was=(g.listIds||[]).indexOf(l.id)>=0, now=!!chosen[g.id];
+      if(was===now) return;
+      g.listIds = g.listIds||[];
+      if(now) g.listIds.push(l.id);
+      else g.listIds = g.listIds.filter(function(x){ return x!==l.id; });
+      g.updatedAt = Date.now();
+      touched++;
+    });
+    closeOverlay();
+    if(touched){ markDirty(); render(); toast(touched===1 ? "1 Spiel geändert." : touched+" Spiele geändert."); }
+  });
+  foot.appendChild(cancel); foot.appendChild(apply);
+  D.drawer.addEventListener("keydown",function(ev){ if(ev.key==="Escape"){ ev.preventDefault(); closeOverlay(); } });
+  setTimeout(function(){ q.focus(); },30);
+}
+
 /* ============ Seite: Listen ============ */
 function renderListsPage(){
   var box=$("#lists-view"); box.innerHTML="";
@@ -924,6 +1005,10 @@ function renderListDetail(l){
   });
   acts.appendChild(seg);
 
+  var pickBtn=el("button","btn btn-sm","Spiele auswählen"); pickBtn.type="button";
+  pickBtn.addEventListener("click",function(){ openListPicker(l); });
+  acts.appendChild(pickBtn);
+
   var ren=el("button","btn btn-sm","Umbenennen"); ren.type="button";
   ren.addEventListener("click",function(){
     var name=prompt("Neuer Name:", l.name);
@@ -950,10 +1035,14 @@ function renderListDetail(l){
     var e=el("div","empty");
     var L=el("div");
     L.appendChild(el("h2",null,"Diese Liste ist noch leer"));
-    L.appendChild(el("p",null,"Öffne ein Spiel im Archiv und hak dort „"+l.name+"“ an — ein Spiel kann in beliebig vielen Listen stehen."));
-    var gb=el("button","btn btn-accent","Zum Archiv"); gb.type="button";
+    L.appendChild(el("p",null,"Wähl Spiele aus deinem Archiv aus — ein Spiel kann in beliebig vielen Listen stehen."));
+    var row2=el("div"); row2.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+    var pb=el("button","btn btn-accent","Spiele auswählen"); pb.type="button";
+    pb.addEventListener("click",function(){ openListPicker(l); });
+    var gb=el("button","btn","Zum Archiv"); gb.type="button";
     gb.addEventListener("click",function(){ setTab("archiv"); });
-    L.appendChild(gb);
+    row2.appendChild(pb); row2.appendChild(gb);
+    L.appendChild(row2);
     e.appendChild(L);
     var R=el("div");
     R.appendChild(el("span","demo-label","So sieht ein Eintrag aus"));
@@ -976,6 +1065,8 @@ function render(){
   c.appendChild(el("b",null,String(rows.length)));
   c.appendChild(document.createTextNode(" von "+games.length+(games.length===1?" Spiel":" Spielen")));
   renderActiveFilters();
+  var done=$("#btn-filters-done");
+  if(done) done.textContent = rows.length===1 ? "Fertig · 1 Spiel" : "Fertig · "+rows.length+" Spiele";
   var res=$("#results"); res.innerHTML="";
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
   renderListsPage();
@@ -1011,6 +1102,99 @@ function makeDrawer(title){
   return {drawer:d, body:body, foot:foot};
 }
 
+/* ============ Leseansicht ============ */
+function openDetail(id){
+  var g = games.find(function(x){ return x.id===id; });
+  if(!g) return;
+  var D=makeDrawer(g.title||"Ohne Titel");
+  var body=D.body, foot=D.foot;
+
+  body.appendChild(coverNode(g,"detail-art",640));
+
+  var sc=nz(g.score);
+  var sr=el("div","detail-score");
+  var num=el("b", null, sc==null ? "noch nicht bewertet" : String(sc));
+  if(sc==null) num.className="none"; else num.style.color=bandVar(sc);
+  sr.appendChild(num);
+  if(sc!=null){
+    var bd=el("em",null,band(sc).l); bd.style.color=bandVar(sc); sr.appendChild(bd);
+  }
+  body.appendChild(sr);
+
+  if(sc!=null){
+    var m=el("div","meter"); m.style.marginTop="10px";
+    var fi=el("i"); fi.style.width=Math.max(1,sc)+"%"; fi.style.background=bandVar(sc);
+    m.appendChild(fi); body.appendChild(m);
+  }
+
+  var meta=[]; var rl=releaseLabel(g); if(rl) meta.push(rl);
+  if(g.platform) meta.push(g.platform);
+  body.appendChild(el("div","detail-meta", meta.join("  ·  ")));
+
+  var stRow=el("div");
+  var stc=el("span","status",STATUS_L[g.status]||"Backlog"); stc.setAttribute("data-s",g.status||"backlog");
+  stRow.appendChild(stc);
+  var pr=nz(g.priority);
+  if(pr && wantsPriority(g.status)){
+    var pw=el("span"); pw.style.cssText="margin-left:10px;display:inline-flex;align-items:center;gap:7px";
+    pw.appendChild(el("span","stat-k","Vorfreude"));
+    pw.appendChild(pipsNode(pr));
+    stRow.appendChild(pw);
+  }
+  body.appendChild(stRow);
+
+  var kv=el("dl"); kv.style.margin="16px 0 0";
+  function row(k,v){
+    if(v==null || v==="") return;
+    var r=el("div","kv");
+    r.appendChild(el("dt",null,k));
+    r.appendChild(el("dd",null,v));
+    kv.appendChild(r);
+  }
+  row("Zeit", fmtHours(g.hours));
+  row("Üblich", fmtAvg(g.avgHours));
+  var cp=nz(g.completion); row("Fortschritt", cp!=null ? Math.round(cp)+" %" : null);
+  var ptn=nz(g.playthroughs); row("Durchgespielt", ptn ? ptn+"\u00D7" : null);
+  row("Gespielt", fmtSpan(g.startedOn,g.finishedOn));
+  if(kv.childElementCount) body.appendChild(kv);
+
+  if((g.genres||[]).length){
+    var s1=el("div","detail-sec");
+    s1.appendChild(el("span","stat-k","Genres"));
+    var tw=el("div","tags");
+    g.genres.forEach(function(x){ tw.appendChild(el("span","tag",x)); });
+    s1.appendChild(tw); body.appendChild(s1);
+  }
+
+  var mine=lists.filter(function(l){ return (g.listIds||[]).indexOf(l.id)>=0; });
+  if(mine.length){
+    var s2=el("div","detail-sec");
+    s2.appendChild(el("span","stat-k","Listen"));
+    var lw2=el("div","tags");
+    mine.forEach(function(l){
+      var b=el("button","tag",l.name); b.type="button"; b.style.cursor="pointer";
+      b.addEventListener("click",function(){
+        closeOverlay(); openListId=l.id; setTab("lists"); render();
+      });
+      lw2.appendChild(b);
+    });
+    s2.appendChild(lw2); body.appendChild(s2);
+  }
+
+  foot.appendChild(el("div","spacer"));
+  var close=el("button","btn btn-sm","Schließen"); close.type="button";
+  close.addEventListener("click",closeOverlay);
+  var edit=el("button","btn btn-accent","Bearbeiten"); edit.type="button";
+  edit.addEventListener("click",function(){ openEditor(id); });
+  foot.appendChild(close); foot.appendChild(edit);
+
+  D.drawer.addEventListener("keydown",function(ev){
+    if(ev.key==="Escape"){ ev.preventDefault(); closeOverlay(); }
+    if(ev.key==="e" || ev.key==="E"){ ev.preventDefault(); openEditor(id); }
+  });
+  setTimeout(function(){ edit.focus(); },30);
+}
+
 /* ============ Editor ============ */
 var draft=null, draftCover=null;
 
@@ -1018,7 +1202,7 @@ function openEditor(id, prefill){
   var existing = id ? games.find(function(g){ return g.id===id; }) : null;
   draft = existing ? JSON.parse(JSON.stringify(existing)) : {
     id:uid(), title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
-    startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"",
+    startedOn:"", finishedOn:"", status:"backlog", cover:"", avgHours:"",
     playthroughs:"", priority:"", listIds:[], createdAt:Date.now()
   };
   draftCover = draft.cover || "";
@@ -1384,13 +1568,6 @@ function paintEditor(isEdit){
   paintLists();
   fl.appendChild(lw); body.appendChild(fl);
 
-  /* Notizen */
-  var fn=el("div","field");
-  var ln=el("label",null,"Notizen / Mini-Review"); ln.htmlFor="e-notes"; fn.appendChild(ln);
-  var tn=el("textarea","inp"); tn.id="e-notes"; tn.value=draft.notes||""; tn.placeholder="Was hängen geblieben ist.";
-  tn.addEventListener("input",function(){ draft.notes=tn.value; });
-  fn.appendChild(tn); body.appendChild(fn);
-
   var errBox=el("p","err"); errBox.hidden=true; body.appendChild(errBox);
 
   if(isEdit){
@@ -1432,7 +1609,6 @@ function commit(errBox, isEdit){
     startedOn: draft.startedOn||"",
     finishedOn: draft.finishedOn||"",
     status: draft.status||"backlog",
-    notes: draft.notes||"",
     playthroughs: nz(draft.playthroughs)==null ? "" : Math.max(0,Math.round(Number(draft.playthroughs))),
     priority: (wantsPriority(draft.status||"backlog") && nz(draft.priority)!=null)
               ? Math.min(5,Math.max(1,Math.round(Number(draft.priority)))) : "",
@@ -1529,7 +1705,7 @@ async function runBulk(rows, wantDb, st, go, cancel){
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     var g={ id:uid(), title:r.title, release:"", platform:"", genres:[], score:r.score, hours:"", completion:"",
-      startedOn:"", finishedOn:"", status:"backlog", notes:"", cover:"", avgHours:"",
+      startedOn:"", finishedOn:"", status:"backlog", cover:"", avgHours:"",
       playthroughs:"", priority:"", listIds:[], createdAt:Date.now()+i };
     if(wantDb){
       busy("Datenbank: "+(i+1)+" von "+rows.length+" — "+r.title);
@@ -1715,7 +1891,7 @@ function doImport(file){
       var g={ id:s.id||uid(), title:String(s.title), release:s.release||"", platform:s.platform||"",
         genres:Array.isArray(s.genres)?s.genres:[], score:s.score==null?"":s.score, hours:s.hours==null?"":s.hours,
         completion:s.completion==null?"":s.completion, startedOn:s.startedOn||"", finishedOn:s.finishedOn||"",
-        status:s.status||"backlog", notes:s.notes||"", cover:s.cover||"", avgHours:s.avgHours==null?"":s.avgHours,
+        status:s.status||"backlog", cover:s.cover||"", avgHours:s.avgHours==null?"":s.avgHours,
         playthroughs:s.playthroughs==null?"":s.playthroughs, priority:s.priority==null?"":s.priority,
         listIds:Array.isArray(s.listIds)?s.listIds:[], createdAt:s.createdAt||Date.now() };
       var i=games.findIndex(function(x){ return x.id===g.id; });
@@ -1732,6 +1908,7 @@ function doImport(file){
 /* ============ Bereiche ============ */
 function setTab(name){
   tab=name;
+  document.body.classList.remove("filters-open");
   document.body.setAttribute("data-tab", name);
   Array.prototype.forEach.call($("#tabnav").children, function(b){
     b.setAttribute("aria-selected", String(b.dataset.tab===name));
@@ -1768,11 +1945,18 @@ $("#m-export").addEventListener("click",doExport);
 $("#m-import").addEventListener("click",function(){ $("#file-import").click(); });
 
 $("#btn-reset").addEventListener("click",resetFilters);
+function setFilters(open){
+  document.body.classList.toggle("filters-open", !!open);
+  $("#btn-filters").setAttribute("aria-expanded", String(!!open));
+  if(open) setTimeout(function(){ $("#f-q").focus(); },60);
+}
 $("#btn-filters").addEventListener("click",function(){
-  var rail=$("#rail"), open=rail.classList.toggle("is-hidden")===false;
-  this.setAttribute("aria-expanded", String(open));
-  if(open) rail.scrollIntoView({behavior:"smooth", block:"nearest"});
+  setFilters(!document.body.classList.contains("filters-open"));
 });
+$("#sheet-scrim").addEventListener("click",function(){ setFilters(false); });
+$("#btn-filters-close").addEventListener("click",function(){ setFilters(false); });
+$("#btn-filters-done").addEventListener("click",function(){ setFilters(false); });
+$("#btn-reset2").addEventListener("click",resetFilters);
 $("#savechip").addEventListener("click",function(){ if(token()) saveNow(); else openSettings(); });
 $("#file-import").addEventListener("change",function(ev){
   if(ev.target.files && ev.target.files[0]) doImport(ev.target.files[0]);
@@ -1800,6 +1984,9 @@ $("#viewseg").addEventListener("click",function(ev){
   render();
 });
 document.addEventListener("keydown",function(ev){
+  if(ev.key==="Escape" && document.body.classList.contains("filters-open")){
+    ev.preventDefault(); setFilters(false); return;
+  }
   if(document.activeElement!==document.body) return;
   if(ev.key==="/"){ ev.preventDefault(); setTab("archiv"); $("#f-q").focus(); }
   else if(ev.key==="n" && !ev.metaKey && !ev.ctrlKey && !ev.altKey){ ev.preventDefault(); setTab("add"); }

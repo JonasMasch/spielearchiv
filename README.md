@@ -82,7 +82,6 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
     "startedOn": "2024-03-05",
     "finishedOn": "2024-04-21",
     "status": "gespielt",
-    "notes": "",
     "cover": "https://media.rawg.io/…",
     "listIds": ["…"],
     "createdAt": 0
