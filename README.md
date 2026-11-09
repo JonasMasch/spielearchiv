@@ -47,8 +47,13 @@ einmal neu eintragen.
 | `⌘S` / `Strg+S` | jetzt auf GitHub speichern |
 | `⌘⏎` / `Strg+⏎` | Eintrag speichern |
 
-Die Seite hat vier Bereiche: **Archiv** (alle Spiele mit Kennzahlen und Filtern), **Hinzufügen**
-(Datenbanksuche), **Listen** und **Mehr**. Sie stehen als Reiter unter dem Titel — auf schmalen
+Die Seite hat fünf Bereiche: **Archiv** (alle Spiele mit Kennzahlen und Filtern), **Hinzufügen**
+(Datenbanksuche), **Listen**, **Empfehlungen** und **Mehr**.
+
+Die Empfehlungen entstehen ohne Sprachmodell: Aus den Spielen mit einer Wertung ab 80 wird ein
+gewichtetes Genre-Profil gebildet (Gewicht = Wertung − 79), damit werden die stärksten Genres in der
+RAWG-Datenbank abgefragt, und die Treffer werden nach Profil-Übereinstimmung, Metacritic-Wertung und
+Plattform bewertet. Was schon im Archiv steht, fällt raus. Jeder Vorschlag nennt, worüber er passt. Sie stehen als Reiter unter dem Titel — auf schmalen
 Bildschirmen klebt die Reiterleiste beim Scrollen oben fest.
 
 Jede Liste merkt sich ihre eigene Reihenfolge und Ansicht (`sort` und `view` am Listeneintrag).

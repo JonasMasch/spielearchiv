@@ -295,22 +295,25 @@ async function rawgSearch(q, signal){
   if(r.status===429) throw new Error("RAWG-Limit erreicht. Später nochmal.");
   if(!r.ok) throw new Error("RAWG antwortet mit "+r.status+".");
   var j=await r.json();
-  return (j.results||[]).map(function(g){
-    var names=(g.platforms||[]).map(function(p){ return (p.platform&&p.platform.name)||""; }).filter(Boolean);
-    var shorts=[];
-    names.map(shortPlat).forEach(function(x){ if(shorts.indexOf(x)<0) shorts.push(x); });
-    return {
-      name: g.name || "",
-      release: g.released || "",
-      cover: g.background_image || "",
-      platforms: shorts,
-      tags: cleanTags(g.tags),
-      playtime: Number(g.playtime) > 0 ? Math.round(Number(g.playtime)) : "",
-      platform: pickPlatform(names),
-      genres: (g.genres||[]).map(function(x){ return x.name; }).slice(0,3),
-      metacritic: g.metacritic || null
-    };
-  });
+  return (j.results||[]).map(mapRawgGame);
+}
+
+function mapRawgGame(g){
+  var names=(g.platforms||[]).map(function(p){ return (p.platform&&p.platform.name)||""; }).filter(Boolean);
+  var shorts=[];
+  names.map(shortPlat).forEach(function(x){ if(shorts.indexOf(x)<0) shorts.push(x); });
+  return {
+    name: g.name || "",
+    release: g.released || "",
+    cover: g.background_image || "",
+    platforms: shorts,
+    tags: cleanTags(g.tags),
+    playtime: Number(g.playtime) > 0 ? Math.round(Number(g.playtime)) : "",
+    platform: pickPlatform(names),
+    genres: (g.genres||[]).map(function(x){ return x.name; }).slice(0,3),
+    metacritic: g.metacritic || null,
+    rating: Number(g.rating) || 0
+  };
 }
 function applyHit(target, hit, opts){
   opts = opts || {};
@@ -971,6 +974,259 @@ function openListPicker(l){
   setTimeout(function(){ q.focus(); },30);
 }
 
+/* ============ Seite: Empfehlungen ============ */
+var TIPS = { loaded:false, loading:false, items:null, profile:null, error:"", note:"" };
+var GENRE_SLUGS = null;
+
+function normTitle(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,""); }
+function slugify(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+
+function likedGames(){
+  return games.filter(function(g){ var s=nz(g.score); return s!=null && s>=80; });
+}
+
+function tasteProfile(){
+  var liked=likedGames(), gw={}, pw={};
+  liked.forEach(function(g){
+    var w=Number(g.score)-79;           /* 80 zaehlt einfach, 100 zwanzigfach */
+    (g.genres||[]).forEach(function(t){ gw[t]=(gw[t]||0)+w; });
+    if(g.platform) pw[g.platform]=(pw[g.platform]||0)+w;
+  });
+  function rank(o){
+    return Object.keys(o).map(function(k){ return {name:k, w:o[k]}; })
+      .sort(function(a,b){ return b.w-a.w || a.name.localeCompare(b.name,"de"); });
+  }
+  return { count:liked.length, genres:rank(gw), platforms:rank(pw) };
+}
+
+/* Die RAWG-Dokumentation war beim Bauen nicht erreichbar. Deshalb probiert die
+   Suche die genaueste Abfrage zuerst und faellt auf einfachere zurueck, wenn ein
+   Parameter abgelehnt wird oder nichts zurueckkommt. */
+async function rawgList(query){
+  var key=rawgKey();
+  if(!key){ var e=new Error("Kein RAWG-Key hinterlegt."); e.nokey=true; throw e; }
+  var r=await fetch("https://api.rawg.io/api/games?key="+encodeURIComponent(key)+query);
+  if(r.status===401){ var a=new Error("Der RAWG-Key wird nicht akzeptiert."); a.nokey=true; throw a; }
+  if(r.status===429) throw new Error("RAWG-Limit erreicht. Später nochmal versuchen.");
+  if(!r.ok) return null;
+  var jj=await r.json();
+  var res=(jj.results||[]).map(mapRawgGame);
+  return res.length ? res : null;
+}
+
+async function discoverByGenre(name, slug){
+  var g=encodeURIComponent(slug);
+  var variants=[
+    "&genres="+g+"&ordering=-metacritic&page_size=40&exclude_additions=true",
+    "&genres="+g+"&ordering=-metacritic&page_size=40",
+    "&genres="+g+"&page_size=40",
+    "&search="+encodeURIComponent(name)+"&page_size=40"
+  ];
+  for(var i=0;i<variants.length;i++){
+    var res=await rawgList(variants[i]);
+    if(res) return res;
+  }
+  return [];
+}
+
+async function genreSlugs(){
+  if(GENRE_SLUGS) return GENRE_SLUGS;
+  GENRE_SLUGS={};
+  try{
+    var r=await fetch("https://api.rawg.io/api/genres?key="+encodeURIComponent(rawgKey())+"&page_size=40");
+    if(r.ok){
+      var jj=await r.json();
+      (jj.results||[]).forEach(function(x){
+        if(x && x.name && x.slug) GENRE_SLUGS[String(x.name).toLowerCase()]=x.slug;
+      });
+    }
+  }catch(e){}
+  return GENRE_SLUGS;
+}
+
+function scoreTip(hit, profile){
+  var gw={}; profile.genres.forEach(function(t){ gw[String(t.name).toLowerCase()]=t.w; });
+  var top = profile.genres.length ? profile.genres[0].w : 1;
+  var fit=0, why=[];
+  (hit.genres||[]).concat(hit.tags||[]).forEach(function(t){
+    var w=gw[String(t).toLowerCase()];
+    if(w){ fit+=w; if(why.indexOf(t)<0) why.push(t); }
+  });
+  var quality = hit.metacritic ? (hit.metacritic-55)/45
+              : (hit.rating ? (hit.rating-2.8)/2.2 : 0.15);
+  if(quality<0) quality=0;
+  var onPlat = profile.platforms.some(function(p){ return (hit.platforms||[]).indexOf(p.name)>=0; });
+  return { total: (fit/(top*2.2)) + quality*0.9 + (onPlat?0.18:0), why: why.slice(0,3) };
+}
+
+async function buildTips(){
+  if(TIPS.loading) return;
+  TIPS.loading=true; TIPS.error=""; TIPS.note="";
+  renderTips();
+  try{
+    var profile=tasteProfile();
+    TIPS.profile=profile;
+    if(!rawgKey()){ var k=new Error("Kein RAWG-Key hinterlegt."); k.nokey=true; throw k; }
+    if(profile.count<5){ var f=new Error("few"); f.few=true; throw f; }
+
+    var map=await genreSlugs();
+    var picks=profile.genres.slice(0,3);
+    var pool=[], seen={};
+    for(var i=0;i<picks.length;i++){
+      var slug = map[String(picks[i].name).toLowerCase()] || slugify(picks[i].name);
+      var res = await discoverByGenre(picks[i].name, slug);
+      res.forEach(function(hit){
+        var key=normTitle(hit.name);
+        if(!key || seen[key]) return;
+        seen[key]=1; pool.push(hit);
+      });
+      await new Promise(function(done){ setTimeout(done,140); });
+    }
+
+    var owned={};
+    games.forEach(function(g){ owned[normTitle(g.title)]=1; });
+
+    var out=pool.filter(function(hit){ return !owned[normTitle(hit.name)]; })
+      .map(function(hit){
+        var s=scoreTip(hit, profile);
+        hit._fit=s.total; hit._why=s.why;
+        return hit;
+      })
+      .filter(function(hit){ return hit._why.length; })
+      .sort(function(a,b){ return b._fit-a._fit; })
+      .slice(0,24);
+
+    TIPS.items=out; TIPS.loaded=true;
+    if(!out.length) TIPS.note="Nichts gefunden, was nicht schon bei dir steht.";
+  }catch(e){
+    TIPS.items=null; TIPS.loaded=false;
+    if(e && e.few) TIPS.error="few";
+    else if(e && e.nokey) TIPS.error="nokey";
+    else TIPS.error=(e && e.message) ? e.message : "Hat nicht geklappt.";
+  }
+  TIPS.loading=false;
+  renderTips();
+}
+
+function addFromTip(hit){
+  var g={ id:uid(), title:hit.name, release:"", platform:"", genres:[], score:"", hours:"", completion:"",
+    startedOn:"", finishedOn:"", status:"wunschliste", cover:"", avgHours:"",
+    playthroughs:"", priority:"", listIds:[], createdAt:Date.now() };
+  g.cover = applyHit(g, hit, {force:true});
+  delete g._suggest;
+  if(TIPS.items) TIPS.items = TIPS.items.filter(function(x){ return x!==hit; });
+  putGame(g);
+  toast("„"+g.title+"“ steht jetzt auf der Wunschliste.");
+}
+
+function renderTips(){
+  var prof=$("#tips-profile"), st=$("#tips-status"), box=$("#tips-results");
+  if(!prof || !st || !box) return;
+  var profile = TIPS.profile || tasteProfile();
+
+  prof.innerHTML="";
+  var card=el("div","taste");
+  card.appendChild(el("span","taste-k",
+    "Deine Vorlieben — aus "+profile.count+(profile.count===1?" Spiel":" Spielen")+" ab 80"));
+  if(profile.genres.length){
+    var bars=el("div","taste-bars");
+    var top=profile.genres[0].w || 1;
+    profile.genres.slice(0,6).forEach(function(t){
+      var row=el("div","taste-row");
+      row.appendChild(el("span",null,t.name));
+      var bar=el("div","bar"), fi=el("i");
+      fi.style.width=Math.max(4,Math.round(t.w/top*100))+"%";
+      bar.appendChild(fi); row.appendChild(bar);
+      row.appendChild(el("b",null,String(t.w)));
+      bars.appendChild(row);
+    });
+    card.appendChild(bars);
+  }
+  var foot=el("div","taste-foot");
+  foot.appendChild(el("p","hint","Je höher deine Wertung, desto stärker zählt ein Spiel."));
+  var rb=el("button","btn btn-sm", TIPS.loading ? "sucht …" : "Neu berechnen"); rb.type="button";
+  rb.disabled=TIPS.loading;
+  rb.addEventListener("click",function(){ TIPS.loaded=false; buildTips(); });
+  foot.appendChild(rb);
+  card.appendChild(foot);
+  prof.appendChild(card);
+
+  st.className="ai-status"; st.innerHTML=""; box.innerHTML="";
+
+  if(TIPS.loading){
+    st.appendChild(el("span","spin"));
+    st.appendChild(document.createTextNode("durchsucht die Datenbank nach deinem Geschmack …"));
+    return;
+  }
+  if(TIPS.error==="nokey"){
+    st.appendChild(document.createTextNode("Dafür fehlt der RAWG-Key dieses Geräts. "));
+    var lnk=el("button","btn btn-quiet btn-sm","Jetzt eintragen"); lnk.type="button";
+    lnk.addEventListener("click",function(){ openSettings(); });
+    st.appendChild(lnk);
+    return;
+  }
+  if(TIPS.error==="few"){
+    st.textContent="Noch zu wenig Grundlage: Es braucht mindestens fünf Spiele mit einer Wertung ab 80.";
+    return;
+  }
+  if(TIPS.error){
+    st.className="ai-status bad"; st.textContent=TIPS.error;
+    return;
+  }
+  if(!TIPS.items){
+    st.textContent="Noch nichts berechnet.";
+    var go=el("button","btn btn-accent","Empfehlungen holen"); go.type="button";
+    go.style.marginTop="12px";
+    go.addEventListener("click",function(){ buildTips(); });
+    box.appendChild(go);
+    return;
+  }
+  if(TIPS.note){ st.textContent=TIPS.note; return; }
+
+  st.textContent=TIPS.items.length+" Vorschläge, beste Übereinstimmung zuerst.";
+  var grid=el("div","hits");
+  TIPS.items.forEach(function(hit){
+    var cardEl=el("div","hit");
+    var art=el("div","hit-art");
+    if(hit.cover){
+      var im=el("img"); im.src=rimg(hit.cover,420); im.alt=""; im.loading="lazy";
+      im.addEventListener("error",function(){
+        im.remove(); tileStyle(art,hit.name); art.appendChild(el("div","cover-ph",initials(hit.name)));
+      });
+      art.appendChild(im);
+    } else { tileStyle(art,hit.name); art.appendChild(el("div","cover-ph",initials(hit.name))); }
+    if(hit.metacritic){
+      var mc=el("span","hit-score",String(hit.metacritic));
+      mc.title="Metacritic";
+      art.appendChild(mc);
+    }
+    cardEl.appendChild(art);
+
+    var bd=el("div","hit-body");
+    bd.appendChild(el("div","hit-n",hit.name));
+    var m=[]; if(hit.release) m.push(String(hit.release).slice(0,4));
+    if(hit.platforms && hit.platforms.length) m.push(hit.platforms.slice(0,3).join(", "));
+    bd.appendChild(el("div","hit-m", m.join(" · ") || "keine Angaben"));
+
+    var why=el("div","tip-why");
+    why.appendChild(document.createTextNode("passt zu"));
+    hit._why.forEach(function(t){ why.appendChild(el("b",null,t)); });
+    bd.appendChild(why);
+
+    var acts=el("div","hit-acts");
+    var wish=el("button","btn btn-accent","Wunschliste"); wish.type="button";
+    wish.addEventListener("click",function(){ addFromTip(hit); });
+    var open=el("button","btn","Eintragen"); open.type="button";
+    open.addEventListener("click",function(){ openEditor(null, hit); });
+    acts.appendChild(wish); acts.appendChild(open);
+    bd.appendChild(acts);
+
+    cardEl.appendChild(bd);
+    grid.appendChild(cardEl);
+  });
+  box.appendChild(grid);
+}
+
 /* ============ Seite: Listen ============ */
 function renderListsPage(){
   var box=$("#lists-view"); box.innerHTML="";
@@ -1126,6 +1382,7 @@ function render(){
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
   renderListsPage();
   renderAddPage();
+  renderTips();
 }
 function resetFilters(){
   filt.q=""; filt.status=""; filt.plat=""; filt.genres=[]; filt.list=""; filt.min=1;
@@ -2028,6 +2285,7 @@ function setTab(name){
   });
   scrollTop();
   if(name==="add") setTimeout(function(){ var q=$("#add-q"); if(q) q.focus(); },40);
+  if(name==="tips" && !TIPS.loaded && !TIPS.loading && !TIPS.error) buildTips();
 }
 
 /* ============ Events ============ */
