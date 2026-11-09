@@ -40,7 +40,7 @@ var sha = null, saveState = "idle", lastSaved = null, saveTimer = null, savingNo
 var view = "grid";
 var tab = "archiv";
 var openListId = null;
-var filt = { q:"", status:"", plat:"", genre:"", list:"", min:1, sort:"score-desc" };
+var filt = { q:"", status:"", plat:"", genres:[], list:"", min:1, sort:"score-desc" };
 
 var $ = function(s){ return document.querySelector(s); };
 function el(t,c,txt){ var n=document.createElement(t); if(c) n.className=c; if(txt!=null) n.textContent=txt; return n; }
@@ -267,6 +267,24 @@ function pickPlatform(names){
   for(var i=0;i<PLAT_ORDER.length;i++){ if(names.indexOf(PLAT_ORDER[i])>=0) return PLAT_SHORT[PLAT_ORDER[i]]; }
   return shorts[0] || "";
 }
+/* RAWG mischt unter die Tags viele Steam-Eigenschaften, die ueber ein Spiel
+   nichts aussagen. Die fliegen raus, Sprachvarianten ebenso. */
+var TAG_NOISE = /steam|controller|remote play|captions|in-app|cloud|achievement|leaderboard|workshop|trading card|family sharing|anti-cheat|source sdk|level editor|commentary|downloadable content|game demo|profile features|hdr|timeline|collectibles|^stats$|^partial |^full |mmo$|includes/i;
+function cleanTags(raw){
+  var out=[], seen={};
+  (raw||[]).forEach(function(t){
+    var name=(t && t.name) || "";
+    if(!name) return;
+    if(t.language && t.language!=="eng") return;
+    if(TAG_NOISE.test(name)) return;
+    if(name.length>26) return;
+    var key=name.toLowerCase();
+    if(seen[key]) return;
+    seen[key]=1; out.push(name);
+  });
+  return out.slice(0,10);
+}
+
 async function rawgSearch(q, signal){
   var key=rawgKey();
   if(!key){ var e=new Error("Kein RAWG-Key hinterlegt."); e.nokey=true; throw e; }
@@ -286,6 +304,7 @@ async function rawgSearch(q, signal){
       release: g.released || "",
       cover: g.background_image || "",
       platforms: shorts,
+      tags: cleanTags(g.tags),
       playtime: Number(g.playtime) > 0 ? Math.round(Number(g.playtime)) : "",
       platform: pickPlatform(names),
       genres: (g.genres||[]).map(function(x){ return x.name; }).slice(0,3),
@@ -299,6 +318,7 @@ function applyHit(target, hit, opts){
   if(hit.release && (!target.release || opts.force)) target.release = hit.release;
   if(hit.platform && (!target.platform || opts.force)) target.platform = hit.platform;
   if(hit.playtime && (!target.avgHours || opts.force)) target.avgHours = hit.playtime;
+  if(hit.tags && hit.tags.length) target._suggest = hit.tags.slice();
   if(hit.genres && hit.genres.length){
     target.genres = target.genres || [];
     hit.genres.forEach(function(x){ if(target.genres.indexOf(x)<0) target.genres.push(x); });
@@ -402,15 +422,24 @@ function allPlatforms(){
   return Object.keys(s).sort(function(a,b){ return a.localeCompare(b,"de"); });
 }
 function allGenres(){
-  var s={}; games.forEach(function(g){ (g.genres||[]).forEach(function(x){ s[x]=1; }); });
-  return Object.keys(s).sort(function(a,b){ return a.localeCompare(b,"de"); });
+  var c={};
+  games.forEach(function(g){ (g.genres||[]).forEach(function(x){ c[x]=(c[x]||0)+1; }); });
+  return Object.keys(c).map(function(k){ return {name:k, count:c[k]}; })
+    .sort(function(a,b){ return b.count-a.count || a.name.localeCompare(b.name,"de"); });
+}
+function countBy(field){
+  var c={}; games.forEach(function(g){ if(g[field]) c[g[field]]=(c[g[field]]||0)+1; });
+  return c;
 }
 function visible(){
   var q=filt.q.trim().toLowerCase();
   return games.filter(function(g){
     if(filt.status && g.status!==filt.status) return false;
     if(filt.plat && g.platform!==filt.plat) return false;
-    if(filt.genre && (g.genres||[]).indexOf(filt.genre)<0) return false;
+    if(filt.genres.length){
+      var mine=g.genres||[];
+      for(var gi=0; gi<filt.genres.length; gi++){ if(mine.indexOf(filt.genres[gi])<0) return false; }
+    }
     if(filt.list && (g.listIds||[]).indexOf(filt.list)<0) return false;
     if(filt.min>1 && !(Number(g.score)>=filt.min)) return false;
     if(q){
@@ -481,7 +510,7 @@ function coverNode(g,cls,w){
 
 /* ============ Render: Kennzahlen ============ */
 function anyFilter(){
-  return !!(filt.q || filt.status || filt.plat || filt.genre || filt.list || filt.min>1);
+  return !!(filt.q || filt.status || filt.plat || filt.genres.length || filt.list || filt.min>1);
 }
 function fillStats(s, rows, countLabel){
   var scored=rows.filter(function(g){ return nz(g.score)!=null; });
@@ -541,16 +570,36 @@ function renderRail(){
   }
   Array.prototype.forEach.call(sw.children,function(b){ b.setAttribute("aria-pressed", String(filt.status===b.dataset.k)); });
 
-  function fillSelect(sel,items,all,cur){
+  function fillSelect(sel,items,all,cur,label){
     var focused=document.activeElement===sel;
     sel.innerHTML="";
     var o=el("option",null,all); o.value=""; sel.appendChild(o);
-    items.forEach(function(x){ var oo=el("option",null,x); oo.value=x; sel.appendChild(oo); });
+    items.forEach(function(x){
+      var oo=el("option",null, label ? label(x) : x); oo.value=x; sel.appendChild(oo);
+    });
     sel.value = items.indexOf(cur)>=0 ? cur : "";
     if(focused) sel.focus();
   }
-  fillSelect($("#f-plat"), allPlatforms(), "Alle Plattformen", filt.plat);
-  fillSelect($("#f-genre"), allGenres(), "Alle Genres", filt.genre);
+  var platCounts=countBy("platform");
+  fillSelect($("#f-plat"), allPlatforms(), "Alle Plattformen", filt.plat, function(name){
+    return name+" ("+(platCounts[name]||0)+")";
+  });
+
+  var gl=$("#f-genre"); gl.innerHTML="";
+  var genres=allGenres();
+  if(!genres.length) gl.appendChild(el("p","hint","Noch keine Genres."));
+  genres.forEach(function(gobj){
+    var b=el("button","pill"); b.type="button";
+    b.appendChild(document.createTextNode(gobj.name));
+    b.appendChild(el("i",null,String(gobj.count)));
+    b.setAttribute("aria-pressed", String(filt.genres.indexOf(gobj.name)>=0));
+    b.addEventListener("click",function(){
+      var i=filt.genres.indexOf(gobj.name);
+      if(i<0) filt.genres.push(gobj.name); else filt.genres.splice(i,1);
+      render();
+    });
+    gl.appendChild(b);
+  });
   $("#f-min").value=filt.min; $("#f-min-out").textContent=filt.min;
   if($("#f-q").value!==filt.q) $("#f-q").value=filt.q;
   $("#f-sort").value=filt.sort;
@@ -558,7 +607,9 @@ function renderRail(){
   var ls=$("#f-list"), lfocus=document.activeElement===ls;
   ls.innerHTML="";
   var o0=el("option",null,"Alle Listen"); o0.value=""; ls.appendChild(o0);
-  sortedLists().forEach(function(l){ var oo=el("option",null,l.name); oo.value=l.id; ls.appendChild(oo); });
+  sortedLists().forEach(function(l){
+    var oo=el("option",null, l.name+" ("+gamesOfList(l.id).length+")"); oo.value=l.id; ls.appendChild(oo);
+  });
   ls.value = lists.some(function(l){ return l.id===filt.list; }) ? filt.list : "";
   if(lfocus) ls.focus();
 }
@@ -745,7 +796,11 @@ function renderActiveFilters(){
   if(filt.q)      chips.push({k:"Suche", v:"„"+filt.q+"“", off:function(){ filt.q=""; $("#f-q").value=""; }});
   if(filt.status) chips.push({k:"Status", v:STATUS_L[filt.status], off:function(){ filt.status=""; }});
   if(filt.plat)   chips.push({k:"Plattform", v:filt.plat, off:function(){ filt.plat=""; }});
-  if(filt.genre)  chips.push({k:"Genre", v:filt.genre, off:function(){ filt.genre=""; }});
+  filt.genres.forEach(function(gname){
+    chips.push({k:"Genre", v:gname, off:function(){
+      filt.genres = filt.genres.filter(function(x){ return x!==gname; });
+    }});
+  });
   if(filt.list){
     var l=lists.find(function(x){ return x.id===filt.list; });
     if(l) chips.push({k:"Liste", v:l.name, off:function(){ filt.list=""; }});
@@ -1073,7 +1128,7 @@ function render(){
   renderAddPage();
 }
 function resetFilters(){
-  filt.q=""; filt.status=""; filt.plat=""; filt.genre=""; filt.list=""; filt.min=1;
+  filt.q=""; filt.status=""; filt.plat=""; filt.genres=[]; filt.list=""; filt.min=1;
   $("#f-q").value=""; render();
 }
 
@@ -1326,7 +1381,7 @@ function paintEditor(isEdit){
           var ri=document.getElementById("e-release"); if(ri) ri.value=isoToDE(draft.release||"");
           var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
           draft._platforms = h.platforms || [];
-          paintTags(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
+          paintTags(); paintSuggest(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
           resBox.innerHTML="";
           info(srcStatus,"Übernommen — schau kurz drüber.");
         });
@@ -1542,7 +1597,62 @@ function paintEditor(isEdit){
   });
   tin.addEventListener("blur",addTag);
   tw.appendChild(tin); paintTags();
-  fg.appendChild(tw); body.appendChild(fg);
+  fg.appendChild(tw);
+
+  var sugWrap=el("div");
+  var sugStatus=el("div","ai-status");
+  var sugBtn=el("button","btn btn-quiet btn-sm","Tags vorschlagen"); sugBtn.type="button";
+  function paintSuggest(){
+    sugWrap.innerHTML="";
+    var open=(draft._suggest||[]).filter(function(t){ return (draft.genres||[]).indexOf(t)<0; });
+    if(open.length){
+      var row=el("div","suggest");
+      open.forEach(function(t){
+        var b=el("button","tag","+ "+t); b.type="button";
+        b.addEventListener("click",function(){
+          draft.genres=draft.genres||[];
+          if(draft.genres.indexOf(t)<0) draft.genres.push(t);
+          paintTags(); paintSuggest();
+        });
+        row.appendChild(b);
+      });
+      sugWrap.appendChild(row);
+    }
+    var bar=el("div");
+    bar.style.cssText="display:flex;align-items:center;gap:10px;margin-top:9px;flex-wrap:wrap";
+    bar.appendChild(sugBtn); bar.appendChild(sugStatus);
+    sugWrap.appendChild(bar);
+  }
+  sugBtn.addEventListener("click",function(){
+    var t=(draft.title||"").trim();
+    if(!t){ sugStatus.className="ai-status bad"; sugStatus.textContent="Erst den Titel eintragen."; return; }
+    if(!rawgKey()){
+      sugStatus.className="ai-status bad";
+      sugStatus.textContent="Dafür fehlt der RAWG-Key dieses Geräts.";
+      return;
+    }
+    sugBtn.disabled=true;
+    sugStatus.className="ai-status"; sugStatus.innerHTML="";
+    sugStatus.appendChild(el("span","spin"));
+    sugStatus.appendChild(document.createTextNode("sucht Tags zu „"+t+"“ …"));
+    rawgSearch(t).then(function(hits){
+      if(!hits.length || !hits[0].tags.length){
+        sugStatus.className="ai-status";
+        sugStatus.textContent="Keine brauchbaren Tags gefunden.";
+      } else {
+        draft._suggest=hits[0].tags.slice();
+        sugStatus.className="ai-status";
+        sugStatus.textContent="Tipp an, was für dich passt.";
+      }
+      paintSuggest();
+    }).catch(function(e){
+      sugStatus.className="ai-status bad";
+      sugStatus.textContent = (e && e.message) ? e.message : "Hat nicht geklappt.";
+    }).then(function(){ sugBtn.disabled=false; });
+  });
+  paintSuggest();
+  fg.appendChild(sugWrap);
+  body.appendChild(fg);
 
   /* Listen */
   var fl=el("div","field");
@@ -1711,7 +1821,7 @@ async function runBulk(rows, wantDb, st, go, cancel){
       busy("Datenbank: "+(i+1)+" von "+rows.length+" — "+r.title);
       try{
         var hits=await rawgSearch(r.title);
-        if(hits.length) g.cover = applyHit(g, hits[0], {force:true});
+        if(hits.length){ g.cover = applyHit(g, hits[0], {force:true}); delete g._suggest; }
         else missed++;
       }catch(e){
         if(e && e.nokey){ wantDb=false; }
@@ -1969,7 +2079,6 @@ $("#f-q").addEventListener("input",function(ev){
   qt=setTimeout(function(){ filt.q=v; render(); },160);
 });
 $("#f-plat").addEventListener("change",function(ev){ filt.plat=ev.target.value; render(); });
-$("#f-genre").addEventListener("change",function(ev){ filt.genre=ev.target.value; render(); });
 $("#f-list").addEventListener("change",function(ev){ filt.list=ev.target.value; render(); });
 $("#f-sort").addEventListener("change",function(ev){ filt.sort=ev.target.value; render(); });
 $("#f-min").addEventListener("input",function(ev){

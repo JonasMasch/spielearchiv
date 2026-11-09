@@ -133,6 +133,14 @@ select.inp{cursor:pointer;appearance:none;
 textarea.inp{resize:vertical;min-height:76px;line-height:1.55}
 
 .pills{display:flex;flex-wrap:wrap;gap:5px}
+.genrelist{display:flex;flex-wrap:wrap;gap:5px;max-height:186px;overflow-y:auto;padding:1px 2px 1px 1px}
+.genrelist .pill{display:inline-flex;align-items:center;gap:6px}
+.genrelist .pill i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums}
+.genrelist .pill[aria-pressed="true"] i{color:inherit;opacity:.7}
+.suggest{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.suggest .tag{cursor:pointer;border-style:dashed;padding:2.5px 9px}
+.suggest .tag:hover{border-color:var(--accent);color:var(--accent);border-style:solid}
 .pill{border:1px solid var(--line);background:var(--surface-2);border-radius:100px;padding:4px 10px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
 .pill:hover{border-color:var(--ink-3)}
 .pill[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}

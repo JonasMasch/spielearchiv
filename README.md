@@ -89,6 +89,9 @@ Wertung — und holt für jedes Spiel die Daten aus der Datenbank.
 }
 ```
 
+`genres` mischt die groben Genres von RAWG mit Tags, die du selbst auswählst — im Eintrag schlägt
+„Tags vorschlagen“ die spezifischen RAWG-Tags vor und filtert deren Steam-Eigenschaften heraus.
+
 `status` ist `gespielt`, `spiele`, `backlog`, `wunschliste` oder `abgebrochen`. `wunschliste` ist
 für Angekündigtes gedacht: Liegt `release` in der Zukunft, zeigen Karte und Tabelle statt der
 Jahreszahl „erscheint TT.MM.JJJJ“. `release`, `startedOn` und
