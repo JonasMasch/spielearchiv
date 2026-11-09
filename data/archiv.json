@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-16T13:23:34.551Z",
+  "updatedAt": "2026-11-09T14:06:23.434Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -908,12 +908,12 @@
       "status": "backlog",
       "notes": "",
       "playthroughs": "",
-      "priority": 4,
+      "priority": 5,
       "avgHours": 5,
       "cover": "https://media.rawg.io/media/screenshots/e9c/e9cfcfafdf44b339edf6a9a07b8faed9.jpg",
       "listIds": [],
       "createdAt": 1788883167237,
-      "updatedAt": 1792156951344
+      "updatedAt": 1794233179930
     },
     {
       "id": "e0687c78-00b5-4172-9e2b-698e0d86f4a8",
