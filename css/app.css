@@ -494,18 +494,26 @@ tbody tr:last-child td{border-bottom:none}
   .rail{display:none}
   .sheet-scrim{position:fixed;inset:0;background:rgba(12,12,20,.5);z-index:45;backdrop-filter:blur(2px)}
   body.filters-open .sheet-scrim{display:block;animation:scrimIn .16s ease-out}
+  /* Das Filterfenster haengt am oberen Rand und fuellt die Flaeche ganz aus
+     (inset:0). Eine von unten gerechnete Hoehe verschiebt sich auf dem iPhone,
+     sobald Safari seine Leisten oder die Tastatur ein- und ausfaehrt - dann
+     rutscht der Kopf des Fensters aus dem Bild. Oben verankert kann das nicht
+     passieren, aus demselben Grund wie bei der Navigationsleiste. */
   body.filters-open .rail{
-    display:flex;flex-direction:column;
-    position:fixed;left:0;right:0;bottom:0;top:auto;z-index:46;
-    max-height:88vh;max-height:88dvh;padding:0;
-    background:var(--surface);border-top:1px solid var(--line);
-    border-radius:16px 16px 0 0;box-shadow:0 -10px 40px -18px rgba(0,0,0,.85);
-    animation:sheetIn .22s cubic-bezier(.22,.7,.3,1)}
+    display:flex;flex-direction:column;flex-wrap:nowrap;gap:0;
+    position:fixed;inset:0;z-index:46;
+    padding:0;background:var(--surface);border:none;border-radius:0;
+    animation:scrimIn .16s ease-out}
   body.filters-open .rail .rail-block{flex:1 1 auto;min-height:0;overflow-y:auto;
+    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
     border:none;border-radius:0;background:transparent;padding:14px 16px 18px}
   body.filters-open .rail .rail-h{margin-bottom:11px}
+  /* Kopfzeile des Fensters sagt bereits "Filter", der Fuss hat das
+     Zuruecksetzen: die erste Zeile im Block waere doppelt. */
+  body.filters-open .rail .rail-block > .rail-h:first-child{display:none}
   .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
-    padding:13px 16px 11px;border-bottom:1px solid var(--line);flex:none}
+    padding:13px 16px 11px;border-bottom:1px solid var(--line);flex:none;
+    padding-top:calc(13px + env(safe-area-inset-top,0px))}
   .sheet-head strong{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.02em}
   .sheet-foot{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);
     background:var(--surface-2);flex:none;

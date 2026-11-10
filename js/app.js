@@ -2316,7 +2316,10 @@ $("#btn-reset").addEventListener("click",resetFilters);
 function setFilters(open){
   document.body.classList.toggle("filters-open", !!open);
   $("#btn-filters").setAttribute("aria-expanded", String(!!open));
-  if(open) setTimeout(function(){ $("#f-q").focus(); },60);
+  /* Nur am Rechner ins Suchfeld springen: auf dem Telefon faehrt sonst die
+     Tastatur hoch, verkleinert die sichtbare Flaeche und verschiebt das
+     Fenster. */
+  if(open && window.innerWidth>760) setTimeout(function(){ $("#f-q").focus(); },60);
 }
 $("#btn-filters").addEventListener("click",function(){
   setFilters(!document.body.classList.contains("filters-open"));
