@@ -645,9 +645,9 @@ function cardNode(g, rank){
   var sc=nz(g.score);
   var sb=el("div","poster-score");
   var num=el("b", null, sc==null ? "ohne Wertung" : String(sc));
-  if(sc==null) num.className="none"; else num.style.color=bandVar(sc);
+  if(sc==null) num.className="none";
   sb.appendChild(num);
-  if(sc!=null){ var bd=el("em",null,band(sc).l); bd.style.color=bandVar(sc); sb.appendChild(bd); }
+  if(sc!=null){ sb.appendChild(el("em",null,band(sc).l)); }
   art.appendChild(sb);
   a.appendChild(art);
 
