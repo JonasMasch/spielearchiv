@@ -43,8 +43,11 @@ Plattform und Genres vor.
 [themoviedb.org](https://www.themoviedb.org) anlegen, in den Kontoeinstellungen auf „API“, den
 Bedingungen zustimmen, Key (v3 auth) kopieren und in den Einstellungen eintragen. Die
 Anmeldeseite ist laut TMDB nicht für Telefone gemacht — das am Rechner erledigen. Der Gratis-Zugang
-gilt für nicht-kommerzielle Projekte; TMDB verlangt den Hinweis, dass die Daten von dort stammen
-und dass TMDB die Seite nicht geprüft hat — er steht in der Fußzeile.
+gilt für nicht-kommerzielle Projekte. TMDB verlangt ihr Logo und den wörtlichen Hinweis „This
+product uses the TMDB API but is not endorsed or certified by TMDB.“ in einem Über- oder
+Credits-Bereich, und das Logo muss weniger ins Auge fallen als die eigene Marke — beides steht
+unter **Mehr → Über diese Seite**. Das Logo liegt unverändert als [`assets/tmdb.svg`](assets/tmdb.svg)
+im Repo (offizielle Fassung „Primary long (blue)“).
 
 Token, RAWG-Key und TMDB-Key werden **nicht** ins Repo geschrieben. Sie liegen im `localStorage` des jeweiligen
 Browsers und gehen ausschließlich an `api.github.com`, `api.rawg.io` bzw. `api.themoviedb.org` —

@@ -172,10 +172,10 @@
     <div class="page-head"><h2>Verwalten</h2></div>
     <div class="morelist">
       <button class="morerow" id="m-settings" type="button">
-        <b>Einstellungen</b><span>GitHub-Token und Spieledatenbank für dieses Gerät</span>
+        <b>Einstellungen</b><span>GitHub-Token und die Datenbank-Keys dieses Geräts</span>
       </button>
       <button class="morerow" id="m-bulk" type="button">
-        <b>Mehrere eintragen</b><span>Ganze Liste auf einmal, Cover und Daten kommen automatisch dazu</span>
+        <b>Mehrere eintragen</b><span>Ganze Liste Spiele auf einmal, Cover und Daten kommen automatisch dazu</span>
       </button>
       <button class="morerow" id="m-export" type="button">
         <b>Exportieren</b><span>Das ganze Archiv als JSON sichern</span>
@@ -184,7 +184,24 @@
         <b>Importieren</b><span>Eine JSON-Datei einlesen</span>
       </button>
     </div>
-    <p class="hint" style="margin-top:16px">Spieldaten von <a href="https://rawg.io" target="_blank" rel="noopener">RAWG</a>. Film- und Seriendaten von <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a> — diese Seite nutzt die TMDB-Schnittstelle, ist aber nicht von TMDB geprüft oder unterstützt.</p>
+    <section class="about">
+      <h3>Über diese Seite</h3>
+      <p>Persönliches Archiv für Spiele, Filme und Serien. Die Daten liegen in einem GitHub-Repository,
+         die Titelangaben kommen aus zwei öffentlichen Datenbanken.</p>
+
+      <div class="credit">
+        <a href="https://www.themoviedb.org" target="_blank" rel="noopener" class="credit-logo">
+          <img src="assets/tmdb.svg" alt="The Movie Database (TMDB)" width="150" height="13">
+        </a>
+        <p class="credit-note">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+        <p class="credit-sub">Filme und Serien: Titel, Cover, Laufzeiten, Folgen, Genres und Anbieter.</p>
+      </div>
+
+      <div class="credit">
+        <a href="https://rawg.io" target="_blank" rel="noopener" class="credit-name">RAWG</a>
+        <p class="credit-sub">Spiele: Titel, Cover, Release, Plattformen, Genres und die übliche Spieldauer.</p>
+      </div>
+    </section>
   </section>
    </div>
   </div>
