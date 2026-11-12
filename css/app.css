@@ -1,5 +1,15 @@
 :root{
-  --paper:#F4F1EB;
+  --paper-base:#F4F1EB;
+  --paper:var(--paper-base);
+  /* Medienfarben: sie kennzeichnen nur den Bereich. Aktionen bleiben beim
+     Akzent, Wertungen bei ihren Baendern — jede Farbe behaelt ihre Rolle. */
+  --m-game:#0E6E70;
+  --m-movie:#3F4FA8;
+  --m-tv:#5B6B1F;
+  --m-ink:#FFFFFF;        /* Schrift auf gefuellter Medienfarbe */
+  --m-fill-game:#0E6E70;  /* auf Bildern, dort immer dunkel mit weissem Zeichen */
+  --m-fill-movie:#3F4FA8;
+  --m-fill-tv:#4F5C1B;
   --surface:#FFFFFF;
   --surface-2:#F6F3ED;
   --line:#E7E1D7;
@@ -25,7 +35,8 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#14130F; --surface:#1D1B17; --surface-2:#252219;
+    --paper-base:#14130F; --paper:var(--paper-base); --surface:#1D1B17; --surface-2:#252219;
+    --m-game:#5CC2C4; --m-movie:#9AA6F5; --m-tv:#B2C26A; --m-ink:#14130F;
     --line:#312D26; --line-2:#453F36;
     --ink:#F1EDE5; --ink-2:#B9B3A7; --ink-3:#908A7E;
     --accent:#EF7FA6; --accent-on:#2A0A15; --accent-soft:#3A1A2660;
@@ -35,7 +46,8 @@
   }
 }
 :root[data-theme="dark"]{
-  --paper:#14130F; --surface:#1D1B17; --surface-2:#252219;
+  --paper-base:#14130F; --paper:var(--paper-base); --surface:#1D1B17; --surface-2:#252219;
+  --m-game:#5CC2C4; --m-movie:#9AA6F5; --m-tv:#B2C26A; --m-ink:#14130F;
   --line:#312D26; --line-2:#453F36;
   --ink:#F1EDE5; --ink-2:#B9B3A7; --ink-3:#908A7E;
   --accent:#EF7FA6; --accent-on:#2A0A15; --accent-soft:#3A1A2660;
@@ -43,6 +55,22 @@
   --shadow-1:0 1px 2px rgba(0,0,0,.35);
   --shadow-2:0 1px 3px rgba(0,0,0,.3), 0 18px 36px -22px rgba(0,0,0,.85);
 }
+
+/* Der Bereich faerbt den Hintergrund nur um eine Spur — spuerbar,
+   ohne laut zu werden. Feste Werte statt color-mix, damit auch ein
+   aelterer Browser nicht auf eine weisse Seite laeuft. */
+body[data-medium="game"]{--medium:var(--m-game);  --paper:#E8EAE5}
+body[data-medium="movie"]{--medium:var(--m-movie); --paper:#EBE9E8}
+body[data-medium="tv"]{--medium:var(--m-tv);    --paper:#ECEAE1}
+body[data-medium="all"]{--medium:var(--accent)}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) body[data-medium="game"]{--paper:#191F1C}
+  :root:not([data-theme="light"]) body[data-medium="movie"]{--paper:#1D1D1F}
+  :root:not([data-theme="light"]) body[data-medium="tv"]{--paper:#1F1F15}
+}
+:root[data-theme="dark"] body[data-medium="game"]{--paper:#191F1C}
+:root[data-theme="dark"] body[data-medium="movie"]{--paper:#1D1D1F}
+:root[data-theme="dark"] body[data-medium="tv"]{--paper:#1F1F15}
 
 *{box-sizing:border-box}
 html{color-scheme:light dark}
@@ -119,6 +147,43 @@ a:hover{border-bottom-color:var(--accent)}
 .hist-bars i[data-band="good"]{background:var(--band-good)} .hist-bars i[data-band="top"]{background:var(--band-top)}
 .hist-bars i[data-band="elite"]{background:var(--band-elite)}
 .hist-axis{display:flex;justify-content:space-between;font-family:var(--body);font-size:11px;color:var(--ink-3)}
+
+/* Bereichsumschalter */
+.mediaseg{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--line);
+  border-radius:100px;padding:4px;margin-bottom:18px;box-shadow:var(--shadow-1);max-width:100%}
+.mediaseg button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;
+  background:none;padding:8px 16px;border-radius:100px;cursor:pointer;color:var(--ink-3);
+  font:inherit;font-weight:500;font-size:13.5px;white-space:nowrap;
+  transition:background .14s,color .14s}
+.mediaseg svg{width:17px;height:17px;flex:none;fill:currentColor}
+.mediaseg button:hover{color:var(--ink)}
+.mediaseg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.mediaseg button[data-m="game"][aria-pressed="true"]{background:var(--m-game);color:var(--m-ink)}
+.mediaseg button[data-m="movie"][aria-pressed="true"]{background:var(--m-movie);color:var(--m-ink)}
+.mediaseg button[data-m="tv"][aria-pressed="true"]{background:var(--m-tv);color:var(--m-ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* Medienzeichen auf der Karte — nur in der gemischten Ansicht noetig */
+.poster-media{display:none;position:absolute;right:10px;top:10px;z-index:2;width:28px;height:28px;
+  border-radius:100px;place-items:center;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+body[data-medium="all"] .poster-media{display:grid}
+.poster-media svg{width:16px;height:16px;fill:currentColor}
+.poster-media[data-m="game"]{background:var(--m-fill-game)}
+.poster-media[data-m="movie"]{background:var(--m-fill-movie)}
+.poster-media[data-m="tv"]{background:var(--m-fill-tv)}
+
+/* Medienwahl im Editor */
+.pill-media{display:inline-flex;align-items:center;gap:7px}
+.pill-media svg{width:16px;height:16px;fill:currentColor}
+.pill-media[data-m="game"][aria-pressed="true"]{background:var(--m-game);border-color:var(--m-game);color:var(--m-ink)}
+.pill-media[data-m="movie"][aria-pressed="true"]{background:var(--m-movie);border-color:var(--m-movie);color:var(--m-ink)}
+.pill-media[data-m="tv"][aria-pressed="true"]{background:var(--m-tv);border-color:var(--m-tv);color:var(--m-ink)}
+
+/* Das Schubfach traegt die Farbe seines Mediums als feine Kante */
+.drawer[data-m="game"]{--medium:var(--m-game)}
+.drawer[data-m="movie"]{--medium:var(--m-movie)}
+.drawer[data-m="tv"]{--medium:var(--m-tv)}
+.drawer[data-m] .drawer-head{border-top:3px solid var(--medium)}
 
 /* layout */
 .layout{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start}
@@ -496,6 +561,9 @@ tbody tr:last-child td{border-bottom:none}
   .notice{flex-direction:column;gap:9px}
   .notice-acts{margin-left:0;flex-wrap:wrap}
   .filter-toggle{display:inline-flex}
+  .mediaseg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;width:100%;gap:2px}
+  .mediaseg button{padding:10px 6px;font-size:12.5px;gap:5px;min-height:44px}
+  .mediaseg svg{width:16px;height:16px}
   .rail{display:none}
   .sheet-scrim{position:fixed;inset:0;background:rgba(12,12,20,.5);z-index:45;backdrop-filter:blur(2px)}
   body.filters-open .sheet-scrim{display:block;animation:scrimIn .16s ease-out}

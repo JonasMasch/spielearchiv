@@ -27,6 +27,84 @@ var BANDS = [
 var PRIO = {1:"irgendwann", 2:"bei Gelegenheit", 3:"gerne bald", 4:"ziemlich bald", 5:"als Nächstes"};
 function wantsPriority(status){ return status==="backlog" || status==="wunschliste"; }
 
+/* ============ Medien ============
+   Ein Medium steht vollstaendig in dieser Tabelle: Benennung, Zustaende,
+   welche Felder es kennt, woher die Daten kommen, welches Zeichen es traegt.
+   Ein weiteres Medium (Buecher etwa) braucht einen Eintrag hier, eine Farbe
+   in der CSS-Datei und eine Quelle — am uebrigen Code aendert sich nichts.
+   Die Zustandsschluessel sind bewusst in allen Medien gleich, nur ihre
+   Beschriftung wechselt: so bleiben Filter, Sortierung und Listen gemeinsam. */
+var MEDIA_ORDER = ["game","movie","tv"];
+var MEDIA = {
+  game: {
+    k:"game", one:"Spiel", many:"Spiele", source:"rawg",
+    icon:'<rect x="2.6" y="7.4" width="18.8" height="9.2" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.8"/>'+
+         '<path d="M7 10.6v2.8M5.6 12h2.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'+
+         '<circle cx="16.2" cy="11" r="1.15"/><circle cx="18.4" cy="13.4" r="1.15"/>',
+    status:{gespielt:"Gespielt", spiele:"Am Spielen", backlog:"Backlog", wunschliste:"Wunschliste", abgebrochen:"Abgebrochen"},
+    lab:{time:"Zeit", span:"Gespielt", spanFrom:"Gespielt von", runs:"Durchgespielt", runsField:"Wie oft durchgespielt",
+         progress:"Fortschritt", where:"Plattform", wherePh:"PC, PS5, Switch …", usual:"Üblich"},
+    has:{hours:true, completion:true, usual:true, span:true, runtime:false, episodes:false}
+  },
+  movie: {
+    k:"movie", one:"Film", many:"Filme", source:"tmdb", tmdb:"movie",
+    icon:'<rect x="2.8" y="4.8" width="18.4" height="14.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/>'+
+         '<path d="M2.8 9.3h18.4M7.4 4.8l-1.6 4.5M12.4 4.8l-1.6 4.5M17.4 4.8l-1.6 4.5" stroke="currentColor" stroke-width="1.6"/>',
+    status:{gespielt:"Gesehen", spiele:"Schaue gerade", backlog:"Backlog", wunschliste:"Wunschliste", abgebrochen:"Abgebrochen"},
+    lab:{time:"Zeit", span:"Gesehen", spanFrom:"Gesehen am", runs:"Gesehen", runsField:"Wie oft gesehen",
+         progress:"Fortschritt", where:"Gesehen bei", wherePh:"Netflix, Kino, Disc …", usual:"Laufzeit"},
+    has:{hours:false, completion:false, usual:false, span:"single", runtime:true, episodes:false}
+  },
+  tv: {
+    k:"tv", one:"Serie", many:"Serien", source:"tmdb", tmdb:"tv",
+    icon:'<rect x="2.8" y="7.6" width="18.4" height="11.6" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/>'+
+         '<path d="M8.4 4.4l3.6 3.2 3.6-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    status:{gespielt:"Gesehen", spiele:"Schaue gerade", backlog:"Backlog", wunschliste:"Wunschliste", abgebrochen:"Abgebrochen"},
+    lab:{time:"Zeit", span:"Gesehen", spanFrom:"Gesehen von", runs:"Gesehen", runsField:"Wie oft gesehen",
+         progress:"Folgen", where:"Gesehen bei", wherePh:"Netflix, Prime, Disc …", usual:"Folgenlänge"},
+    has:{hours:false, completion:"episodes", usual:false, span:true, runtime:true, episodes:true}
+  }
+};
+function mediaKey(g){ var k=g && g.media; return MEDIA[k] ? k : "game"; }
+function md(g){ return MEDIA[mediaKey(g)]; }
+function mediaLabel(k, n){
+  var m=MEDIA[k]; if(!m) return n===1 ? "Eintrag" : "Einträge";
+  return n===1 ? m.one : m.many;
+}
+/* „von 77 Spielen“ — der Wemfall braucht eine eigene Form. */
+function mediaLabelDat(k, n){
+  var m=MEDIA[k];
+  if(!m) return n===1 ? "Eintrag" : "Einträgen";
+  if(n===1) return m.one;
+  return m.many.slice(-1)==="n" ? m.many : m.many+"n";
+}
+function statusLabel(g){ return md(g).status[g&&g.status||"backlog"] || "Backlog"; }
+function mediaIcon(k, cls){
+  var m=MEDIA[k]; if(!m) return null;
+  var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 24 24");
+  svg.setAttribute("aria-hidden","true");
+  if(cls) svg.setAttribute("class",cls);
+  svg.innerHTML=m.icon;
+  return svg;
+}
+/* Zeit und Fortschritt rechnen sich bei Film und Serie aus Laufzeit und
+   Folgen — eintippen muss man dort nichts. */
+function derivedHours(g){
+  var k=mediaKey(g), rt=Number(g.runtime)||0, runs=Math.max(1, Number(g.playthroughs)||1);
+  if(k==="movie") return rt ? Math.round(rt/60*runs*10)/10 : "";
+  if(k==="tv"){
+    var seen=Number(g.episodesSeen)||0;
+    return (rt && seen) ? Math.round(rt*seen/60*runs*10)/10 : "";
+  }
+  return null;
+}
+function derivedCompletion(g){
+  if(mediaKey(g)!=="tv") return null;
+  var all=Number(g.episodes)||0, seen=Number(g.episodesSeen)||0;
+  return all ? Math.min(100, Math.round(seen/all*100)) : "";
+}
+
 function band(s){ for(var i=0;i<BANDS.length;i++){ if(s>=BANDS[i].min) return BANDS[i]; } return BANDS[BANDS.length-1]; }
 function bandVar(s){ return "var(--band-"+band(s).c+")"; }
 
@@ -40,7 +118,7 @@ var sha = null, saveState = "idle", lastSaved = null, saveTimer = null, savingNo
 var view = "grid";
 var tab = "archiv";
 var openListId = null;
-var filt = { q:"", status:"", plat:"", genres:[], list:"", min:1, sort:"score-desc" };
+var filt = { q:"", media:"", status:"", plat:"", genres:[], list:"", min:1, sort:"score-desc" };
 
 var $ = function(s){ return document.querySelector(s); };
 function el(t,c,txt){ var n=document.createElement(t); if(c) n.className=c; if(txt!=null) n.textContent=txt; return n; }
@@ -56,6 +134,7 @@ var LS = {
 
 function token(){ return LS.raw("sa.token").trim(); }
 function rawgKey(){ return LS.raw("sa.rawg").trim(); }
+function tmdbKey(){ return LS.raw("sa.tmdb").trim(); }
 
 function scrollTop(){
   var sc=document.getElementById("scroll");
@@ -303,6 +382,7 @@ function mapRawgGame(g){
   var shorts=[];
   names.map(shortPlat).forEach(function(x){ if(shorts.indexOf(x)<0) shorts.push(x); });
   return {
+    media: "game",
     name: g.name || "",
     release: g.released || "",
     cover: g.background_image || "",
@@ -315,12 +395,102 @@ function mapRawgGame(g){
     rating: Number(g.rating) || 0
   };
 }
+/* ============ TMDB: Filme und Serien ============
+   Derselbe Trefferaufbau wie bei RAWG, damit der Editor nicht wissen muss,
+   woher ein Treffer stammt. */
+var TMDB_IMG="https://image.tmdb.org/t/p/";
+function tmdbImg(path,size){ return path ? TMDB_IMG+(size||"w780")+path : ""; }
+function sourceName(k){ return (MEDIA[k] && MEDIA[k].source==="tmdb") ? "TMDB" : "RAWG"; }
+function hasKey(k){ return (MEDIA[k] && MEDIA[k].source==="tmdb") ? !!tmdbKey() : !!rawgKey(); }
+function searchMedia(k, q, signal){
+  var m=MEDIA[k]||MEDIA.game;
+  return m.source==="tmdb" ? tmdbSearch(m.tmdb, q, signal) : rawgSearch(q, signal);
+}
+
+async function tmdbFetch(path, params, signal){
+  var key=tmdbKey();
+  if(!key){ var e=new Error("Kein TMDB-Key hinterlegt."); e.nokey=true; throw e; }
+  var qs=[];
+  for(var k in (params||{})) qs.push(k+"="+encodeURIComponent(params[k]));
+  var url="https://api.themoviedb.org/3"+path+"?api_key="+encodeURIComponent(key)+
+          "&language=de-DE"+(qs.length?"&"+qs.join("&"):"");
+  var r=await fetch(url,{signal:signal});
+  if(r.status===401){ var a=new Error("Der TMDB-Key wird nicht akzeptiert."); a.nokey=true; throw a; }
+  if(r.status===429) throw new Error("TMDB-Limit erreicht. Später nochmal.");
+  if(!r.ok) throw new Error("TMDB antwortet mit "+r.status+".");
+  return r.json();
+}
+
+/* Die Suche liefert nur Genre-Nummern. Die Liste dazu aendert sich praktisch
+   nie, also wird sie einmal geholt und bleibt im Browser. */
+var TMDB_GENRES={};
+async function tmdbGenres(kind){
+  if(TMDB_GENRES[kind]) return TMDB_GENRES[kind];
+  var cached=LS.get("sa.tmdbgenres."+kind,null);
+  if(cached){ TMDB_GENRES[kind]=cached; return cached; }
+  try{
+    var j=await tmdbFetch("/genre/"+kind+"/list",{});
+    var map={}; (j.genres||[]).forEach(function(x){ map[x.id]=x.name; });
+    TMDB_GENRES[kind]=map; LS.set("sa.tmdbgenres."+kind,map);
+    return map;
+  }catch(e){ return {}; }
+}
+
+function mapTmdb(kind, g, gmap){
+  var isTv = kind==="tv";
+  var genres = (g.genres||[]).map(function(x){ return x.name; });
+  if(!genres.length && gmap) genres=(g.genre_ids||[]).map(function(id){ return gmap[id]; }).filter(Boolean);
+  genres=genres.slice(0,4);
+  return {
+    media: isTv ? "tv" : "movie",
+    tmdbId: g.id,
+    name: (isTv ? (g.name||g.original_name) : (g.title||g.original_title)) || "",
+    release: (isTv ? g.first_air_date : g.release_date) || "",
+    cover: tmdbImg(g.backdrop_path,"w780") || tmdbImg(g.poster_path,"w500"),
+    platforms: [],
+    tags: genres.slice(),
+    genres: genres,
+    runtime: isTv ? ((g.episode_run_time && g.episode_run_time[0]) || "") : (g.runtime || ""),
+    episodes: isTv ? (g.number_of_episodes || "") : "",
+    seasons: isTv ? (g.number_of_seasons || "") : "",
+    playtime: "",
+    platform: "",
+    metacritic: null,
+    rating: Number(g.vote_average) || 0
+  };
+}
+
+async function tmdbSearch(kind, q, signal){
+  var gmap=await tmdbGenres(kind);
+  var j=await tmdbFetch("/search/"+kind, {query:q, include_adult:"false"}, signal);
+  return (j.results||[]).slice(0,8).map(function(x){ return mapTmdb(kind,x,gmap); });
+}
+
+/* Laufzeit, Folgenzahl und die Anbieter stehen erst in den Einzeldaten. */
+async function tmdbDetails(kind, id){
+  var j=await tmdbFetch("/"+kind+"/"+id, {append_to_response:"watch/providers"});
+  var hit=mapTmdb(kind, j, null);
+  var wp=j["watch/providers"] && j["watch/providers"].results && j["watch/providers"].results.DE;
+  if(wp){
+    var names=[];
+    ["flatrate","free","ads","rent","buy"].forEach(function(t){
+      (wp[t]||[]).forEach(function(prov){
+        if(prov.provider_name && names.indexOf(prov.provider_name)<0) names.push(prov.provider_name);
+      });
+    });
+    hit.platforms=names.slice(0,8);
+  }
+  return hit;
+}
+
 function applyHit(target, hit, opts){
   opts = opts || {};
   if(hit.name) target.title = hit.name;
   if(hit.release && (!target.release || opts.force)) target.release = hit.release;
   if(hit.platform && (!target.platform || opts.force)) target.platform = hit.platform;
   if(hit.playtime && (!target.avgHours || opts.force)) target.avgHours = hit.playtime;
+  if(hit.runtime && (!target.runtime || opts.force)) target.runtime = hit.runtime;
+  if(hit.episodes && (!target.episodes || opts.force)) target.episodes = hit.episodes;
   if(hit.tags && hit.tags.length) target._suggest = hit.tags.slice();
   if(hit.genres && hit.genres.length){
     target.genres = target.genres || [];
@@ -420,23 +590,29 @@ function sortedLists(){
 function gamesOfList(id){
   return games.filter(function(g){ return (g.listIds||[]).indexOf(id)>=0; });
 }
+/* Alles, was den Filter fuellt, bezieht sich auf das gewaehlte Medium —
+   sonst stehen im Spielefilter die Streamingdienste. */
+function mediaPool(){
+  return filt.media ? games.filter(function(g){ return mediaKey(g)===filt.media; }) : games;
+}
 function allPlatforms(){
-  var s={}; games.forEach(function(g){ if(g.platform) s[g.platform]=1; });
+  var s={}; mediaPool().forEach(function(g){ if(g.platform) s[g.platform]=1; });
   return Object.keys(s).sort(function(a,b){ return a.localeCompare(b,"de"); });
 }
 function allGenres(){
   var c={};
-  games.forEach(function(g){ (g.genres||[]).forEach(function(x){ c[x]=(c[x]||0)+1; }); });
+  mediaPool().forEach(function(g){ (g.genres||[]).forEach(function(x){ c[x]=(c[x]||0)+1; }); });
   return Object.keys(c).map(function(k){ return {name:k, count:c[k]}; })
     .sort(function(a,b){ return b.count-a.count || a.name.localeCompare(b.name,"de"); });
 }
 function countBy(field){
-  var c={}; games.forEach(function(g){ if(g[field]) c[g[field]]=(c[g[field]]||0)+1; });
+  var c={}; mediaPool().forEach(function(g){ if(g[field]) c[g[field]]=(c[g[field]]||0)+1; });
   return c;
 }
 function visible(){
   var q=filt.q.trim().toLowerCase();
   return games.filter(function(g){
+    if(filt.media && mediaKey(g)!==filt.media) return false;
     if(filt.status && g.status!==filt.status) return false;
     if(filt.plat && g.platform!==filt.plat) return false;
     if(filt.genres.length){
@@ -446,7 +622,7 @@ function visible(){
     if(filt.list && (g.listIds||[]).indexOf(filt.list)<0) return false;
     if(filt.min>1 && !(Number(g.score)>=filt.min)) return false;
     if(q){
-      var hay=[g.title,g.platform,(g.genres||[]).join(" "),STATUS_L[g.status]||""].join(" ").toLowerCase();
+      var hay=[g.title,g.platform,(g.genres||[]).join(" "),statusLabel(g),md(g).one].join(" ").toLowerCase();
       if(hay.indexOf(q)<0) return false;
     }
     return true;
@@ -512,6 +688,8 @@ function coverNode(g,cls,w){
 }
 
 /* ============ Render: Kennzahlen ============ */
+/* Das Medium zaehlt hier bewusst nicht als Filter: es ist der Bereich, in
+   dem man sich befindet, und die Kennzahlen gelten dann fuer diesen Bereich. */
 function anyFilter(){
   return !!(filt.q || filt.status || filt.plat || filt.genres.length || filt.list || filt.min>1);
 }
@@ -533,7 +711,7 @@ function fillStats(s, rows, countLabel){
     if(sub) b.appendChild(el("small",null,sub));
     d.appendChild(b); return d;
   }
-  s.appendChild(tile(countLabel || "Spiele", String(rows.length)));
+  s.appendChild(tile(countLabel || "Einträge", String(rows.length)));
   s.appendChild(tile("Ø Wertung", avg==null?"—":(Math.round(avg*10)/10).toLocaleString("de-DE"), avg==null?null:"/ 100"));
   s.appendChild(tile("Stunden", hrs?Math.round(hrs).toLocaleString("de-DE"):"—", hrs?"h gesamt":null));
   s.appendChild(tile("Abgeschlossen", String(done), rows.length?"von "+rows.length:null));
@@ -545,7 +723,7 @@ function fillStats(s, rows, countLabel){
     var b=el("i");
     b.style.height=(n ? Math.max(8,Math.round(n/peak*38)) : 2)+"px";
     if(n) b.setAttribute("data-band", band(i*10+5).c);
-    b.title=(i*10+1)+"–"+(i*10+10)+": "+n+(n===1?" Spiel":" Spiele");
+    b.title=(i*10+1)+"–"+(i*10+10)+": "+n+(n===1?" Eintrag":" Einträge");
     bars.appendChild(b);
   });
   h.appendChild(bars);
@@ -557,21 +735,63 @@ function fillStats(s, rows, countLabel){
 
 function renderStats(){
   var filtered=anyFilter();
-  fillStats($("#stats"), filtered ? visible() : games.slice(),
-            filtered ? "Spiele (gefiltert)" : "Spiele");
+  var word = filt.media ? MEDIA[filt.media].many : "Einträge";
+  fillStats($("#stats"), filtered ? visible() : mediaPool().slice(),
+            filtered ? word+" (gefiltert)" : word);
+}
+
+/* ============ Render: Medienumschalter ============ */
+function setMedia(k){
+  if(filt.media===k) return;
+  filt.media = k || "";
+  /* Plattform und Genres gehoeren zum vorherigen Medium und ergeben hier
+     keinen Sinn mehr. */
+  filt.plat=""; filt.genres=[];
+  document.body.setAttribute("data-medium", filt.media || "all");
+  LS.put("sa.media", filt.media);
+  render();
+}
+function renderMediaSeg(){
+  var box=$("#mediaseg");
+  if(!box) return;
+  if(!box.childElementCount){
+    var opts=[{k:"", l:"Alle"}].concat(MEDIA_ORDER.map(function(k){ return {k:k, l:MEDIA[k].many}; }));
+    opts.forEach(function(o){
+      var b=el("button",null); b.type="button"; b.dataset.m=o.k;
+      if(o.k){ var ic=mediaIcon(o.k); if(ic) b.appendChild(ic); }
+      b.appendChild(el("span",null,o.l));
+      b.addEventListener("click",function(){ setMedia(o.k); });
+      box.appendChild(b);
+    });
+  }
+  Array.prototype.forEach.call(box.children,function(b){
+    var on = (b.dataset.m||"")===filt.media;
+    b.setAttribute("aria-pressed", String(on));
+    var n = b.dataset.m ? games.filter(function(g){ return mediaKey(g)===b.dataset.m; }).length : games.length;
+    b.title = n + " " + mediaLabel(b.dataset.m||null, n);
+  });
 }
 
 /* ============ Render: Rail ============ */
 function renderRail(){
+  renderMediaSeg();
+  var labs=(filt.media ? MEDIA[filt.media] : MEDIA.game).lab;
+  var lp=$("#lab-plat"); if(lp) lp.textContent=labs.where;
+
   var sw=$("#f-status");
   if(!sw.childElementCount){
     STATUS.forEach(function(st){
-      var b=el("button","pill",st.l); b.type="button"; b.dataset.k=st.k;
+      var b=el("button","pill"); b.type="button"; b.dataset.k=st.k;
       b.addEventListener("click",function(){ filt.status=(filt.status===st.k)?"":st.k; render(); });
       sw.appendChild(b);
     });
   }
-  Array.prototype.forEach.call(sw.children,function(b){ b.setAttribute("aria-pressed", String(filt.status===b.dataset.k)); });
+  Array.prototype.forEach.call(sw.children,function(b){
+    var k=b.dataset.k;
+    /* Ohne Medienwahl gelten die Spielbegriffe, sonst die des Bereichs. */
+    b.textContent = (filt.media ? MEDIA[filt.media] : MEDIA.game).status[k];
+    b.setAttribute("aria-pressed", String(filt.status===k));
+  });
 
   function fillSelect(sel,items,all,cur,label){
     var focused=document.activeElement===sel;
@@ -584,7 +804,7 @@ function renderRail(){
     if(focused) sel.focus();
   }
   var platCounts=countBy("platform");
-  fillSelect($("#f-plat"), allPlatforms(), "Alle Plattformen", filt.plat, function(name){
+  fillSelect($("#f-plat"), allPlatforms(), filt.media==="game"||!filt.media ? "Alle Plattformen" : "Überall", filt.plat, function(name){
     return name+" ("+(platCounts[name]||0)+")";
   });
 
@@ -633,13 +853,54 @@ function factWith(k,node){
 }
 function factNode(k,v){ var f=el("span","fact"); f.appendChild(el("span",null,k)); f.appendChild(el("b",null,v)); return f; }
 
+function fmtRuntime(min){
+  var n=Number(min)||0; if(!n) return null;
+  var h=Math.floor(n/60), r=n%60;
+  return h ? (h+" h"+(r?" "+r+" min":"")) : (r+" min");
+}
+/* Welche Angaben ein Eintrag zeigt, haengt am Medium — Karte und
+   Leseansicht holen sie beide hier, damit sie nicht auseinanderlaufen. */
+function factList(g){
+  var m=md(g), k=mediaKey(g), out=[];
+  /* Bei einem einmal gesehenen Film waere die Zeit nur die Laufzeit
+     noch einmal — die steht ohnehin darunter. */
+  var showTime = !(k==="movie" && !(Number(g.playthroughs)>1));
+  var fh=showTime ? fmtHours(g.hours) : null;
+  if(fh) out.push([m.lab.time, fh]);
+  if(k==="game"){
+    var fa=fmtAvg(g.avgHours); if(fa) out.push([m.lab.usual, fa]);
+    var cp=nz(g.completion); if(cp!=null) out.push([m.lab.progress, Math.round(cp)+" %"]);
+  }
+  if(k==="movie"){
+    var rt=fmtRuntime(g.runtime); if(rt) out.push([m.lab.usual, rt]);
+  }
+  if(k==="tv"){
+    var all=Number(g.episodes)||0, seen=Number(g.episodesSeen)||0;
+    if(all||seen) out.push([m.lab.progress, seen+(all ? " von "+all : "")]);
+    else { var cq=nz(g.completion); if(cq!=null) out.push(["Fortschritt", Math.round(cq)+" %"]); }
+    var er=fmtRuntime(g.runtime); if(er) out.push([m.lab.usual, er]);
+  }
+  var pt=nz(g.playthroughs); if(pt) out.push([m.lab.runs, pt+"\u00D7"]);
+  var sp = (k==="movie") ? fmtDate(g.finishedOn) : fmtSpan(g.startedOn,g.finishedOn);
+  if(sp) out.push([m.lab.span, sp]);
+  return out;
+}
+
 function cardNode(g, rank){
   var a=el("button","poster"); a.type="button";
 
   var art=coverNode(g,"poster-art",640);
   if(rank){ art.appendChild(el("span","poster-rank","#"+rank)); }
 
-  var st=el("span","poster-status",STATUS_L[g.status]||"Backlog");
+  var mk=mediaKey(g);
+  var mb=el("span","poster-media");
+  mb.setAttribute("data-m",mk);
+  mb.title=md(g).one;
+  var mi=mediaIcon(mk); if(mi) mb.appendChild(mi);
+  mb.appendChild(el("span","sr",md(g).one));
+  art.appendChild(mb);
+
+  var st=el("span","poster-status",statusLabel(g));
   art.appendChild(st);
 
   var sc=nz(g.score);
@@ -664,13 +925,9 @@ function cardNode(g, rank){
   }
 
   var facts=el("div","facts");
-  var fh=fmtHours(g.hours); if(fh) facts.appendChild(factNode("Zeit",fh));
-  var fa=fmtAvg(g.avgHours); if(fa) facts.appendChild(factNode("Üblich",fa));
-  var cp=nz(g.completion); if(cp!=null) facts.appendChild(factNode("Fortschritt",Math.round(cp)+" %"));
-  var pt=nz(g.playthroughs); if(pt) facts.appendChild(factNode("Durchgespielt", pt+"\u00D7"));
+  factList(g).forEach(function(f){ facts.appendChild(factNode(f[0], f[1])); });
   var pr=nz(g.priority);
   if(pr && wantsPriority(g.status)) facts.appendChild(factWith("Vorfreude", pipsNode(pr)));
-  var sp=fmtSpan(g.startedOn,g.finishedOn); if(sp) facts.appendChild(factNode("Gespielt",sp));
   if(facts.childElementCount) b.appendChild(facts);
 
   if((g.genres||[]).length){
@@ -725,13 +982,17 @@ function renderTable(rows){
     tr.appendChild(tdh);
     var cp=nz(g.completion), ptc=nz(g.playthroughs);
     var tdc2=el("td","t-num"+(cp!=null?"":" t-dim"));
-    tdc2.appendChild(el("div",null, cp!=null?Math.round(cp)+" %":"—"));
-    if(ptc) tdc2.appendChild(el("div","t-sub", ptc+"\u00D7 durch"));
+    /* Bei Serien sagt die Folgenzahl mehr als die Prozentangabe. */
+    if(mediaKey(g)==="tv" && (Number(g.episodes)||Number(g.episodesSeen)))
+      tdc2.appendChild(el("div",null,(Number(g.episodesSeen)||0)+(Number(g.episodes)?" / "+g.episodes:"")));
+    else tdc2.appendChild(el("div",null, cp!=null?Math.round(cp)+" %":"—"));
+    if(ptc) tdc2.appendChild(el("div","t-sub", ptc+"\u00D7 "+(mediaKey(g)==="game"?"durch":"gesehen")));
     tr.appendChild(tdc2);
-    var sp=fmtSpan(g.startedOn,g.finishedOn); tr.appendChild(el("td","t-num"+(sp?"":" t-dim"), sp||"—"));
+    var sp = mediaKey(g)==="movie" ? fmtDate(g.finishedOn) : fmtSpan(g.startedOn,g.finishedOn);
+    tr.appendChild(el("td","t-num"+(sp?"":" t-dim"), sp||"—"));
 
     var tdst=el("td");
-    var st=el("span","status",STATUS_L[g.status]||"Backlog"); st.setAttribute("data-s",g.status||"backlog");
+    var st=el("span","status",statusLabel(g)); st.setAttribute("data-s",g.status||"backlog");
     tdst.appendChild(st);
     var prt=nz(g.priority);
     if(prt && wantsPriority(g.status)){
@@ -758,23 +1019,38 @@ function demoCard(){
 
 function renderEmpty(){
   var e=el("div","empty"), L=el("div");
+  var pool=mediaPool();
+  /* Ein leerer Bereich ist etwas anderes als ein leeres Archiv und etwas
+     anderes als ein Filter, der nichts uebrig laesst. */
+  if(filt.media && !pool.length && games.length){
+    var M=MEDIA[filt.media];
+    L.appendChild(el("h2", null, "Noch "+(filt.media==="tv"?"keine Serien":filt.media==="movie"?"keine Filme":"keine Spiele")+" im Archiv"));
+    L.appendChild(el("p",null,"Such den Titel in der Datenbank — Cover, Erscheinungsjahr, "+
+      (filt.media==="tv" ? "Folgenzahl und Folgenlänge" : filt.media==="movie" ? "Laufzeit" : "Plattform")+
+      ", Genres und die Anbieter kommen mit. Wertung und Zeitraum trägst du selbst ein."));
+    var ba=el("button","btn btn-accent","Ersten Eintrag anlegen"); ba.type="button";
+    ba.addEventListener("click",function(){ setAddMedia(filt.media); setTab("add"); });
+    L.appendChild(ba);
+    e.appendChild(L);
+    return e;
+  }
   var filtered = games.length>0;
-  L.appendChild(el("h2", null, filtered ? "Kein Spiel passt zu diesem Filter" : "Dein Archiv ist noch leer"));
+  L.appendChild(el("h2", null, filtered ? "Nichts passt zu diesem Filter" : "Dein Archiv ist noch leer"));
   if(filtered){
     L.appendChild(el("p",null,"Setz die Filter zurück oder such nach etwas anderem."));
     var rb=el("button","btn","Filter zurücksetzen"); rb.type="button";
     rb.addEventListener("click",resetFilters);
     L.appendChild(rb);
   } else {
-    L.appendChild(el("p",null,"Tipp den Titel ein, such das Spiel in der Datenbank und übernimm Cover, Release, Plattform und Genres mit einem Klick. Wertung, Stunden und Zeitraum trägst du selbst ein."));
+    L.appendChild(el("p",null,"Tipp den Titel ein, such ihn in der Datenbank und übernimm Cover, Erscheinungsdatum, Genres und die übrigen Angaben mit einem Klick. Wertung und Zeitraum trägst du selbst ein."));
     var ul=el("ul");
     ["Wertung von 1 bis 100, mit Skala und Prädikat",
-     "Stunden, Fortschritt in Prozent und Zeitraum von–bis",
-     "Cover und Metadaten automatisch aus der Spieledatenbank",
+     "Spiele, Filme und Serien auf derselben Skala",
+     "Cover und Angaben automatisch aus den Datenbanken",
      "Eigene Listen wie „Top 10 2025“ neben dem Status"].forEach(function(x){ ul.appendChild(el("li",null,x)); });
     L.appendChild(ul);
     var row=el("div"); row.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-    var b1=el("button","btn btn-accent","Erstes Spiel eintragen"); b1.type="button";
+    var b1=el("button","btn btn-accent","Ersten Eintrag anlegen"); b1.type="button";
     b1.addEventListener("click",function(){ setTab("add"); });
     var b2=el("button","btn","Mehrere auf einmal"); b2.type="button";
     b2.addEventListener("click",openBulk);
@@ -797,8 +1073,9 @@ function renderActiveFilters(){
   box.innerHTML="";
   var chips=[];
   if(filt.q)      chips.push({k:"Suche", v:"„"+filt.q+"“", off:function(){ filt.q=""; $("#f-q").value=""; }});
-  if(filt.status) chips.push({k:"Status", v:STATUS_L[filt.status], off:function(){ filt.status=""; }});
-  if(filt.plat)   chips.push({k:"Plattform", v:filt.plat, off:function(){ filt.plat=""; }});
+  var labs=(filt.media ? MEDIA[filt.media] : MEDIA.game);
+  if(filt.status) chips.push({k:"Status", v:labs.status[filt.status], off:function(){ filt.status=""; }});
+  if(filt.plat)   chips.push({k:labs.lab.where, v:filt.plat, off:function(){ filt.plat=""; }});
   filt.genres.forEach(function(gname){
     chips.push({k:"Genre", v:gname, off:function(){
       filt.genres = filt.genres.filter(function(x){ return x!==gname; });
@@ -833,12 +1110,51 @@ function renderActiveFilters(){
 /* ============ Seite: Hinzufügen ============ */
 var addCtl=null, addTimer=null;
 
+var addMedia = "game";
+function setAddMedia(k){
+  addMedia = MEDIA[k] ? k : "game";
+  LS.put("sa.addmedia", addMedia);
+  $("#add-results").innerHTML="";
+  $("#add-status").textContent="";
+  renderAddPage();
+}
 function renderAddPage(){
   var st=$("#add-status"), box=$("#add-results");
-  if(!rawgKey()){
+  var M=MEDIA[addMedia]||MEDIA.game;
+
+  var seg=$("#add-media");
+  if(seg){
+    if(!seg.childElementCount){
+      MEDIA_ORDER.forEach(function(k){
+        var b=el("button",null); b.type="button"; b.dataset.m=k;
+        var ic=mediaIcon(k); if(ic) b.appendChild(ic);
+        b.appendChild(el("span",null,MEDIA[k].one));
+        b.addEventListener("click",function(){ setAddMedia(k); });
+        seg.appendChild(b);
+      });
+    }
+    Array.prototype.forEach.call(seg.children,function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.m===addMedia));
+    });
+    seg.setAttribute("data-m", addMedia);
+  }
+
+  var h=$("#add-head"), ph=$("#add-sub"), q=$("#add-q");
+  if(h) h.textContent = M.one+" hinzufügen";
+  if(q) q.placeholder = M.one+" suchen …";
+  if(ph) ph.textContent = addMedia==="game"
+    ? "Titel eingeben, das richtige Spiel wählen — Cover, Release, Plattform, Genres und die übliche Spieldauer kommen mit."
+    : (addMedia==="movie"
+      ? "Titel eingeben, den richtigen Film wählen — Cover, Erscheinungsjahr, Laufzeit, Genres und die Anbieter kommen mit."
+      : "Titel eingeben, die richtige Serie wählen — Cover, Startjahr, Folgenzahl, Folgenlänge, Genres und die Anbieter kommen mit.");
+
+  var man=$("#add-manual"); if(man) man.textContent = "Ohne Datenbank eintragen";
+  var blk=$("#add-bulk"); if(blk) blk.hidden = addMedia!=="game";
+
+  if(!hasKey(addMedia)){
     box.innerHTML="";
     st.className="ai-status"; st.innerHTML="";
-    st.appendChild(document.createTextNode("Für die Datenbanksuche fehlt der Key dieses Geräts. "));
+    st.appendChild(document.createTextNode("Für die Suche fehlt der "+sourceName(addMedia)+"-Key dieses Geräts. "));
     var lnk=el("button","btn btn-quiet btn-sm","Jetzt eintragen"); lnk.type="button";
     lnk.addEventListener("click",function(){ openSettings(); });
     st.appendChild(lnk);
@@ -850,19 +1166,20 @@ function runAddSearch(){
   var st=$("#add-status"), box=$("#add-results");
   box.innerHTML="";
   if(q.length<2){ st.className="ai-status bad"; st.textContent="Erst ein paar Buchstaben tippen."; return; }
-  if(!rawgKey()){ renderAddPage(); return; }
+  if(!hasKey(addMedia)){ renderAddPage(); return; }
+  var M=MEDIA[addMedia]||MEDIA.game;
   if(addCtl) addCtl.abort();
   addCtl=new AbortController();
   st.className="ai-status"; st.innerHTML="";
   st.appendChild(el("span","spin")); st.appendChild(document.createTextNode("sucht …"));
-  rawgSearch(q, addCtl.signal).then(function(hits){
+  searchMedia(addMedia, q, addCtl.signal).then(function(hits){
     if(!hits.length){
       st.className="ai-status";
-      st.textContent="Nichts gefunden. Du kannst das Spiel trotzdem von Hand eintragen.";
+      st.textContent="Nichts gefunden. Du kannst den Eintrag trotzdem von Hand anlegen.";
       return;
     }
     st.className="ai-status";
-    st.textContent=hits.length+" Treffer — wähl das richtige Spiel aus:";
+    st.textContent=hits.length+" Treffer — wähl "+(addMedia==="tv"?"die richtige Serie":addMedia==="movie"?"den richtigen Film":"das richtige Spiel")+" aus:";
     var grid=el("div","hits");
     hits.forEach(function(hit){
       var b=el("button","hit"); b.type="button";
@@ -880,9 +1197,17 @@ function runAddSearch(){
       var m=[]; if(hit.release) m.push(String(hit.release).slice(0,4));
       if(hit.platforms && hit.platforms.length) m.push(hit.platforms.slice(0,3).join(", "));
       if(hit.playtime) m.push("ca. "+hit.playtime+" h");
+      if(hit.genres && hit.genres.length) m.push(hit.genres.slice(0,2).join(", "));
       bd.appendChild(el("div","hit-m", m.join(" · ") || "keine Angaben"));
       b.appendChild(bd);
-      b.addEventListener("click",function(){ openEditor(null, hit); });
+      b.addEventListener("click",function(){
+        if(M.source==="tmdb" && hit.tmdbId){
+          st.className="ai-status"; st.innerHTML="";
+          st.appendChild(el("span","spin")); st.appendChild(document.createTextNode("holt Einzelheiten …"));
+          tmdbDetails(M.tmdb, hit.tmdbId).then(function(full){ openEditor(null, full||hit); })
+            .catch(function(){ openEditor(null, hit); });
+        } else openEditor(null, hit);
+      });
       grid.appendChild(b);
     });
     box.appendChild(grid);
@@ -895,7 +1220,7 @@ function runAddSearch(){
 
 /* ============ Spiele einer Liste auswählen ============ */
 function openListPicker(l){
-  var D=makeDrawer("Spiele in „"+l.name+"“");
+  var D=makeDrawer("Einträge in „"+l.name+"“");
   var body=D.body, foot=D.foot;
 
   var chosen={};
@@ -915,7 +1240,7 @@ function openListPicker(l){
   function countChosen(){ return Object.keys(chosen).filter(function(k){ return chosen[k]; }).length; }
   function refreshFoot(){
     var c=countChosen();
-    apply.textContent = c===1 ? "Übernehmen (1 Spiel)" : "Übernehmen ("+c+" Spiele)";
+    apply.textContent = c===1 ? "Übernehmen (1 Eintrag)" : "Übernehmen ("+c+" Einträge)";
   }
   function paint(){
     var term=q.value.trim().toLowerCase();
@@ -928,7 +1253,7 @@ function openListPicker(l){
       if(ai!==bi) return ai-bi;
       return String(a.title||"").localeCompare(String(b.title||""),"de",{sensitivity:"base"});
     });
-    if(!rows.length){ box.appendChild(el("p","hint","Kein Spiel passt zur Suche.")); return; }
+    if(!rows.length){ box.appendChild(el("p","hint","Nichts passt zur Suche.")); return; }
     rows.forEach(function(g){
       var r=el("button","pickrow"); r.type="button";
       r.setAttribute("aria-pressed", String(!!chosen[g.id]));
@@ -967,7 +1292,7 @@ function openListPicker(l){
       touched++;
     });
     closeOverlay();
-    if(touched){ markDirty(); render(); toast(touched===1 ? "1 Spiel geändert." : touched+" Spiele geändert."); }
+    if(touched){ markDirty(); render(); toast(touched===1 ? "1 Eintrag geändert." : touched+" Einträge geändert."); }
   });
   foot.appendChild(cancel); foot.appendChild(apply);
   D.drawer.addEventListener("keydown",function(ev){ if(ev.key==="Escape"){ ev.preventDefault(); closeOverlay(); } });
@@ -981,8 +1306,14 @@ var GENRE_SLUGS = null;
 function normTitle(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,""); }
 function slugify(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
 
+/* Die Empfehlungen laufen ueber die Spieledatenbank, also zaehlen hier
+   auch nur Spiele. Filme und Serien bekommen spaeter ihren eigenen Weg
+   ueber die Empfehlungen von TMDB. */
 function likedGames(){
-  return games.filter(function(g){ var s=nz(g.score); return s!=null && s>=80; });
+  return games.filter(function(g){
+    if(mediaKey(g)!=="game") return false;
+    var s=nz(g.score); return s!=null && s>=80;
+  });
 }
 
 function tasteProfile(){
@@ -1259,7 +1590,7 @@ function renderListOverview(){
     c.appendChild(miniStrip(rows));
     var bd=el("div","listcard-body");
     bd.appendChild(el("div","listcard-n",l.name));
-    bd.appendChild(el("div","listcard-c", rows.length===1 ? "1 Spiel" : rows.length+" Spiele"));
+    bd.appendChild(el("div","listcard-c", rows.length===1 ? "1 Eintrag" : rows.length+" Einträge"));
     c.appendChild(bd);
     c.addEventListener("click",function(){ openListId=l.id; render(); scrollTop(); });
     grid.appendChild(c);
@@ -1289,7 +1620,7 @@ function renderListDetail(l){
   var head=el("div","listhead");
   var left=el("div");
   left.appendChild(el("h2",null,l.name));
-  left.appendChild(el("div","sub", (rows.length===1 ? "1 Spiel" : rows.length+" Spiele")));
+  left.appendChild(el("div","sub", (rows.length===1 ? "1 Eintrag" : rows.length+" Einträge")));
   head.appendChild(left);
 
   var acts=el("div","listhead-acts");
@@ -1346,7 +1677,7 @@ function renderListDetail(l){
     var e=el("div","empty");
     var L=el("div");
     L.appendChild(el("h2",null,"Diese Liste ist noch leer"));
-    L.appendChild(el("p",null,"Wähl Spiele aus deinem Archiv aus — ein Spiel kann in beliebig vielen Listen stehen."));
+    L.appendChild(el("p",null,"Wähl Einträge aus deinem Archiv aus — Spiele, Filme und Serien dürfen in derselben Liste stehen, und ein Eintrag kann in beliebig vielen Listen stehen."));
     var row2=el("div"); row2.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
     var pb=el("button","btn btn-accent","Spiele auswählen"); pb.type="button";
     pb.addEventListener("click",function(){ openListPicker(l); });
@@ -1371,13 +1702,13 @@ function renderListDetail(l){
 function render(){
   renderStats();
   renderRail();
-  var rows=visible(), c=$("#count");
+  var rows=visible(), c=$("#count"), pool=mediaPool();
   c.innerHTML="";
   c.appendChild(el("b",null,String(rows.length)));
-  c.appendChild(document.createTextNode(" von "+games.length+(games.length===1?" Spiel":" Spielen")));
+  c.appendChild(document.createTextNode(" von "+pool.length+" "+mediaLabelDat(filt.media||null, pool.length)));
   renderActiveFilters();
   var done=$("#btn-filters-done");
-  if(done) done.textContent = rows.length===1 ? "Fertig · 1 Spiel" : "Fertig · "+rows.length+" Spiele";
+  if(done) done.textContent = "Fertig · "+rows.length+" "+mediaLabel(filt.media||null, rows.length);
   var res=$("#results"); res.innerHTML="";
   res.appendChild(rows.length ? (view==="grid" ? renderGrid(rows) : renderTable(rows)) : renderEmpty());
   renderListsPage();
@@ -1420,6 +1751,7 @@ function openDetail(id){
   if(!g) return;
   var D=makeDrawer(g.title||"Ohne Titel");
   var body=D.body, foot=D.foot;
+  D.drawer.setAttribute("data-m", mediaKey(g));
 
   body.appendChild(coverNode(g,"detail-art",640));
 
@@ -1439,12 +1771,12 @@ function openDetail(id){
     m.appendChild(fi); body.appendChild(m);
   }
 
-  var meta=[]; var rl=releaseLabel(g); if(rl) meta.push(rl);
+  var meta=[md(g).one]; var rl=releaseLabel(g); if(rl) meta.push(rl);
   if(g.platform) meta.push(g.platform);
   body.appendChild(el("div","detail-meta", meta.join("  ·  ")));
 
   var stRow=el("div");
-  var stc=el("span","status",STATUS_L[g.status]||"Backlog"); stc.setAttribute("data-s",g.status||"backlog");
+  var stc=el("span","status",statusLabel(g)); stc.setAttribute("data-s",g.status||"backlog");
   stRow.appendChild(stc);
   var pr=nz(g.priority);
   if(pr && wantsPriority(g.status)){
@@ -1463,11 +1795,7 @@ function openDetail(id){
     r.appendChild(el("dd",null,v));
     kv.appendChild(r);
   }
-  row("Zeit", fmtHours(g.hours));
-  row("Üblich", fmtAvg(g.avgHours));
-  var cp=nz(g.completion); row("Fortschritt", cp!=null ? Math.round(cp)+" %" : null);
-  var ptn=nz(g.playthroughs); row("Durchgespielt", ptn ? ptn+"\u00D7" : null);
-  row("Gespielt", fmtSpan(g.startedOn,g.finishedOn));
+  factList(g).forEach(function(f){ row(f[0], f[1]); });
   if(kv.childElementCount) body.appendChild(kv);
 
   if((g.genres||[]).length){
@@ -1513,8 +1841,10 @@ var draft=null, draftCover=null;
 function openEditor(id, prefill){
   var existing = id ? games.find(function(g){ return g.id===id; }) : null;
   draft = existing ? JSON.parse(JSON.stringify(existing)) : {
-    id:uid(), title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
+    id:uid(), media:(prefill && prefill.media) || filt.media || "game",
+    title:"", release:"", platform:"", genres:[], score:"", hours:"", completion:"",
     startedOn:"", finishedOn:"", status:"backlog", cover:"", avgHours:"",
+    runtime:"", episodes:"", episodesSeen:"",
     playthroughs:"", priority:"", listIds:[], createdAt:Date.now()
   };
   draftCover = draft.cover || "";
@@ -1528,8 +1858,28 @@ function openEditor(id, prefill){
 }
 
 function paintEditor(isEdit){
-  var D=makeDrawer(isEdit ? "Spiel bearbeiten" : "Spiel hinzufügen");
+  var MK=mediaKey(draft), M=MEDIA[MK];
+  var D=makeDrawer(M.one+(isEdit ? " bearbeiten" : " hinzufügen"));
   var body=D.body, foot=D.foot;
+  D.drawer.setAttribute("data-m", MK);
+
+  /* Art des Eintrags — bestimmt Felder, Begriffe und Datenbank. */
+  var fm=el("div","field");
+  fm.appendChild(el("label",null,"Art"));
+  var mw=el("div","pills");
+  MEDIA_ORDER.forEach(function(k){
+    var b=el("button","pill pill-media"); b.type="button"; b.setAttribute("data-m",k);
+    var ic=mediaIcon(k); if(ic) b.appendChild(ic);
+    b.appendChild(el("span",null,MEDIA[k].one));
+    b.setAttribute("aria-pressed", String(k===MK));
+    b.addEventListener("click",function(){
+      if(k===MK) return;
+      draft.media=k; draft._platforms=[]; draft._suggest=null;
+      paintEditor(isEdit);
+    });
+    mw.appendChild(b);
+  });
+  fm.appendChild(mw); body.appendChild(fm);
 
   /* Cover + Titel + Datenbanksuche */
   var cp=el("div","coverpick");
@@ -1601,9 +1951,9 @@ function paintEditor(isEdit){
     var q=(it.value||"").trim();
     resBox.innerHTML="";
     if(q.length<2){ fail(srcStatus,"Erst ein paar Buchstaben tippen."); return; }
-    if(!rawgKey()){
+    if(!hasKey(MK)){
       srcStatus.className="ai-status"; srcStatus.innerHTML="";
-      srcStatus.appendChild(document.createTextNode("Dafür fehlt der RAWG-Key. "));
+      srcStatus.appendChild(document.createTextNode("Dafür fehlt der "+sourceName(MK)+"-Key. "));
       var lnk=el("button","btn btn-quiet btn-sm","Jetzt eintragen"); lnk.type="button";
       lnk.addEventListener("click",function(){ openSettings(); });
       srcStatus.appendChild(lnk);
@@ -1612,9 +1962,9 @@ function paintEditor(isEdit){
     if(searchCtl) searchCtl.abort();
     searchCtl=new AbortController();
     busy(srcStatus,"sucht …");
-    rawgSearch(q, searchCtl.signal).then(function(hits){
+    searchMedia(MK, q, searchCtl.signal).then(function(hits){
       if(!hits.length){ info(srcStatus,"Nichts gefunden. Trag die Daten von Hand ein."); return; }
-      info(srcStatus, hits.length+" Treffer — wähl das richtige Spiel:");
+      info(srcStatus, hits.length+" Treffer — wähl "+(MK==="tv"?"die richtige Serie":MK==="movie"?"den richtigen Film":"das richtige Spiel")+":");
       var box=el("div","sres");
       hits.forEach(function(h){
         var b=el("button"); b.type="button";
@@ -1632,15 +1982,25 @@ function paintEditor(isEdit){
         meta.appendChild(el("div","sres-m", m.join(" · ") || "keine Angaben"));
         b.appendChild(meta);
         b.addEventListener("click",function(){
-          var cover=applyHit(draft,h,{force:true});
-          if(cover) draftCover=cover;
-          it.value=draft.title;
-          var ri=document.getElementById("e-release"); if(ri) ri.value=isoToDE(draft.release||"");
-          var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
-          draft._platforms = h.platforms || [];
-          paintTags(); paintSuggest(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
-          resBox.innerHTML="";
-          info(srcStatus,"Übernommen — schau kurz drüber.");
+          /* Bei Film und Serie fehlen Laufzeit, Folgen und Genres im
+             Suchergebnis — die stehen erst in den Einzeldaten. */
+          var finish=function(hit){
+            var cover=applyHit(draft,hit,{force:true});
+            if(cover) draftCover=cover;
+            it.value=draft.title;
+            var ri=document.getElementById("e-release"); if(ri) ri.value=isoToDE(draft.release||"");
+            var pi=document.getElementById("e-platform"); if(pi) pi.value=draft.platform||"";
+            draft._platforms = hit.platforms || [];
+            paintTags(); paintSuggest(); paintDrop(); paintCoverActions(); paintPlatChips(); paintAvgHint();
+            paintNumbers();
+            resBox.innerHTML="";
+            info(srcStatus,"Übernommen — schau kurz drüber.");
+          };
+          if(M.source==="tmdb" && h.tmdbId){
+            busy(srcStatus,"holt Einzelheiten …");
+            tmdbDetails(M.tmdb, h.tmdbId).then(function(full){ finish(full||h); })
+              .catch(function(){ finish(h); });
+          } else finish(h);
         });
         box.appendChild(b);
       });
@@ -1655,7 +2015,7 @@ function paintEditor(isEdit){
     draft.title=it.value;
     if(!draftCover) paintDrop();
     clearTimeout(searchTimer);
-    if(rawgKey() && it.value.trim().length>=3) searchTimer=setTimeout(runSearch,550);
+    if(hasKey(MK) && it.value.trim().length>=3) searchTimer=setTimeout(runSearch,550);
   });
   it.addEventListener("keydown",function(ev){ if(ev.key==="Enter"){ ev.preventDefault(); clearTimeout(searchTimer); runSearch(); } });
 
@@ -1702,37 +2062,22 @@ function paintEditor(isEdit){
   paintScore();
   body.appendChild(sf);
 
-  /* Zahlen und Daten */
-  function textField(label,key,ph,type,attrs){
+  /* Zahlen und Daten — welche Felder hier stehen, bestimmt das Medium. */
+  function textField(label,key,ph,type,attrs,onInput){
     var f=el("div","field"), id="e-"+key;
     var l=el("label",null,label); l.htmlFor=id; f.appendChild(l);
     var i=el("input","inp"); i.id=id; i.type=type||"text"; if(ph) i.placeholder=ph;
     if(attrs) for(var a in attrs) i.setAttribute(a,attrs[a]);
     i.value = draft[key]==null?"":String(draft[key]);
-    i.addEventListener("input",function(){ draft[key]=i.value; });
+    i.addEventListener("input",function(){ draft[key]=i.value; if(onInput) onInput(); });
     f.appendChild(i);
     return f;
   }
-
-  var r1=el("div","row2");
-  r1.appendChild(textField("Stunden gespielt","hours","z. B. 42.5","number",{min:"0",step:"0.5"}));
-  r1.appendChild(textField("Fortschritt in %","completion","0–100","number",{min:"0",max:"100",step:"1"}));
-  body.appendChild(r1);
-  var avgHint=el("p","hint"); avgHint.style.margin="-6px 0 16px";
-  function paintAvgHint(){
-    var fa=fmtAvg(draft.avgHours);
-    avgHint.textContent = fa ? "Für dieses Spiel werden im Schnitt rund "+fa+" gebraucht." : "";
-    avgHint.hidden = !fa;
+  function hintP(txt){
+    var h=el("p","hint",txt||""); h.style.margin="-6px 0 16px"; h.hidden=!txt; return h;
   }
-  paintAvgHint();
-  body.appendChild(avgHint);
 
-  var r1b=el("div","row2");
-  r1b.appendChild(textField("Wie oft durchgespielt","playthroughs","0","number",{min:"0",step:"1"}));
   var prioBox=el("div","field");
-  r1b.appendChild(prioBox);
-  body.appendChild(r1b);
-
   function paintPriority(){
     prioBox.innerHTML="";
     if(!wantsPriority(draft.status||"backlog")){ prioBox.hidden=true; return; }
@@ -1758,10 +2103,73 @@ function paintEditor(isEdit){
     prioBox.appendChild(lab);
   }
 
-  var r2=el("div","row2");
-  r2.appendChild(textField("Gespielt von","startedOn",null,"date"));
-  r2.appendChild(textField("bis","finishedOn",null,"date"));
-  body.appendChild(r2);
+  /* Bei Film und Serie wird die Zeit gerechnet, nicht getippt. */
+  var hoursHint=hintP("");
+  function paintHoursHint(){
+    if(MK==="game"){
+      var fa=fmtAvg(draft.avgHours);
+      hoursHint.textContent = fa ? "Dafür werden im Schnitt rund "+fa+" gebraucht." : "";
+    } else {
+      var h=derivedHours(draft);
+      if(!h){
+        hoursHint.textContent = MK==="movie"
+          ? "Mit der Laufzeit rechnet die App die Zeit selbst aus."
+          : "Mit Folgenlänge und gesehenen Folgen rechnet die App die Zeit selbst aus.";
+      } else {
+        hoursHint.textContent = "Macht rund "+fmtHours(h)+" — die Zeit wird daraus gerechnet.";
+      }
+    }
+    hoursHint.hidden = !hoursHint.textContent;
+  }
+  function paintAvgHint(){ paintHoursHint(); }
+
+  var numBox=el("div"); body.appendChild(numBox);
+  function paintNumbers(){
+    numBox.innerHTML="";
+    if(MK==="game"){
+      var r1=el("div","row2");
+      r1.appendChild(textField("Stunden gespielt","hours","z. B. 42.5","number",{min:"0",step:"0.5"}));
+      r1.appendChild(textField("Fortschritt in %","completion","0–100","number",{min:"0",max:"100",step:"1"}));
+      numBox.appendChild(r1);
+      numBox.appendChild(hoursHint);
+      var r1b=el("div","row2");
+      r1b.appendChild(textField("Wie oft durchgespielt","playthroughs","0","number",{min:"0",step:"1"}));
+      r1b.appendChild(prioBox);
+      numBox.appendChild(r1b);
+      var r2=el("div","row2");
+      r2.appendChild(textField("Gespielt von","startedOn",null,"date"));
+      r2.appendChild(textField("bis","finishedOn",null,"date"));
+      numBox.appendChild(r2);
+    } else if(MK==="movie"){
+      var m1=el("div","row2");
+      m1.appendChild(textField("Laufzeit in Minuten","runtime","z. B. 139","number",{min:"0",step:"1"},paintHoursHint));
+      m1.appendChild(textField("Wie oft gesehen","playthroughs","1","number",{min:"0",step:"1"},paintHoursHint));
+      numBox.appendChild(m1);
+      numBox.appendChild(hoursHint);
+      var m2=el("div","row2");
+      m2.appendChild(textField("Gesehen am","finishedOn",null,"date"));
+      m2.appendChild(prioBox);
+      numBox.appendChild(m2);
+    } else {
+      var t1=el("div","row2");
+      t1.appendChild(textField("Folgen gesehen","episodesSeen","0","number",{min:"0",step:"1"},paintHoursHint));
+      t1.appendChild(textField("Folgen gesamt","episodes","0","number",{min:"0",step:"1"},paintHoursHint));
+      numBox.appendChild(t1);
+      var t2=el("div","row2");
+      t2.appendChild(textField("Minuten pro Folge","runtime","z. B. 45","number",{min:"0",step:"1"},paintHoursHint));
+      t2.appendChild(textField("Wie oft gesehen","playthroughs","1","number",{min:"0",step:"1"},paintHoursHint));
+      numBox.appendChild(t2);
+      numBox.appendChild(hoursHint);
+      var t3=el("div","row2");
+      t3.appendChild(textField("Gesehen von","startedOn",null,"date"));
+      t3.appendChild(textField("bis","finishedOn",null,"date"));
+      numBox.appendChild(t3);
+      numBox.appendChild(prioBox);
+    }
+    paintHoursHint();
+    paintPriority();
+  }
+  paintNumbers();
 
   var r3=el("div","row2");
   var frel=el("div","field");
@@ -1776,13 +2184,17 @@ function paintEditor(isEdit){
   hrel.style.marginTop="5px"; frel.appendChild(hrel);
   r3.appendChild(frel);
   var fp=el("div","field");
-  var lp=el("label",null,"Plattform"); lp.htmlFor="e-platform"; fp.appendChild(lp);
-  var ip=el("input","inp"); ip.id="e-platform"; ip.value=draft.platform||""; ip.placeholder="PC, PS5, Switch …"; ip.setAttribute("list","dl-plat");
+  var lp=el("label",null,M.lab.where); lp.htmlFor="e-platform"; fp.appendChild(lp);
+  var ip=el("input","inp"); ip.id="e-platform"; ip.value=draft.platform||""; ip.placeholder=M.lab.wherePh; ip.setAttribute("list","dl-plat");
   ip.addEventListener("input",function(){ draft.platform=ip.value; });
   fp.appendChild(ip);
   var dlp=el("datalist"); dlp.id="dl-plat";
-  var plats=allPlatforms();
-  ["PC","PS5","PS4","Xbox Series","Switch","Steam Deck","Handy"].forEach(function(p){ if(plats.indexOf(p)<0) plats.push(p); });
+  var plats=games.filter(function(g){ return mediaKey(g)===MK && g.platform; }).map(function(g){ return g.platform; })
+    .filter(function(v,i,a){ return a.indexOf(v)===i; }).sort(function(a,b){ return a.localeCompare(b,"de"); });
+  var platSuggest = MK==="game"
+    ? ["PC","PS5","PS4","Xbox Series","Switch","Steam Deck","Handy"]
+    : ["Netflix","Prime Video","Disney+","WOW","Apple TV+","Mediathek","Kino","Blu-ray","DVD"];
+  platSuggest.forEach(function(p){ if(plats.indexOf(p)<0) plats.push(p); });
   plats.forEach(function(p){ var oo=el("option"); oo.value=p; dlp.appendChild(oo); });
   fp.appendChild(dlp);
   var platChips=el("div","pills"); platChips.style.marginTop="7px"; fp.appendChild(platChips);
@@ -1792,8 +2204,8 @@ function paintEditor(isEdit){
   function paintPlatChips(){
     platChips.innerHTML="";
     var opts=draft._platforms||[];
-    if(opts.length<2) return;
-    var lab=el("div","hint","Auf welcher Plattform hast du es gespielt?");
+    if(!opts.length) return;
+    var lab=el("div","hint", MK==="game" ? "Auf welcher Plattform hast du es gespielt?" : "Wo hast du es gesehen?");
     lab.style.cssText="flex:1 0 100%;margin-bottom:2px";
     platChips.appendChild(lab);
     opts.slice(0,10).forEach(function(pn){
@@ -1808,13 +2220,16 @@ function paintEditor(isEdit){
       platChips.appendChild(b);
     });
   }
+  /* Beim Weg ueber die Suchseite stehen die Vorschlaege schon im Entwurf —
+     ohne diesen Aufruf blieben sie unsichtbar. */
+  paintPlatChips();
 
   /* Status */
   var fst=el("div","field");
   fst.appendChild(el("label",null,"Status"));
   var stw=el("div","pills");
   STATUS.forEach(function(st){
-    var b=el("button","pill pill-accent",st.l); b.type="button";
+    var b=el("button","pill pill-accent",M.status[st.k]); b.type="button";
     b.setAttribute("aria-pressed", String((draft.status||"backlog")===st.k));
     b.addEventListener("click",function(){
       draft.status=st.k;
@@ -1883,17 +2298,17 @@ function paintEditor(isEdit){
   sugBtn.addEventListener("click",function(){
     var t=(draft.title||"").trim();
     if(!t){ sugStatus.className="ai-status bad"; sugStatus.textContent="Erst den Titel eintragen."; return; }
-    if(!rawgKey()){
+    if(!hasKey(MK)){
       sugStatus.className="ai-status bad";
-      sugStatus.textContent="Dafür fehlt der RAWG-Key dieses Geräts.";
+      sugStatus.textContent="Dafür fehlt der "+sourceName(MK)+"-Key dieses Geräts.";
       return;
     }
     sugBtn.disabled=true;
     sugStatus.className="ai-status"; sugStatus.innerHTML="";
     sugStatus.appendChild(el("span","spin"));
     sugStatus.appendChild(document.createTextNode("sucht Tags zu „"+t+"“ …"));
-    rawgSearch(t).then(function(hits){
-      if(!hits.length || !hits[0].tags.length){
+    searchMedia(MK, t).then(function(hits){
+      if(!hits.length || !(hits[0].tags||[]).length){
         sugStatus.className="ai-status";
         sugStatus.textContent="Keine brauchbaren Tags gefunden.";
       } else {
@@ -1940,7 +2355,7 @@ function paintEditor(isEdit){
   if(isEdit){
     var del=el("button","btn btn-sm btn-danger","Löschen"); del.type="button";
     del.addEventListener("click",function(){
-      if(confirm("„"+(draft.title||"Dieses Spiel")+"“ endgültig löschen?")){
+      if(confirm("„"+(draft.title||"Dieser Eintrag")+"“ endgültig löschen?")){
         var id=draft.id; closeOverlay(); dropGame(id); toast("Gelöscht.");
       }
     });
@@ -1964,8 +2379,10 @@ function commit(errBox, isEdit){
   errBox.hidden=true;
   var t=(draft.title||"").trim();
   if(!t){ errBox.textContent="Bitte einen Titel eintragen — alles andere ist optional."; errBox.hidden=false; return; }
+  var mk = mediaKey(draft);
   var g = {
     id: draft.id,
+    media: mk,
     title: t,
     release: (draft.release||"").trim(),
     platform: (draft.platform||"").trim(),
@@ -1980,11 +2397,24 @@ function commit(errBox, isEdit){
     priority: (wantsPriority(draft.status||"backlog") && nz(draft.priority)!=null)
               ? Math.min(5,Math.max(1,Math.round(Number(draft.priority)))) : "",
     avgHours: nz(draft.avgHours)==null ? "" : Math.max(0,Math.round(Number(draft.avgHours))),
+    runtime: nz(draft.runtime)==null ? "" : Math.max(0,Math.round(Number(draft.runtime))),
+    episodes: nz(draft.episodes)==null ? "" : Math.max(0,Math.round(Number(draft.episodes))),
+    episodesSeen: nz(draft.episodesSeen)==null ? "" : Math.max(0,Math.round(Number(draft.episodesSeen))),
     cover: draftCover||"",
     listIds: (draft.listIds||[]).slice(),
     createdAt: draft.createdAt||Date.now()
   };
   ["score","hours","completion"].forEach(function(k){ if(g[k]!=="" && !isFinite(g[k])) g[k]=""; });
+  /* Zeit und Fortschritt sind bei Film und Serie gerechnete Werte. Sie
+     werden trotzdem gespeichert, damit Statistik und Sortierung ueber alle
+     Medien mit denselben Feldern arbeiten. */
+  if(mk!=="game"){
+    var dh=derivedHours(g); g.hours = dh===""||dh==null ? "" : dh;
+    var dc=derivedCompletion(g);
+    if(dc!=null) g.completion = dc===""?"":dc;
+    else if(mk==="movie") g.completion="";
+    if(mk==="movie"){ g.avgHours=""; g.startedOn=""; }
+  }
   closeOverlay();
   putGame(g);
   toast(isEdit ? "Gespeichert." : "„"+g.title+"“ ins Archiv aufgenommen.");
@@ -2110,7 +2540,7 @@ function openSettings(msg){
     s0.appendChild(el("div","sec-h","Verworfener lokaler Stand"));
     var p0=el("p","sec-p");
     p0.textContent="Bei einem Abgleich wurde ein Stand aus diesem Browser durch die Version aus dem Repo ersetzt: "+
-      bk.games.length+(bk.games.length===1?" Spiel":" Spiele")+" vom "+new Date(bk.at||Date.now()).toLocaleString("de-DE")+
+      bk.games.length+(bk.games.length===1?" Eintrag":" Einträge")+" vom "+new Date(bk.at||Date.now()).toLocaleString("de-DE")+
       ". Beim Wiederherstellen wird ergänzt, nichts gelöscht.";
     s0.appendChild(p0);
     var rb=el("button","btn btn-sm","Diesen Stand wiederherstellen"); rb.type="button";
@@ -2119,7 +2549,7 @@ function openSettings(msg){
       bk.games.forEach(function(g){ if(!games.some(function(x){ return x.id===g.id; })){ games.push(g); added++; } });
       (bk.lists||[]).forEach(function(l){ if(!lists.some(function(x){ return x.id===l.id; })) lists.push(l); });
       markDirty(); render(); closeOverlay();
-      toast(added ? added+(added===1?" Spiel":" Spiele")+" zurückgeholt." : "Alles war schon vorhanden.");
+      toast(added ? added+(added===1?" Eintrag":" Einträge")+" zurückgeholt." : "Alles war schon vorhanden.");
     });
     s0.appendChild(rb);
     body.appendChild(s0);
@@ -2180,6 +2610,8 @@ function openSettings(msg){
   kv("Repository", CFG.owner+"/"+CFG.repo);
   kv("Datei", CFG.path+" @ "+CFG.branch);
   kv("Token", token() ? "hinterlegt" : "nicht hinterlegt", token()?"ok":"bad");
+  kv("RAWG-Key", rawgKey() ? "hinterlegt" : "nicht hinterlegt", rawgKey()?"ok":"bad");
+  kv("TMDB-Key", tmdbKey() ? "hinterlegt" : "nicht hinterlegt", tmdbKey()?"ok":"bad");
   kv("Zuletzt gespeichert", lastSaved ? lastSaved.toLocaleString("de-DE") : "in dieser Sitzung noch nicht");
 
   /* RAWG */
@@ -2197,6 +2629,22 @@ function openSettings(msg){
   rHint.textContent = "Hinweis: RAWG liefert das Key-Art der Spiele, nicht die Box-Art von der Hülle. Wenn dir ein Bild nicht gefällt, zieh im Eintrag einfach dein eigenes drüber.";
   s2.appendChild(rHint);
   body.appendChild(s2);
+
+  /* TMDB */
+  var s2b=el("div","sec");
+  s2b.appendChild(el("div","sec-h","Film- und Seriendatenbank (TMDB)"));
+  var p2b=el("p","sec-p");
+  p2b.textContent = "Liefert Cover, Erscheinungsdatum, Laufzeit, Folgenzahl, Genres und die Anbieter — auf Deutsch. Kostenlosen Key holen unter themoviedb.org: Konto anlegen, in den Kontoeinstellungen auf „API“, Bedingungen zustimmen. Die Anmeldeseite funktioniert nur am Rechner, nicht am Telefon.";
+  s2b.appendChild(p2b);
+  var fr3=el("div","field");
+  var lt3=el("label",null,"API-Key (v3 auth)"); lt3.htmlFor="s-tmdb"; fr3.appendChild(lt3);
+  var itm=el("input","inp"); itm.id="s-tmdb"; itm.type="password"; itm.placeholder="32-stelliger Key"; itm.autocomplete="off";
+  itm.value = tmdbKey();
+  fr3.appendChild(itm); s2b.appendChild(fr3);
+  var tmHint=el("p","sec-p");
+  tmHint.textContent = "TMDB verlangt den Hinweis, dass die Daten von dort stammen und dass TMDB diese Seite nicht geprüft hat — er steht unten auf jeder Seite.";
+  s2b.appendChild(tmHint);
+  body.appendChild(s2b);
 
   /* Daten */
   var s3=el("div","sec");
@@ -2219,6 +2667,7 @@ function openSettings(msg){
   apply.addEventListener("click",function(){
     LS.put("sa.token", itk.value.trim());
     LS.put("sa.rawg", irk.value.trim());
+    LS.put("sa.tmdb", itm.value.trim());
     closeOverlay(); paintSave();
     toast("Einstellungen gespeichert.");
     if(dirty && token()) saveNow();
@@ -2246,7 +2695,7 @@ function doImport(file){
     var inGames = Array.isArray(data) ? data : (data.games||[]);
     var inLists = (data && data.lists) || [];
     if(!Array.isArray(inGames) || !inGames.length){ toast("Keine Spiele in der Datei gefunden."); return; }
-    if(!confirm(inGames.length+" Spiel(e) importieren? Einträge mit gleicher ID werden überschrieben.")) return;
+    if(!confirm(inGames.length+" Eintrag/Einträge importieren? Einträge mit gleicher ID werden überschrieben.")) return;
 
     inLists.forEach(function(l){
       if(l && l.name && !lists.some(function(x){ return x.id===l.id; }))
@@ -2266,7 +2715,7 @@ function doImport(file){
       n++;
     });
     markDirty(); render();
-    toast(n+" Spiel(e) importiert.");
+    toast(n+" Eintrag/Einträge importiert.");
   };
   fr.onerror=function(){ toast("Datei konnte nicht gelesen werden."); };
   fr.readAsText(file);
@@ -2304,7 +2753,8 @@ $("#add-q").addEventListener("input",function(){
   clearTimeout(addTimer);
   if(rawgKey() && this.value.trim().length>=3) addTimer=setTimeout(runAddSearch,550);
 });
-$("#add-manual").addEventListener("click",function(){ openEditor(null); });
+/* Auf der Suchseite gilt die dort gewaehlte Art, nicht der Archivbereich. */
+$("#add-manual").addEventListener("click",function(){ openEditor(null, {media:addMedia}); });
 $("#add-bulk").addEventListener("click",openBulk);
 
 $("#m-settings").addEventListener("click",function(){ openSettings(); });
@@ -2370,6 +2820,12 @@ window.addEventListener("beforeunload",function(ev){
 setTab("archiv");
 
 (function boot(){
+  var m0=LS.raw("sa.media");
+  if(MEDIA[m0]) filt.media=m0;
+  document.body.setAttribute("data-medium", filt.media || "all");
+  var am=LS.raw("sa.addmedia");
+  if(MEDIA[am]) addMedia=am;
+
   var v=LS.raw("sa.view");
   if(v==="table"||v==="grid"){
     view=v;
@@ -2395,7 +2851,7 @@ setTab("archiv");
     var wouldVanish = games.length && !remoteGames.length;
     if(dirty || wouldVanish || (cache && cache.sha && got.sha!==cache.sha && games.length)){
       sha=got.sha;
-      notice("In diesem Browser liegen "+games.length+(games.length===1?" Spiel":" Spiele")+
+      notice("In diesem Browser liegen "+games.length+(games.length===1?" Eintrag":" Einträge")+
              ", im Repo "+remoteGames.length+". Welcher Stand soll gelten?", [
         {label:"Diesen Browser hochladen", onClick:function(){ notice(null); markDirty(); saveNow(); }},
         {label:"Stand aus dem Repo", onClick:function(){
