@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T09:53:49.762Z",
+  "updatedAt": "2026-11-13T09:54:34.063Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2721,6 +2721,35 @@
       "listIds": [],
       "createdAt": 1794563581550,
       "updatedAt": 1794563626260
+    },
+    {
+      "id": "01d159d1-abd2-403d-bd52-c611d3560f40",
+      "media": "tv",
+      "title": "Willkommen in Gravity Falls",
+      "release": "2012-06-15",
+      "platform": "Disney Plus",
+      "genres": [
+        "Action & Adventure",
+        "Animation",
+        "Komödie",
+        "Familie"
+      ],
+      "score": 93,
+      "hours": 88,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 3,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 44,
+      "episodes": 40,
+      "episodesSeen": 40,
+      "cover": "https://image.tmdb.org/t/p/w780/lhg7eA6CTOCL10QNVdKiyxkgPsL.jpg",
+      "listIds": [],
+      "createdAt": 1794563647087,
+      "updatedAt": 1794563670560
     }
   ]
 }
