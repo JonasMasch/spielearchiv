@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:05:45.962Z",
+  "updatedAt": "2026-11-13T07:34:38.694Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -33,6 +33,12 @@
       "id": "7b822cf6-1a67-4498-a2ba-6d85ce2ace5e",
       "name": "Nintendo",
       "createdAt": 1788884035199
+    },
+    {
+      "id": "85f37a10-0948-40eb-a48f-fc37e9df6982",
+      "name": "Marvel",
+      "media": "tv",
+      "createdAt": 1794555275191
     }
   ],
   "games": [
