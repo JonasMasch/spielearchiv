@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T09:39:33.594Z",
+  "updatedAt": "2026-11-13T09:41:42.660Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1968,7 +1968,7 @@
         "Drama"
       ],
       "score": 89,
-      "hours": "",
+      "hours": 6.7,
       "completion": 100,
       "startedOn": "",
       "finishedOn": "",
@@ -1976,7 +1976,7 @@
       "playthroughs": 1,
       "priority": "",
       "avgHours": "",
-      "runtime": "",
+      "runtime": 50,
       "episodes": 8,
       "episodesSeen": 8,
       "cover": "https://image.tmdb.org/t/p/w780/31o1Ufd7bStD5dGEcpzapOjwaqx.jpg",
@@ -1984,7 +1984,7 @@
         "85f37a10-0948-40eb-a48f-fc37e9df6982"
       ],
       "createdAt": 1794553278676,
-      "updatedAt": 1794555290759
+      "updatedAt": 1794562899158
     },
     {
       "id": "a7b35c24-8eb8-45df-a9bd-7bcf706356d5",
