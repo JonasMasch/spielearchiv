@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T08:56:24.996Z",
+  "updatedAt": "2026-11-13T08:56:54.057Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2665,6 +2665,34 @@
       "listIds": [],
       "createdAt": 1794560152266,
       "updatedAt": 1794560181487
+    },
+    {
+      "id": "f1f507de-722b-4861-8c10-9a5797ddd709",
+      "media": "tv",
+      "title": "A Knight of the Seven Kingdoms",
+      "release": "2026-01-18",
+      "platform": "HBO Max",
+      "genres": [
+        "Drama",
+        "Sci-Fi & Fantasy",
+        "Action & Adventure"
+      ],
+      "score": 87,
+      "hours": 3.1,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 31,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/7mkUu1F2hVUNgz24xO8HPx0D6mK.jpg",
+      "listIds": [],
+      "createdAt": 1794560183320,
+      "updatedAt": 1794560210555
     }
   ]
 }
