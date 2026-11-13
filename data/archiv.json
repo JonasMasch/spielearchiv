@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:37:27.412Z",
+  "updatedAt": "2026-11-13T07:37:58.479Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2073,6 +2073,35 @@
       ],
       "createdAt": 1794555407278,
       "updatedAt": 1794555443910
+    },
+    {
+      "id": "cd9cc42c-6a35-4597-9659-4233d8721f61",
+      "media": "tv",
+      "title": "She-Hulk: Die Anwältin",
+      "release": "2022-08-18",
+      "platform": "Disney Plus",
+      "genres": [
+        "Komödie",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 15,
+      "hours": 5.3,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 35,
+      "episodes": 9,
+      "episodesSeen": 9,
+      "cover": "https://image.tmdb.org/t/p/w780/eljErfkQUcFUgQkI4I1soZcH8MW.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555452482,
+      "updatedAt": 1794555474977
     }
   ]
 }
