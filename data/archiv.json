@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:42:12.683Z",
+  "updatedAt": "2026-11-13T07:42:43.767Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2282,6 +2282,36 @@
       ],
       "createdAt": 1794555707941,
       "updatedAt": 1794555729181
+    },
+    {
+      "id": "25927b08-985b-460f-a8b6-e6448a88ea96",
+      "media": "tv",
+      "title": "The Falcon and the Winter Soldier",
+      "release": "2021-03-19",
+      "platform": "Disney Plus",
+      "genres": [
+        "Action & Adventure",
+        "Sci-Fi & Fantasy",
+        "Drama"
+      ],
+      "score": 60,
+      "hours": 5.4,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 54,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/aTjbqMONy77fHJrIYu14g1F0d5h.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555738190,
+      "updatedAt": 1794555760263
     }
   ]
 }
