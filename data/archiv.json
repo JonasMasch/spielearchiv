@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:40:10.914Z",
+  "updatedAt": "2026-11-13T07:40:52.148Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2192,6 +2192,36 @@
       ],
       "createdAt": 1794555588117,
       "updatedAt": 1794555607412
+    },
+    {
+      "id": "c9afead1-0756-4faf-ab73-24a0ffd5165c",
+      "media": "tv",
+      "title": "Moon Knight",
+      "release": "2022-03-30",
+      "platform": "Disney Plus",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Mystery",
+        "Action & Adventure"
+      ],
+      "score": 75,
+      "hours": 8.8,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 2,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 44,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/1uegR4uAxRxiMyX4nQnpzbXhrTw.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555616191,
+      "updatedAt": 1794555648645
     }
   ]
 }
