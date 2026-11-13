@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:44:04.616Z",
+  "updatedAt": "2026-11-13T07:44:33.283Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2372,6 +2372,36 @@
       ],
       "createdAt": 1794555814341,
       "updatedAt": 1794555841114
+    },
+    {
+      "id": "480202e2-ed02-4f05-97a1-a1a987839c0f",
+      "media": "tv",
+      "title": "Der freundliche Spider-Man aus der Nachbarschaft",
+      "release": "2025-01-29",
+      "platform": "Disney Plus",
+      "genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 70,
+      "hours": 6.1,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 33,
+      "episodes": 11,
+      "episodesSeen": 11,
+      "cover": "https://image.tmdb.org/t/p/w780/kkT2B2gmynoh9kZMo1gromLNeqy.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555849770,
+      "updatedAt": 1794555869781
     }
   ]
 }
