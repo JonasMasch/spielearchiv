@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:51:54.008Z",
+  "updatedAt": "2026-11-13T07:52:34.323Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2581,6 +2581,34 @@
       "listIds": [],
       "createdAt": 1794556283796,
       "updatedAt": 1794556310504
+    },
+    {
+      "id": "ae1b628d-713c-4286-9577-4bb3f146700b",
+      "media": "tv",
+      "title": "Avatar - Der Herr der Elemente",
+      "release": "2005-02-21",
+      "platform": "Netflix",
+      "genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 98,
+      "hours": 97.6,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 4,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 24,
+      "episodes": 61,
+      "episodesSeen": 61,
+      "cover": "https://image.tmdb.org/t/p/w780/7oBGhqJIghRBvOwo5Qe0yM0cnMc.jpg",
+      "listIds": [],
+      "createdAt": 1794556325500,
+      "updatedAt": 1794556350821
     }
   ]
 }
