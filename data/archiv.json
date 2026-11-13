@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:36:03.861Z",
+  "updatedAt": "2026-11-13T07:36:35.812Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2014,6 +2014,35 @@
       ],
       "createdAt": 1794555304424,
       "updatedAt": 1794555360359
+    },
+    {
+      "id": "e56505d8-0ba7-4844-81fe-fc86f3df959e",
+      "media": "tv",
+      "title": "Agatha All Along",
+      "release": "2024-09-18",
+      "platform": "Disney+",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Mystery"
+      ],
+      "score": 85,
+      "hours": "",
+      "completion": 0,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": "",
+      "priority": "",
+      "avgHours": "",
+      "runtime": 42,
+      "episodes": 9,
+      "episodesSeen": 0,
+      "cover": "https://image.tmdb.org/t/p/w780/tYLXJW1sZQU09VWY1BhSVPKGIwc.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555369768,
+      "updatedAt": 1794555392311
     }
   ]
 }
