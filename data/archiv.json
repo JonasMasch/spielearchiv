@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:42:43.767Z",
+  "updatedAt": "2026-11-13T07:43:30.384Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2312,6 +2312,36 @@
       ],
       "createdAt": 1794555738190,
       "updatedAt": 1794555760263
+    },
+    {
+      "id": "bbfe135e-8ac9-4cb1-8719-2418ac55322b",
+      "media": "tv",
+      "title": "X-Men '97",
+      "release": "2024-03-20",
+      "platform": "Disney Plus",
+      "genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 81,
+      "hours": 5.3,
+      "completion": 53,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 32,
+      "episodes": 19,
+      "episodesSeen": 10,
+      "cover": "https://image.tmdb.org/t/p/w780/jIyEmnBrZtl6SEWyBoMO2hZnzMa.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555778175,
+      "updatedAt": 1794555806881
     }
   ]
 }
