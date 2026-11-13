@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:45:03.501Z",
+  "updatedAt": "2026-11-13T07:45:47.068Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2432,6 +2432,36 @@
       ],
       "createdAt": 1794555878693,
       "updatedAt": 1794555899998
+    },
+    {
+      "id": "8b32b403-d761-4bcd-aa35-8dd81a0f2856",
+      "media": "tv",
+      "title": "Eyes of Wakanda",
+      "release": "2025-08-01",
+      "platform": "Disney Plus",
+      "genres": [
+        "Animation",
+        "Sci-Fi & Fantasy",
+        "Action & Adventure"
+      ],
+      "score": 75,
+      "hours": 2,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 30,
+      "episodes": 4,
+      "episodesSeen": 4,
+      "cover": "https://image.tmdb.org/t/p/w780/cWO5NDkKqpOuwxu4vFc4PtL8aNF.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555911054,
+      "updatedAt": 1794555943565
     }
   ]
 }
