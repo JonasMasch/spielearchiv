@@ -436,6 +436,14 @@ async function tmdbGenres(kind){
   }catch(e){ return {}; }
 }
 
+/* episode_run_time ist bei neueren Serien oft leer. Dann steht die Laenge
+   meist an der zuletzt oder als naechstes ausgestrahlten Folge. */
+function tvRuntime(g){
+  var rt=(g.episode_run_time && g.episode_run_time[0]) || 0;
+  if(!rt && g.last_episode_to_air) rt=g.last_episode_to_air.runtime || 0;
+  if(!rt && g.next_episode_to_air) rt=g.next_episode_to_air.runtime || 0;
+  return rt || "";
+}
 function mapTmdb(kind, g, gmap){
   var isTv = kind==="tv";
   var genres = (g.genres||[]).map(function(x){ return x.name; });
@@ -450,7 +458,7 @@ function mapTmdb(kind, g, gmap){
     platforms: [],
     tags: genres.slice(),
     genres: genres,
-    runtime: isTv ? ((g.episode_run_time && g.episode_run_time[0]) || "") : (g.runtime || ""),
+    runtime: isTv ? tvRuntime(g) : (g.runtime || ""),
     episodes: isTv ? (g.number_of_episodes || "") : "",
     seasons: isTv ? (g.number_of_seasons || "") : "",
     playtime: "",
@@ -584,11 +592,17 @@ function releaseSort(g){
 }
 
 /* ============ Ableitungen ============ */
-function sortedLists(){
-  return lists.slice().sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); });
+/* Eine Liste gehoert zu genau einem Medium. Listen ohne Angabe sind
+   Spielelisten — der Bestand musste dafuer nicht angefasst werden. */
+function listMedia(l){ return (l && MEDIA[l.media]) ? l.media : "game"; }
+function sortedLists(mediaK){
+  return lists.filter(function(l){ return !mediaK || listMedia(l)===mediaK; })
+    .sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); });
 }
+function listById(id){ return lists.find(function(l){ return l.id===id; }) || null; }
 function gamesOfList(id){
-  return games.filter(function(g){ return (g.listIds||[]).indexOf(id)>=0; });
+  var l=listById(id), mk=listMedia(l);
+  return games.filter(function(g){ return (g.listIds||[]).indexOf(id)>=0 && mediaKey(g)===mk; });
 }
 /* Alles, was den Filter fuellt, bezieht sich auf das gewaehlte Medium —
    sonst stehen im Spielefilter die Streamingdienste. */
@@ -830,8 +844,9 @@ function renderRail(){
   var ls=$("#f-list"), lfocus=document.activeElement===ls;
   ls.innerHTML="";
   var o0=el("option",null,"Alle Listen"); o0.value=""; ls.appendChild(o0);
-  sortedLists().forEach(function(l){
-    var oo=el("option",null, l.name+" ("+gamesOfList(l.id).length+")"); oo.value=l.id; ls.appendChild(oo);
+  sortedLists(filt.media||null).forEach(function(l){
+    var pre = filt.media ? "" : MEDIA[listMedia(l)].one+": ";
+    var oo=el("option",null, pre+l.name+" ("+gamesOfList(l.id).length+")"); oo.value=l.id; ls.appendChild(oo);
   });
   ls.value = lists.some(function(l){ return l.id===filt.list; }) ? filt.list : "";
   if(lfocus) ls.focus();
@@ -1220,8 +1235,10 @@ function runAddSearch(){
 
 /* ============ Spiele einer Liste auswählen ============ */
 function openListPicker(l){
-  var D=makeDrawer("Einträge in „"+l.name+"“");
+  var LM=listMedia(l), LMM=MEDIA[LM];
+  var D=makeDrawer(LMM.many+" in „"+l.name+"“");
   var body=D.body, foot=D.foot;
+  D.drawer.setAttribute("data-m", LM);
 
   var chosen={};
   games.forEach(function(g){ if((g.listIds||[]).indexOf(l.id)>=0) chosen[g.id]=true; });
@@ -1231,7 +1248,7 @@ function openListPicker(l){
   var q=el("input","inp"); q.id="pick-q"; q.type="search"; q.placeholder="Titel, Plattform, Genre …"; q.autocomplete="off";
   f.appendChild(q); body.appendChild(f);
 
-  var hint=el("p","hint","Angehakte Spiele stehen in der Liste. Ein Tipp hakt an oder ab.");
+  var hint=el("p","hint","Angehaktes steht in der Liste, ein Tipp hakt an oder ab. Diese Liste führt "+LMM.many+".");
   body.appendChild(hint);
 
   var box=el("div","pick"); body.appendChild(box);
@@ -1246,6 +1263,7 @@ function openListPicker(l){
     var term=q.value.trim().toLowerCase();
     box.innerHTML="";
     var rows=games.filter(function(g){
+      if(mediaKey(g)!==LM) return false;
       if(!term) return true;
       return [g.title,g.platform,(g.genres||[]).join(" ")].join(" ").toLowerCase().indexOf(term)>=0;
     }).sort(function(a,b){
@@ -1253,7 +1271,7 @@ function openListPicker(l){
       if(ai!==bi) return ai-bi;
       return String(a.title||"").localeCompare(String(b.title||""),"de",{sensitivity:"base"});
     });
-    if(!rows.length){ box.appendChild(el("p","hint","Nichts passt zur Suche.")); return; }
+    if(!rows.length){ box.appendChild(el("p","hint", term ? "Nichts passt zur Suche." : "Noch keine "+LMM.many+" im Archiv.")); return; }
     rows.forEach(function(g){
       var r=el("button","pickrow"); r.type="button";
       r.setAttribute("aria-pressed", String(!!chosen[g.id]));
@@ -1576,40 +1594,68 @@ function miniStrip(rows){
   return strip;
 }
 
-function renderListOverview(){
-  var wrap=el("div");
-  var head=el("div","page-head");
-  head.appendChild(el("h2",null,"Listen"));
-  head.appendChild(el("p",null,"Eigene Zusammenstellungen neben dem Status — jede Liste behält ihre eigene Reihenfolge und Ansicht."));
-  wrap.appendChild(head);
-
-  var grid=el("div","listgrid");
-  sortedLists().forEach(function(l){
-    var rows=gamesOfList(l.id).sort(sorter(l.sort||"score-desc"));
-    var c=el("button","listcard"); c.type="button";
-    c.appendChild(miniStrip(rows));
-    var bd=el("div","listcard-body");
-    bd.appendChild(el("div","listcard-n",l.name));
-    bd.appendChild(el("div","listcard-c", rows.length===1 ? "1 Eintrag" : rows.length+" Einträge"));
-    c.appendChild(bd);
-    c.addEventListener("click",function(){ openListId=l.id; render(); scrollTop(); });
-    grid.appendChild(c);
-  });
-
+function listCard(l){
+  var rows=gamesOfList(l.id).sort(sorter(l.sort||"score-desc"));
+  var c=el("button","listcard"); c.type="button";
+  c.appendChild(miniStrip(rows));
+  var bd=el("div","listcard-body");
+  bd.appendChild(el("div","listcard-n",l.name));
+  bd.appendChild(el("div","listcard-c", rows.length+" "+mediaLabel(listMedia(l), rows.length)));
+  c.appendChild(bd);
+  c.addEventListener("click",function(){ openListId=l.id; render(); scrollTop(); });
+  return c;
+}
+function newListCard(presetMedia){
   var nb=el("button","listcard is-new"); nb.type="button";
   var nbi=el("div"); nbi.style.cssText="display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px";
   nbi.appendChild(el("div",null,"+"));
   nbi.appendChild(el("div","listcard-n","Neue Liste"));
   nb.appendChild(nbi);
-  nb.addEventListener("click",function(){ newList(function(l){ openListId=l.id; render(); }); });
-  grid.appendChild(nb);
+  nb.addEventListener("click",function(){ newList(function(l){ openListId=l.id; render(); }, presetMedia); });
+  return nb;
+}
 
-  wrap.appendChild(grid);
+function renderListOverview(){
+  var wrap=el("div");
+  var head=el("div","page-head");
+  head.appendChild(el("h2",null,"Listen"));
+  head.appendChild(el("p",null,"Eigene Zusammenstellungen neben dem Status. Jede Liste gehört zu einem Medium und behält ihre eigene Reihenfolge und Ansicht."));
+  wrap.appendChild(head);
+
+  /* Im Archiv ein Medium gewaehlt? Dann zeigt die Liste nur dessen Listen.
+     Sonst nach Medium gruppiert, und leere Gruppen bleiben weg. */
+  if(filt.media){
+    var grid=el("div","listgrid");
+    sortedLists(filt.media).forEach(function(l){ grid.appendChild(listCard(l)); });
+    grid.appendChild(newListCard(filt.media));
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  var any=false;
+  MEDIA_ORDER.forEach(function(k){
+    var ls=sortedLists(k);
+    if(!ls.length) return;
+    any=true;
+    var h=el("div","listgroup-h");
+    var ic=mediaIcon(k); if(ic) h.appendChild(ic);
+    h.appendChild(el("span",null,MEDIA[k].many));
+    h.appendChild(el("b",null,String(ls.length)));
+    h.setAttribute("data-m",k);
+    wrap.appendChild(h);
+    var g=el("div","listgrid");
+    ls.forEach(function(l){ g.appendChild(listCard(l)); });
+    wrap.appendChild(g);
+  });
+  var g0=el("div", any ? "listgrid listgrid-add" : "listgrid");
+  g0.appendChild(newListCard(null));
+  wrap.appendChild(g0);
   return wrap;
 }
 
 function renderListDetail(l){
   var wrap=el("div");
+  var LM=listMedia(l), LMM=MEDIA[LM];
   var rows=gamesOfList(l.id).sort(sorter(l.sort||"score-desc"));
 
   var back=el("button","btn btn-quiet btn-sm","← Alle Listen"); back.type="button";
@@ -1619,8 +1665,12 @@ function renderListDetail(l){
 
   var head=el("div","listhead");
   var left=el("div");
-  left.appendChild(el("h2",null,l.name));
-  left.appendChild(el("div","sub", (rows.length===1 ? "1 Eintrag" : rows.length+" Einträge")));
+  var h2=el("h2",null,l.name);
+  left.appendChild(h2);
+  var sub=el("div","sub");
+  var si=mediaIcon(LM,"sub-icon"); if(si) sub.appendChild(si);
+  sub.appendChild(document.createTextNode(rows.length+" "+mediaLabel(LM, rows.length)));
+  left.appendChild(sub);
   head.appendChild(left);
 
   var acts=el("div","listhead-acts");
@@ -1629,8 +1679,9 @@ function renderListDetail(l){
   [["score-desc","Wertung — hoch zu niedrig"],["score-asc","Wertung — niedrig zu hoch"],
    ["title-asc","Titel A–Z"],["hours-desc","Stunden — meiste zuerst"],
    ["completion-desc","Fortschritt — höchster zuerst"],["finished-desc","Zuletzt beendet"],
-   ["release-desc","Release — neueste zuerst"],["release-asc","Release — früheste zuerst"],
-   ["priority-desc","Vorfreude — höchste zuerst"],["playthroughs-desc","Am häufigsten durchgespielt"],
+   ["release-desc","Erschienen — neueste zuerst"],["release-asc","Erschienen — früheste zuerst"],
+   ["priority-desc","Vorfreude — höchste zuerst"],
+   ["playthroughs-desc", LM==="game" ? "Am häufigsten durchgespielt" : "Am häufigsten gesehen"],
    ["added-desc","Zuletzt hinzugefügt"]].forEach(function(o){
     var oo=el("option",null,o[1]); oo.value=o[0]; sortSel.appendChild(oo);
   });
@@ -1647,7 +1698,7 @@ function renderListDetail(l){
   });
   acts.appendChild(seg);
 
-  var pickBtn=el("button","btn btn-sm","Spiele auswählen"); pickBtn.type="button";
+  var pickBtn=el("button","btn btn-sm",LMM.many+" auswählen"); pickBtn.type="button";
   pickBtn.addEventListener("click",function(){ openListPicker(l); });
   acts.appendChild(pickBtn);
 
@@ -1660,7 +1711,7 @@ function renderListDetail(l){
   });
   var del=el("button","btn btn-sm btn-danger","Löschen"); del.type="button";
   del.addEventListener("click",function(){
-    if(!confirm("Liste „"+l.name+"“ löschen? Die Spiele bleiben erhalten.")) return;
+    if(!confirm("Liste „"+l.name+"“ löschen? Die "+LMM.many+" bleiben erhalten.")) return;
     openListId=null; dropList(l.id);
   });
   acts.appendChild(ren); acts.appendChild(del);
@@ -1669,7 +1720,7 @@ function renderListDetail(l){
 
   if(rows.length){
     var st=el("section","stats"); st.style.marginBottom="20px";
-    fillStats(st, rows, "Spiele in dieser Liste");
+    fillStats(st, rows, LMM.many+" in dieser Liste");
     wrap.appendChild(st);
   }
 
@@ -1677,12 +1728,12 @@ function renderListDetail(l){
     var e=el("div","empty");
     var L=el("div");
     L.appendChild(el("h2",null,"Diese Liste ist noch leer"));
-    L.appendChild(el("p",null,"Wähl Einträge aus deinem Archiv aus — Spiele, Filme und Serien dürfen in derselben Liste stehen, und ein Eintrag kann in beliebig vielen Listen stehen."));
+    L.appendChild(el("p",null,"Wähl "+LMM.many+" aus deinem Archiv aus — ein Eintrag kann in beliebig vielen Listen stehen."));
     var row2=el("div"); row2.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-    var pb=el("button","btn btn-accent","Spiele auswählen"); pb.type="button";
+    var pb=el("button","btn btn-accent",LMM.many+" auswählen"); pb.type="button";
     pb.addEventListener("click",function(){ openListPicker(l); });
     var gb=el("button","btn","Zum Archiv"); gb.type="button";
-    gb.addEventListener("click",function(){ setTab("archiv"); });
+    gb.addEventListener("click",function(){ setMedia(LM); setTab("archiv"); });
     row2.appendChild(pb); row2.appendChild(gb);
     L.appendChild(row2);
     e.appendChild(L);
@@ -1874,6 +1925,17 @@ function paintEditor(isEdit){
     b.setAttribute("aria-pressed", String(k===MK));
     b.addEventListener("click",function(){
       if(k===MK) return;
+      /* Listen gehoeren zu einem Medium. Beim Wechsel verliert der Eintrag
+         seine bisherigen — das sagen wir vorher, statt es still zu tun. */
+      var verliert=(draft.listIds||[]).filter(function(id){
+        var l=listById(id); return l && listMedia(l)!==k;
+      });
+      if(verliert.length){
+        var namen=verliert.map(function(id){ return "„"+(listById(id)||{}).name+"“"; }).join(", ");
+        if(!confirm("Als "+MEDIA[k].one+" kann der Eintrag nicht in "+namen+" bleiben, weil "+
+                    (verliert.length===1?"diese Liste":"diese Listen")+" zu "+MEDIA[MK].many+" "+
+                    (verliert.length===1?"gehört":"gehören")+". Trotzdem wechseln?")) return;
+      }
       draft.media=k; draft._platforms=[]; draft._suggest=null;
       paintEditor(isEdit);
     });
@@ -2332,7 +2394,9 @@ function paintEditor(isEdit){
   var lw=el("div","pills");
   function paintLists(){
     lw.innerHTML="";
-    lists.slice().sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); }).forEach(function(l){
+    var mine=sortedLists(MK);
+    if(!mine.length) lw.appendChild(el("p","hint","Für "+M.many+" gibt es noch keine Liste."));
+    mine.forEach(function(l){
       var b=el("button","pill",l.name); b.type="button";
       b.setAttribute("aria-pressed", String((draft.listIds||[]).indexOf(l.id)>=0));
       b.addEventListener("click",function(){
@@ -2344,7 +2408,16 @@ function paintEditor(isEdit){
       lw.appendChild(b);
     });
     var nb=el("button","pill","+ neue Liste"); nb.type="button"; nb.style.borderStyle="dashed";
-    nb.addEventListener("click",function(){ newList(function(l){ draft.listIds=(draft.listIds||[]).concat([l.id]); paintLists(); }); });
+    nb.addEventListener("click",function(){
+      /* Der Editor wird beim Anlegen zugedeckt und danach neu gezeichnet,
+         damit der Entwurf nicht verlorengeht. */
+      var keep=JSON.parse(JSON.stringify(draft)), keepCover=draftCover;
+      newList(function(l){
+        draft=keep; draftCover=keepCover;
+        draft.listIds=(draft.listIds||[]).concat([l.id]);
+        paintEditor(isEdit);
+      }, MK);
+    });
     lw.appendChild(nb);
   }
   paintLists();
@@ -2401,7 +2474,11 @@ function commit(errBox, isEdit){
     episodes: nz(draft.episodes)==null ? "" : Math.max(0,Math.round(Number(draft.episodes))),
     episodesSeen: nz(draft.episodesSeen)==null ? "" : Math.max(0,Math.round(Number(draft.episodesSeen))),
     cover: draftCover||"",
-    listIds: (draft.listIds||[]).slice(),
+    /* Wechselt ein Eintrag das Medium, passen seine bisherigen Listen
+       nicht mehr zu ihm. */
+    listIds: (draft.listIds||[]).filter(function(id){
+      var l=listById(id); return l ? listMedia(l)===mk : false;
+    }),
     createdAt: draft.createdAt||Date.now()
   };
   ["score","hours","completion"].forEach(function(k){ if(g[k]!=="" && !isFinite(g[k])) g[k]=""; });
@@ -2420,13 +2497,61 @@ function commit(errBox, isEdit){
   toast(isEdit ? "Gespeichert." : "„"+g.title+"“ ins Archiv aufgenommen.");
 }
 
-function newList(cb){
-  var name=prompt("Name der neuen Liste:","");
-  if(name==null) return;
-  name=name.trim(); if(!name) return;
-  var l={ id:uid(), name:name, createdAt:Date.now() };
-  putList(l);
-  if(cb) cb(l);
+/* presetMedia kommt aus dem Editor: dort muss die Liste zum Eintrag
+   passen, sonst koennte er ihr gar nicht beitreten. */
+function newList(cb, presetMedia){
+  var locked = !!MEDIA[presetMedia];
+  var mk = locked ? presetMedia : (filt.media || "game");
+  var D=makeDrawer("Neue Liste");
+  var body=D.body, foot=D.foot;
+  D.drawer.setAttribute("data-m", mk);
+
+  var f=el("div","field");
+  var lb=el("label",null,"Name"); lb.htmlFor="nl-name"; f.appendChild(lb);
+  var inp=el("input","inp"); inp.id="nl-name"; inp.placeholder="z. B. Beste 2026"; inp.autocomplete="off";
+  f.appendChild(inp); body.appendChild(f);
+
+  var err=el("p","err"); err.hidden=true;
+
+  if(locked){
+    body.appendChild(el("p","hint","Eine Liste für "+MEDIA[mk].many+". Listen mischen die Medien nicht."));
+  } else {
+    var fm=el("div","field");
+    fm.appendChild(el("label",null,"Wofür"));
+    var mw=el("div","pills");
+    MEDIA_ORDER.forEach(function(k){
+      var b=el("button","pill pill-media"); b.type="button"; b.setAttribute("data-m",k);
+      var ic=mediaIcon(k); if(ic) b.appendChild(ic);
+      b.appendChild(el("span",null,MEDIA[k].many));
+      b.setAttribute("aria-pressed", String(k===mk));
+      b.addEventListener("click",function(){
+        mk=k; D.drawer.setAttribute("data-m",k);
+        Array.prototype.forEach.call(mw.children,function(o){ o.setAttribute("aria-pressed", String(o===b)); });
+      });
+      mw.appendChild(b);
+    });
+    fm.appendChild(mw); body.appendChild(fm);
+    body.appendChild(el("p","hint","Listen mischen die Medien nicht: eine Liste führt entweder Spiele, Filme oder Serien."));
+  }
+  body.appendChild(err);
+
+  function save(){
+    var name=(inp.value||"").trim();
+    if(!name){ err.textContent="Bitte einen Namen eintragen."; err.hidden=false; inp.focus(); return; }
+    var l={ id:uid(), name:name, media:mk, createdAt:Date.now() };
+    closeOverlay(); putList(l);
+    if(cb) cb(l);
+  }
+  inp.addEventListener("keydown",function(ev){ if(ev.key==="Enter"){ ev.preventDefault(); save(); } });
+
+  foot.appendChild(el("div","spacer"));
+  var cancel=el("button","btn btn-sm","Abbrechen"); cancel.type="button";
+  cancel.addEventListener("click",closeOverlay);
+  var ok=el("button","btn btn-accent","Anlegen"); ok.type="button";
+  ok.addEventListener("click",save);
+  foot.appendChild(cancel); foot.appendChild(ok);
+  D.drawer.addEventListener("keydown",function(ev){ if(ev.key==="Escape"){ ev.preventDefault(); closeOverlay(); } });
+  setTimeout(function(){ inp.focus(); },30);
 }
 
 /* ============ Mehrere auf einmal ============ */
