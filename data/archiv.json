@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T09:41:42.660Z",
+  "updatedAt": "2026-11-13T09:53:30.296Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2693,6 +2693,34 @@
       "listIds": [],
       "createdAt": 1794560183320,
       "updatedAt": 1794560210555
+    },
+    {
+      "id": "c73a7926-aeb5-4b0d-8860-e961c1de7c95",
+      "media": "tv",
+      "title": "Stranger Things",
+      "release": "2016-07-15",
+      "platform": "Netflix",
+      "genres": [
+        "Action & Adventure",
+        "Mystery",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 82,
+      "hours": 180.6,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 2,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 129,
+      "episodes": 42,
+      "episodesSeen": 42,
+      "cover": "https://image.tmdb.org/t/p/w780/9P4IIMYY3HifqeruZq0ZZ9g7YUi.jpg",
+      "listIds": [],
+      "createdAt": 1794563581550,
+      "updatedAt": 1794563606794
     }
   ]
 }
