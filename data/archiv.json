@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:41:37.031Z",
+  "updatedAt": "2026-11-13T07:42:12.683Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2252,6 +2252,36 @@
       ],
       "createdAt": 1794555664440,
       "updatedAt": 1794555693529
+    },
+    {
+      "id": "9ab2cb2c-d537-4b6c-afe5-b1c30b3234e2",
+      "media": "tv",
+      "title": "Ironheart",
+      "release": "2025-06-24",
+      "platform": "Disney Plus",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Krimi",
+        "Action & Adventure"
+      ],
+      "score": 58,
+      "hours": 4.2,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 42,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/vno2LrEQr3lTOk3U1G1ihZsy64b.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555707941,
+      "updatedAt": 1794555729181
     }
   ]
 }
