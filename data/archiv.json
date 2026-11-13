@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:45:47.068Z",
+  "updatedAt": "2026-11-13T07:46:13.235Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2462,6 +2462,37 @@
       ],
       "createdAt": 1794555911054,
       "updatedAt": 1794555943565
+    },
+    {
+      "id": "96cc141e-d354-4b53-a033-e707796984bc",
+      "media": "tv",
+      "title": "Ich bin Groot",
+      "release": "2022-08-10",
+      "platform": "Disney Plus",
+      "genres": [
+        "Animation",
+        "Komödie",
+        "Familie",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 70,
+      "hours": 1,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 6,
+      "episodes": 10,
+      "episodesSeen": 10,
+      "cover": "https://image.tmdb.org/t/p/w780/AcqVeohiVgGEFTKwjvL57YHsnGU.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555951652,
+      "updatedAt": 1794555969732
     }
   ]
 }
