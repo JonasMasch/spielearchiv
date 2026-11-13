@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T09:53:30.296Z",
+  "updatedAt": "2026-11-13T09:53:49.762Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2705,7 +2705,7 @@
         "Mystery",
         "Sci-Fi & Fantasy"
       ],
-      "score": 82,
+      "score": 84,
       "hours": 180.6,
       "completion": 100,
       "startedOn": "",
@@ -2720,7 +2720,7 @@
       "cover": "https://image.tmdb.org/t/p/w780/9P4IIMYY3HifqeruZq0ZZ9g7YUi.jpg",
       "listIds": [],
       "createdAt": 1794563581550,
-      "updatedAt": 1794563606794
+      "updatedAt": 1794563626260
     }
   ]
 }
