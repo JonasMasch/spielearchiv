@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:43:30.384Z",
+  "updatedAt": "2026-11-13T07:44:04.616Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2342,6 +2342,36 @@
       ],
       "createdAt": 1794555778175,
       "updatedAt": 1794555806881
+    },
+    {
+      "id": "eaf871ee-6193-4dbe-a9e8-386e0e6d6352",
+      "media": "tv",
+      "title": "Echo",
+      "release": "2024-01-09",
+      "platform": "Disney Plus",
+      "genres": [
+        "Action & Adventure",
+        "Krimi",
+        "Drama"
+      ],
+      "score": 30,
+      "hours": 3.1,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 37,
+      "episodes": 5,
+      "episodesSeen": 5,
+      "cover": "https://image.tmdb.org/t/p/w780/u3ySnWqSjM3jedYgJZTR7RWRDDm.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555814341,
+      "updatedAt": 1794555841114
     }
   ]
 }
