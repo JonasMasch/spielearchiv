@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-09T14:06:37.437Z",
+  "updatedAt": "2026-11-13T07:04:33.846Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1950,6 +1950,35 @@
       "listIds": [],
       "createdAt": 1789227095363,
       "updatedAt": 1789378989033
+    },
+    {
+      "id": "cc45e2ec-2bbc-4800-93e7-bbf693ca0bad",
+      "media": "tv",
+      "title": "VisionQuest",
+      "release": "2026-10-13",
+      "platform": "Disney+",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Drama"
+      ],
+      "score": 89,
+      "hours": "",
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": "",
+      "episodes": 8,
+      "episodesSeen": 8,
+      "cover": "https://image.tmdb.org/t/p/w780/31o1Ufd7bStD5dGEcpzapOjwaqx.jpg",
+      "listIds": [
+        "47723e02-2705-4789-83da-8d99c53847cf"
+      ],
+      "createdAt": 1794553278676,
+      "updatedAt": 1794553470344
     }
   ]
 }
