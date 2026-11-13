@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:39:12.564Z",
+  "updatedAt": "2026-11-13T07:40:10.914Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2162,6 +2162,36 @@
       ],
       "createdAt": 1794555524748,
       "updatedAt": 1794555549061
+    },
+    {
+      "id": "6ffe9a2c-00e5-4997-bca2-e224d5a90de1",
+      "media": "tv",
+      "title": "WandaVision",
+      "release": "2021-01-15",
+      "platform": "Disney Plus",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Mystery",
+        "Drama"
+      ],
+      "score": 85,
+      "hours": "",
+      "completion": 0,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 0,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 51,
+      "episodes": 9,
+      "episodesSeen": 0,
+      "cover": "https://image.tmdb.org/t/p/w780/fSCb3lzRbHknuKD7apdH4RYJLkc.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555588117,
+      "updatedAt": 1794555607412
     }
   ]
 }
