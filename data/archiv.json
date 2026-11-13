@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:34:54.261Z",
+  "updatedAt": "2026-11-13T07:36:03.861Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1985,6 +1985,35 @@
       ],
       "createdAt": 1794553278676,
       "updatedAt": 1794555290759
+    },
+    {
+      "id": "a7b35c24-8eb8-45df-a9bd-7bcf706356d5",
+      "media": "tv",
+      "title": "Loki",
+      "release": "2021-06-09",
+      "platform": "Disney+",
+      "genres": [
+        "Drama",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 93,
+      "hours": 23.6,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 2,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 59,
+      "episodes": 12,
+      "episodesSeen": 12,
+      "cover": "https://image.tmdb.org/t/p/w780/q3jHCb4dMfYF6ojikKuHd6LscxC.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555304424,
+      "updatedAt": 1794555360359
     }
   ]
 }
