@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:44:33.283Z",
+  "updatedAt": "2026-11-13T07:45:03.501Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2402,6 +2402,36 @@
       ],
       "createdAt": 1794555849770,
       "updatedAt": 1794555869781
+    },
+    {
+      "id": "9422cbe7-e4d4-48b7-a31c-ddb784605bfc",
+      "media": "tv",
+      "title": "Daredevil: Born Again",
+      "release": "2025-03-04",
+      "platform": "Disney Plus",
+      "genres": [
+        "Drama",
+        "Action & Adventure",
+        "Krimi"
+      ],
+      "score": 73,
+      "hours": 15.3,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 54,
+      "episodes": 17,
+      "episodesSeen": 17,
+      "cover": "https://image.tmdb.org/t/p/w780/qrTAc0ZtQ859Qu5O8cixJzNJpQs.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555878693,
+      "updatedAt": 1794555899998
     }
   ]
 }
