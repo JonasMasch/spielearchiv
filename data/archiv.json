@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:37:58.479Z",
+  "updatedAt": "2026-11-13T07:38:33.113Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2102,6 +2102,36 @@
       ],
       "createdAt": 1794555452482,
       "updatedAt": 1794555474977
+    },
+    {
+      "id": "fd66b6ac-acc4-4afd-86e6-61dfbae8ff57",
+      "media": "tv",
+      "title": "Secret Invasion",
+      "release": "2023-06-21",
+      "platform": "Disney Plus",
+      "genres": [
+        "Drama",
+        "Sci-Fi & Fantasy",
+        "Action & Adventure"
+      ],
+      "score": 20,
+      "hours": 3.6,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 36,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/6mOK9j99OFlxGc3ird2jWUeUha9.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555489834,
+      "updatedAt": 1794555509610
     }
   ]
 }
