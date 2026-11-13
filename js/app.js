@@ -761,12 +761,20 @@ function setMedia(k){
   /* Plattform und Genres gehoeren zum vorherigen Medium und ergeben hier
      keinen Sinn mehr. */
   filt.plat=""; filt.genres=[];
+  /* Eine geoeffnete Liste, die nicht zum neuen Bereich gehoert, waere
+     dort ein Fremdkoerper — zurueck zur Uebersicht. */
+  if(openListId && filt.media){
+    var ol=listById(openListId);
+    if(ol && listMedia(ol)!==filt.media) openListId=null;
+  }
   document.body.setAttribute("data-medium", filt.media || "all");
   LS.put("sa.media", filt.media);
   render();
 }
-function renderMediaSeg(){
-  var box=$("#mediaseg");
+
+/* Der Bereichsumschalter steht im Archiv und auf der Listenseite. Beide
+   schalten dasselbe: in welchem Bereich man sich gerade befindet. */
+function fillMediaSeg(box, counter){
   if(!box) return;
   if(!box.childElementCount){
     var opts=[{k:"", l:"Alle"}].concat(MEDIA_ORDER.map(function(k){ return {k:k, l:MEDIA[k].many}; }));
@@ -779,10 +787,15 @@ function renderMediaSeg(){
     });
   }
   Array.prototype.forEach.call(box.children,function(b){
-    var on = (b.dataset.m||"")===filt.media;
-    b.setAttribute("aria-pressed", String(on));
-    var n = b.dataset.m ? games.filter(function(g){ return mediaKey(g)===b.dataset.m; }).length : games.length;
-    b.title = n + " " + mediaLabel(b.dataset.m||null, n);
+    var k=b.dataset.m||"";
+    b.setAttribute("aria-pressed", String(k===filt.media));
+    b.title = counter(k||null);
+  });
+}
+function renderMediaSeg(){
+  fillMediaSeg($("#mediaseg"), function(k){
+    var n = k ? games.filter(function(g){ return mediaKey(g)===k; }).length : games.length;
+    return n+" "+mediaLabel(k, n);
   });
 }
 
@@ -1622,11 +1635,25 @@ function renderListOverview(){
   head.appendChild(el("p",null,"Eigene Zusammenstellungen neben dem Status. Jede Liste gehört zu einem Medium und behält ihre eigene Reihenfolge und Ansicht."));
   wrap.appendChild(head);
 
+  var seg=el("div","mediaseg");
+  seg.setAttribute("role","group");
+  seg.setAttribute("aria-label","Bereich");
+  fillMediaSeg(seg, function(k){
+    var n=sortedLists(k).length;
+    return n===1 ? "1 Liste" : n+" Listen";
+  });
+  wrap.appendChild(seg);
+
   /* Im Archiv ein Medium gewaehlt? Dann zeigt die Liste nur dessen Listen.
      Sonst nach Medium gruppiert, und leere Gruppen bleiben weg. */
   if(filt.media){
+    var mine=sortedLists(filt.media);
+    if(!mine.length){
+      var p0=el("p","hint","Für "+MEDIA[filt.media].many+" gibt es noch keine Liste.");
+      p0.style.margin="0 0 14px"; wrap.appendChild(p0);
+    }
     var grid=el("div","listgrid");
-    sortedLists(filt.media).forEach(function(l){ grid.appendChild(listCard(l)); });
+    mine.forEach(function(l){ grid.appendChild(listCard(l)); });
     grid.appendChild(newListCard(filt.media));
     wrap.appendChild(grid);
     return wrap;
