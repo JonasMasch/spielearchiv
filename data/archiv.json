@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:34:38.694Z",
+  "updatedAt": "2026-11-13T07:34:54.261Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -1980,9 +1980,11 @@
       "episodes": 8,
       "episodesSeen": 8,
       "cover": "https://image.tmdb.org/t/p/w780/31o1Ufd7bStD5dGEcpzapOjwaqx.jpg",
-      "listIds": [],
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
       "createdAt": 1794553278676,
-      "updatedAt": 1794553542460
+      "updatedAt": 1794555290759
     }
   ]
 }
