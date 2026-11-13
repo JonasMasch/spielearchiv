@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:36:35.812Z",
+  "updatedAt": "2026-11-13T07:37:27.412Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2043,6 +2043,36 @@
       ],
       "createdAt": 1794555369768,
       "updatedAt": 1794555392311
+    },
+    {
+      "id": "56de9b99-2e1e-4b57-9755-0ffe7a53247d",
+      "media": "tv",
+      "title": "Hawkeye",
+      "release": "2021-11-24",
+      "platform": "Disney Plus",
+      "genres": [
+        "Drama",
+        "Komödie",
+        "Action & Adventure"
+      ],
+      "score": 82,
+      "hours": 24.8,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 4,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 62,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/uHESULlKh7VSc0MRcqfyIf9Alk4.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555407278,
+      "updatedAt": 1794555443910
     }
   ]
 }
