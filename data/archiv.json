@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:38:33.113Z",
+  "updatedAt": "2026-11-13T07:39:12.564Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2132,6 +2132,36 @@
       ],
       "createdAt": 1794555489834,
       "updatedAt": 1794555509610
+    },
+    {
+      "id": "927ba1e1-5c63-48bb-bb58-0765eb68d40a",
+      "media": "tv",
+      "title": "What If...?",
+      "release": "2021-08-11",
+      "platform": "Disney Plus",
+      "genres": [
+        "Animation",
+        "Action & Adventure",
+        "Sci-Fi & Fantasy"
+      ],
+      "score": 78,
+      "hours": 29.5,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 2,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 34,
+      "episodes": 26,
+      "episodesSeen": 26,
+      "cover": "https://image.tmdb.org/t/p/w780/jnzoh5qoxRLFRIQAxnl6D3RStPC.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555524748,
+      "updatedAt": 1794555549061
     }
   ]
 }
