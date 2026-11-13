@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:52:34.323Z",
+  "updatedAt": "2026-11-13T08:55:50.091Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2609,6 +2609,34 @@
       "listIds": [],
       "createdAt": 1794556325500,
       "updatedAt": 1794556350821
+    },
+    {
+      "id": "ba355255-7f2a-4252-9f26-1c6bdf168009",
+      "media": "tv",
+      "title": "Game of Thrones",
+      "release": "2011-04-17",
+      "platform": "HBO Max",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Drama",
+        "Action & Adventure"
+      ],
+      "score": 92,
+      "hours": 97.3,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 80,
+      "episodes": 73,
+      "episodesSeen": 73,
+      "cover": "https://image.tmdb.org/t/p/w780/zZqpAXxVSBtxV9qPBcscfXBcL2w.jpg",
+      "listIds": [],
+      "createdAt": 1794560122467,
+      "updatedAt": 1794560146588
     }
   ]
 }
