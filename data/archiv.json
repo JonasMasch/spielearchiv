@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:49:58.405Z",
+  "updatedAt": "2026-11-13T07:51:54.008Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2552,6 +2552,35 @@
       ],
       "createdAt": 1794556163784,
       "updatedAt": 1794556194903
+    },
+    {
+      "id": "571e3060-f6a8-4fd3-ae09-ac4b0cd3069e",
+      "media": "tv",
+      "title": "Dark",
+      "release": "2017-12-01",
+      "platform": "Netflix",
+      "genres": [
+        "Krimi",
+        "Drama",
+        "Sci-Fi & Fantasy",
+        "Mystery"
+      ],
+      "score": 98,
+      "hours": 96.2,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 3,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 74,
+      "episodes": 26,
+      "episodesSeen": 26,
+      "cover": "https://image.tmdb.org/t/p/w780/3jDXL4Xvj3AzDOF6UH1xeyHW8MH.jpg",
+      "listIds": [],
+      "createdAt": 1794556283796,
+      "updatedAt": 1794556310504
     }
   ]
 }
