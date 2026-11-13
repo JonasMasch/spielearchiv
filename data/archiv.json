@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:46:13.235Z",
+  "updatedAt": "2026-11-13T07:47:04.818Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2493,6 +2493,35 @@
       ],
       "createdAt": 1794555951652,
       "updatedAt": 1794555969732
+    },
+    {
+      "id": "35919ca8-7144-4ebd-b36b-9be43f821fc5",
+      "media": "tv",
+      "title": "Wonder Man",
+      "release": "2026-01-27",
+      "platform": "Disney Plus",
+      "genres": [
+        "Komödie",
+        "Drama"
+      ],
+      "score": 76,
+      "hours": 4.7,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 35,
+      "episodes": 8,
+      "episodesSeen": 8,
+      "cover": "https://image.tmdb.org/t/p/w780/ldz9THIHaV4orMsUrPT1nlQF51T.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555987225,
+      "updatedAt": 1794556021317
     }
   ]
 }
