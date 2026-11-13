@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:40:52.148Z",
+  "updatedAt": "2026-11-13T07:41:37.031Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2222,6 +2222,36 @@
       ],
       "createdAt": 1794555616191,
       "updatedAt": 1794555648645
+    },
+    {
+      "id": "00cbf260-b6fe-4e01-adf1-dacac6cee759",
+      "media": "tv",
+      "title": "Ms. Marvel",
+      "release": "2022-06-08",
+      "platform": "Disney Plus",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Action & Adventure",
+        "Komödie"
+      ],
+      "score": 73,
+      "hours": 10,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 2,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 50,
+      "episodes": 6,
+      "episodesSeen": 6,
+      "cover": "https://image.tmdb.org/t/p/w780/mfcLUWASJghU8MTNK38eYktfE83.jpg",
+      "listIds": [
+        "85f37a10-0948-40eb-a48f-fc37e9df6982"
+      ],
+      "createdAt": 1794555664440,
+      "updatedAt": 1794555693529
     }
   ]
 }
