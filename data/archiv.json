@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T08:55:50.091Z",
+  "updatedAt": "2026-11-13T08:56:24.996Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2637,6 +2637,34 @@
       "listIds": [],
       "createdAt": 1794560122467,
       "updatedAt": 1794560146588
+    },
+    {
+      "id": "019e30af-c3b8-4c28-aa6b-f7622da7a9c2",
+      "media": "tv",
+      "title": "House of the Dragon",
+      "release": "2022-08-21",
+      "platform": "HBO Max",
+      "genres": [
+        "Sci-Fi & Fantasy",
+        "Drama",
+        "Action & Adventure"
+      ],
+      "score": 83,
+      "hours": 30.8,
+      "completion": 100,
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "gespielt",
+      "playthroughs": 1,
+      "priority": "",
+      "avgHours": "",
+      "runtime": 71,
+      "episodes": 26,
+      "episodesSeen": 26,
+      "cover": "https://image.tmdb.org/t/p/w780/577eXC8wFQT0eUrJcgznSiFPRmk.jpg",
+      "listIds": [],
+      "createdAt": 1794560152266,
+      "updatedAt": 1794560181487
     }
   ]
 }
