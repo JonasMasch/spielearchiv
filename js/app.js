@@ -217,7 +217,7 @@ async function ghLoad(){
 
 async function ghSave(){
   var body = {
-    message: "Archiv aktualisiert ("+games.length+" Spiele)",
+    message: "Archiv aktualisiert ("+games.length+(games.length===1?" Eintrag":" Einträge")+")",
     content: encodeB64(JSON.stringify(payload(), null, 2)),
     branch: CFG.branch
   };
@@ -769,6 +769,7 @@ function setMedia(k){
   }
   document.body.setAttribute("data-medium", filt.media || "all");
   LS.put("sa.media", filt.media);
+  paintThemeColor();
   render();
 }
 
@@ -2968,6 +2969,59 @@ window.addEventListener("beforeunload",function(ev){
   if(dirty && token()){ ev.preventDefault(); ev.returnValue=""; }
 });
 
+/* ============ Erscheinungsbild ============ */
+/* Drei Zustaende. "auto" folgt dem Geraet, "hell" und "dunkel" setzen
+   sich darueber hinweg. Gespeichert wird nur die Abweichung: wer nie
+   etwas waehlt, bekommt weiter das, was das Betriebssystem sagt. */
+var THEMES = ["auto","light","dark"];
+
+function themePref(){
+  var t = LS.raw("sa.theme");
+  return (t==="light"||t==="dark") ? t : "auto";
+}
+
+function applyTheme(t){
+  if(t==="light"||t==="dark") document.documentElement.setAttribute("data-theme", t);
+  else document.documentElement.removeAttribute("data-theme");
+  paintThemeSeg();
+  paintThemeColor();
+}
+
+/* Die Browserleiste auf dem Handy nimmt die Seitenfarbe des Bereichs an,
+   damit oben keine fremde Kante stehen bleibt. */
+function paintThemeColor(){
+  var m = $("#meta-theme"); if(!m) return;
+  var c = getComputedStyle(document.body).backgroundColor;
+  if(c && c.indexOf("rgba(0, 0, 0, 0)")<0) m.setAttribute("content", c);
+}
+
+function paintThemeSeg(){
+  var box = $("#themeseg"); if(!box) return;
+  var t = themePref();
+  Array.prototype.forEach.call(box.children, function(b){
+    b.setAttribute("aria-pressed", String(b.dataset.t===t));
+  });
+}
+
+function setTheme(t){
+  if(THEMES.indexOf(t)<0) t = "auto";
+  LS.put("sa.theme", t==="auto" ? "" : t);
+  applyTheme(t);
+}
+
+$("#themeseg").addEventListener("click", function(ev){
+  var b = ev.target.closest("button[data-t]"); if(!b) return;
+  setTheme(b.dataset.t);
+});
+
+/* Wechselt das Geraet, solange "automatisch" gilt, geht die Leistenfarbe mit. */
+if(window.matchMedia){
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var onSys = function(){ if(themePref()==="auto") paintThemeColor(); };
+  if(mq.addEventListener) mq.addEventListener("change", onSys);
+  else if(mq.addListener) mq.addListener(onSys);
+}
+
 /* ============ Start ============ */
 setTab("archiv");
 
@@ -2975,6 +3029,7 @@ setTab("archiv");
   var m0=LS.raw("sa.media");
   if(MEDIA[m0]) filt.media=m0;
   document.body.setAttribute("data-medium", filt.media || "all");
+  applyTheme(themePref());
   var am=LS.raw("sa.addmedia");
   if(MEDIA[am]) addMedia=am;
 

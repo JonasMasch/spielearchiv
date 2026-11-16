@@ -84,6 +84,10 @@ body[data-medium="all"]{--medium:var(--accent)}
 
 *{box-sizing:border-box}
 html{color-scheme:light dark}
+/* Eine eigene Wahl gilt auch fuer Formularfelder und Scrollbalken,
+   sonst bliebe die Seite hell und das Eingabefeld dunkel. */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;font-variant-numeric:tabular-nums;line-height:1.5;-webkit-font-smoothing:antialiased}
 h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-.015em;text-wrap:balance}
 p{margin:0}
@@ -244,6 +248,12 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.55}
   position:sticky;top:0;z-index:20;background:var(--paper);padding:9px 0 10px}
 .count{font-family:var(--body);font-size:12px;color:var(--ink-3);margin-right:auto}
 .count b{color:var(--ink);font-weight:600}
+.themerow{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);
+  padding:14px 16px;box-shadow:var(--shadow-1);margin-bottom:14px}
+.themerow b{display:block;font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.015em}
+.themerow span{display:block;font-size:12.5px;color:var(--ink-3);line-height:1.45}
+.themerow .seg{background:var(--surface-2);box-shadow:none}
 .seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:100px;padding:3px;gap:2px;box-shadow:var(--shadow-1)}
 .seg button{border:none;background:none;padding:6px 14px;border-radius:100px;cursor:pointer;color:var(--ink-3);font-size:13px;font-weight:500}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}

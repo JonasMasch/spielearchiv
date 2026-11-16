@@ -6,6 +6,13 @@
 <title>Spielarchiv</title>
 <meta name="description" content="Persönliches Spielarchiv: Wertung 1–100, Stunden, Fortschritt, Zeiträume und eigene Listen.">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" id="meta-theme" content="#F4F1EB">
+<script>
+/* Vor dem ersten Strich Farbe bekennen: liegt eine eigene Wahl vor,
+   wird sie hier gesetzt — sonst entscheidet weiter das Geraet. */
+try{var t=localStorage.getItem("sa.theme");
+    if(t==="light"||t==="dark") document.documentElement.setAttribute("data-theme",t);}catch(e){}
+</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>%F0%9F%8E%AE</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -170,6 +177,17 @@
   <!-- ============ Mehr ============ -->
   <section class="tabpage" id="page-more">
     <div class="page-head"><h2>Verwalten</h2></div>
+    <div class="themerow">
+      <div>
+        <b>Erscheinungsbild</b>
+        <span>Gilt nur auf diesem Gerät</span>
+      </div>
+      <div class="seg" id="themeseg" role="group" aria-label="Erscheinungsbild">
+        <button type="button" data-t="auto" aria-pressed="true">Automatisch</button>
+        <button type="button" data-t="light" aria-pressed="false">Hell</button>
+        <button type="button" data-t="dark" aria-pressed="false">Dunkel</button>
+      </div>
+    </div>
     <div class="morelist">
       <button class="morerow" id="m-settings" type="button">
         <b>Einstellungen</b><span>GitHub-Token und die Datenbank-Keys dieses Geräts</span>

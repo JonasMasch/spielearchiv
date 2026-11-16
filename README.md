@@ -68,8 +68,9 @@ Die Seite hat fünf Bereiche: **Archiv** (alles mit Kennzahlen und Filtern), **H
 Im Archiv steht oben der Medienumschalter: **Alle · Spiele · Filme · Serien**. Er bestimmt, worauf
 sich Kennzahlen, Filter und Begriffe beziehen — im Filmbereich heißt „Plattform“ etwa „Gesehen bei“
 und „Gespielt“ heißt „Gesehen“. Jedes Medium hat eine eigene Farbe (Spiele petrol, Filme indigo,
-Serien oliv), die den Bereich kennzeichnet: Umschalter, eine Spur im Hintergrund, die Kante des
-Schubfachs und in der gemischten Ansicht ein Zeichen auf der Kachel. Die Aktionsfarbe bleibt überall
+Serien oliv), die den Bereich kennzeichnet: Umschalter, Seitenfarbe, Karten und Linien, die Kante
+des Schubfachs und in der gemischten Ansicht ein Zeichen auf der Kachel. In der Ansicht **Alle**
+bleibt der Hintergrund neutral — der Überblick meint keinen Bereich. Die Aktionsfarbe bleibt überall
 dieselbe, und die Wertungsfarben bleiben den Wertungen vorbehalten.
 
 Die Empfehlungen gelten vorerst nur für Spiele, weil sie über die RAWG-Datenbank laufen. Sie
@@ -80,6 +81,11 @@ Plattform bewertet. Was schon im Archiv steht, fällt raus. Jeder Vorschlag nenn
 Bildschirmen klebt die Reiterleiste beim Scrollen oben fest.
 
 Jede Liste merkt sich ihre eigene Reihenfolge und Ansicht (`sort` und `view` am Listeneintrag).
+
+Unter **Mehr** steht das Erscheinungsbild: **Automatisch · Hell · Dunkel**. *Automatisch* folgt dem
+Betriebssystem, die beiden anderen setzen sich darüber hinweg. Die Wahl liegt im `localStorage`
+dieses Geräts (`sa.theme`), gilt also pro Gerät und nicht im Archiv. Gespeichert wird nur die
+Abweichung — wer nie etwas wählt, behält, was das Gerät sagt.
 
 Der Chip oben rechts zeigt den Speicherstand: *ungespeichert* → *speichert* → *gespeichert*. Klick
 darauf speichert sofort; sonst pusht die Seite drei Sekunden nach der letzten Änderung von selbst.
