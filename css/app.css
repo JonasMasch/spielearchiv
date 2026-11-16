@@ -11,8 +11,10 @@
   --m-fill-movie:#3F4FA8;
   --m-fill-tv:#4F5C1B;
   /* Bereichstoenung: Papier, Flaechen und Linien bekommen den Farbton
-     des Bereichs. Feste Werte statt color-mix, damit auch ein aelterer
-     Browser nicht auf eine weisse Seite laeuft. */
+     des Bereichs. Im Hellen deutlich, im Dunkeln halb so gesaettigt —
+     eine kraeftige Farbe wiegt auf dunklem Grund schwerer. Feste Werte
+     statt color-mix, damit auch ein aelterer Browser nicht auf eine
+     weisse Seite laeuft. */
   --t-game-paper:#DAECEC;  --t-game-surf:#FFFFFF; --t-game-surf2:#EDF6F5; --t-game-line:#D3E4E2; --t-game-line2:#BCD4D1;
   --t-movie-paper:#E5E8F5; --t-movie-surf:#FFFFFF; --t-movie-surf2:#EFF1FA; --t-movie-line:#DCE0F0; --t-movie-line2:#C6CCE4;
   --t-tv-paper:#E7EBD5;    --t-tv-surf:#FFFFFF; --t-tv-surf2:#F2F6E9; --t-tv-line:#DFE5CC; --t-tv-line2:#CBD3B3;
@@ -44,9 +46,9 @@
     --paper-base:#14130F; --paper:var(--paper-base); --surface:#1D1B17; --surface-2:#252219;
     --m-game:#5CC2C4; --m-movie:#9AA6F5; --m-tv:#B2C26A; --m-ink:#14130F;
     --line:#312D26; --line-2:#453F36;
-    --t-game-paper:#0B2120;  --t-game-surf:#0F2A28; --t-game-surf2:#133331; --t-game-line:#1E423F; --t-game-line2:#2C5653;
-    --t-movie-paper:#0F1333; --t-movie-surf:#141A42; --t-movie-surf2:#1A2150; --t-movie-line:#272F64; --t-movie-line2:#36407C;
-    --t-tv-paper:#1A1F09;    --t-tv-surf:#212810; --t-tv-surf2:#293115; --t-tv-line:#3B4522; --t-tv-line2:#4D5930;
+    --t-game-paper:#101C1B;  --t-game-surf:#162322; --t-game-surf2:#1B2B2A; --t-game-line:#273938; --t-game-line2:#364C4A;
+    --t-movie-paper:#181A2A; --t-movie-surf:#202237; --t-movie-surf2:#272B42; --t-movie-line:#363A55; --t-movie-line2:#484D6A;
+    --t-tv-paper:#17190F;    --t-tv-surf:#1E2216; --t-tv-surf2:#262A1C; --t-tv-line:#373C2B; --t-tv-line2:#494F3A;
     --ink:#F1EDE5; --ink-2:#B9B3A7; --ink-3:#9B9588;
     --accent:#EF7FA6; --accent-on:#2A0A15; --accent-soft:#3A1A2660;
     --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF7FA6; --band-elite:#B08CF5; --wish:#79ADEE;
@@ -58,9 +60,9 @@
   --paper-base:#14130F; --paper:var(--paper-base); --surface:#1D1B17; --surface-2:#252219;
   --m-game:#5CC2C4; --m-movie:#9AA6F5; --m-tv:#B2C26A; --m-ink:#14130F;
   --line:#312D26; --line-2:#453F36;
-  --t-game-paper:#0B2120;  --t-game-surf:#0F2A28; --t-game-surf2:#133331; --t-game-line:#1E423F; --t-game-line2:#2C5653;
-  --t-movie-paper:#0F1333; --t-movie-surf:#141A42; --t-movie-surf2:#1A2150; --t-movie-line:#272F64; --t-movie-line2:#36407C;
-  --t-tv-paper:#1A1F09;    --t-tv-surf:#212810; --t-tv-surf2:#293115; --t-tv-line:#3B4522; --t-tv-line2:#4D5930;
+  --t-game-paper:#101C1B;  --t-game-surf:#162322; --t-game-surf2:#1B2B2A; --t-game-line:#273938; --t-game-line2:#364C4A;
+  --t-movie-paper:#181A2A; --t-movie-surf:#202237; --t-movie-surf2:#272B42; --t-movie-line:#363A55; --t-movie-line2:#484D6A;
+  --t-tv-paper:#17190F;    --t-tv-surf:#1E2216; --t-tv-surf2:#262A1C; --t-tv-line:#373C2B; --t-tv-line2:#494F3A;
   --ink:#F1EDE5; --ink-2:#B9B3A7; --ink-3:#9B9588;
   --accent:#EF7FA6; --accent-on:#2A0A15; --accent-soft:#3A1A2660;
   --band-low:#D2795F; --band-mid:#D5A34F; --band-good:#63B287; --band-top:#EF7FA6; --band-elite:#B08CF5; --wish:#79ADEE;
