@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T14:04:54.021Z",
+  "updatedAt": "2026-11-19T08:40:27.926Z",
   "lists": [
     {
       "id": "47723e02-2705-4789-83da-8d99c53847cf",
@@ -2778,6 +2778,32 @@
       "listIds": [],
       "createdAt": 1794563683372,
       "updatedAt": 1794563701326
+    },
+    {
+      "id": "987a0adc-8487-435e-a6ef-4875ddd4d098",
+      "media": "game",
+      "title": "Grand Theft Auto VI",
+      "release": "2026-11-19",
+      "platform": "PS5",
+      "genres": [
+        "Action"
+      ],
+      "score": "",
+      "hours": "",
+      "completion": "",
+      "startedOn": "",
+      "finishedOn": "",
+      "status": "backlog",
+      "playthroughs": "",
+      "priority": 5,
+      "avgHours": "",
+      "runtime": "",
+      "episodes": "",
+      "episodesSeen": "",
+      "cover": "https://media.rawg.io/media/games/734/7342a1cd82c8997ec620084ae4c2e7e4.jpg",
+      "listIds": [],
+      "createdAt": 1795077523228,
+      "updatedAt": 1795077624423
     }
   ]
 }
